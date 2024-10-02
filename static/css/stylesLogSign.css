@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* General Styles */
+body {
+    background-image: url("/static/assets/img/login-bg.jpg");
+    background-size: cover; /* Ensures the image covers the entire background */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents repetition */
+}
+
+.container {
+    margin: 50px auto;
+}
+
+.panel-heading {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#forgot {
+    min-width: 100px;
+    margin-left: auto;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+.form-inline label {
+    padding-left: 10px;
+    margin: 0;
+    cursor: pointer;
+}
+
+.btn.btn-primary {
+    margin-top: 20px;
+    border-radius: 15px;
+}
+
+.panel {
+    min-height: 380px;
+    box-shadow: 20px 20px 80px rgb(218, 218, 218);
+    border-radius: 12px;
+}
+
+.input-field {
+    border-radius: 5px;
+    padding: 10px; /* Increased padding for better appearance */
+    display: flex;
+    align-items: center;
+    cursor: text;
+    border: 1px solid #ddd; /* Light border */
+    transition: border-color 0.3s; /* Smooth transition for border color */
+}
+
+.input-field input {
+    flex: 1; /* Take full width */
+    border: none; /* Remove input border */
+    outline: none; /* Remove outline on focus */
+    box-shadow: none; /* Remove shadow */
+    padding: 10px; /* Padding inside the input */
+    font-size: 16px; /* Increase font size */
+    color: #333; /* Darker text color for better readability */
+}
+
+.input-field input:focus {
+    border-bottom: 2px solid #007bff; /* Add a blue underline on focus */
+    transition: border-color 0.3s; /* Smooth transition */
+}
+
+.input-field label {
+    color: #555; /* Slightly darker label color */
+    margin-right: 8px; /* Space between label and input */
+}
+
+
+input[type='text'],
+input[type='password'] {
+    border: none;
+    outline: none;
+    box-shadow: none;
+    width: 100%;
+}
+
+.fa-eye-slash.btn {
+    border: none;
+    outline: none;
+    box-shadow: none;
+}
+
+img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    position: relative;
+}
+
+a[target='_blank'] {
+    position: relative;
+    transition: all 0.1s ease-in-out;
+}
+
+.bordert {
+    border-top: 1px solid #aaa;
+    position: relative;
+}
+
+.bordert:after {
+    content: "or connect with";
+    position: absolute;
+    top: -13px;
+    left: 33%;
+    background-color: #fff;
+    padding: 0px 8px;
+}
+
+/* Responsive Styles */
+@media(max-width: 360px) {
+    #forgot {
+        margin-left: 0;
+        padding-top: 10px;
+    }
+
+    body {
+        height: 100%;
+    }
+
+    .container {
+        margin: 30px 0;
+    }
+
+    .bordert:after {
+        left: 25%;
+    }
+}
+
+/* Additional styles for the index page (if any) can be added below */

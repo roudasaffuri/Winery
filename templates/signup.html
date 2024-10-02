@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up Page</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- FontAwesome CSS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <!--path to css -->
+    <link rel="icon" href="static/assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/stylesLogSign.css">
+</head>
+<body>
+<br>
+<br>
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3">
+            <div class="panel border bg-white">
+                <div class="panel-heading">
+                    <h3 class="pt-3 font-weight-bold">Sign Up</h3>
+                </div>
+                <div class="panel-body p-3">
+                    <form action="/signup" method="POST">
+                        <div class="form-group py-2">
+                            <div class="input-field">
+                                <span class="far fa-user p-2"></span>
+                                <input type="text" name="firstname" placeholder="First Name" required>
+                            </div>
+                        </div>
+                        <div class="form-group py-2">
+                            <div class="input-field">
+                                <span class="far fa-user p-2"></span>
+                                <input type="text" name="lastname" placeholder="Last Name" required>
+                            </div>
+                        </div>
+                      <div class="form-group py-2">
+                            <div class="input-field">
+                                <span class="far fa-envelope p-2"></span>
+                                <input type="email" name="email" placeholder="Email" required>
+                            </div>
+                        </div>
+                        <div class="form-group py-1 pb-2">
+                            <div class="input-field">
+                                <span class="fas fa-lock px-2"></span>
+                                <input type="password" name="password" placeholder="Create a Password" required>
+                                <button type="button" class="btn bg-white text-muted">
+                                    <span class="far fa-eye-slash"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-block mt-3">Sign Up</button>
+                        <div class="text-center pt-4 text-muted">Already have an account? <a href="{{ url_for('index') }}">Login</a></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</body>
+</html>

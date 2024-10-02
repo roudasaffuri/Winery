@@ -1,0 +1,75 @@
+{% if session.username %}
+{% include "header.html" %}
+
+<!-- Page Header -->
+<header class="masthead" style="background-image: url('../static/assets/img/about-bg.jpg')">
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading">
+          <h1>How to Store Wine Properly</h1>
+          <span class="subheading">Why Wine Storage Matters</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Main Content -->
+<main class="mb-4">
+  <div class="container px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+
+        <p>Wine is highly susceptible to changes in its environment. Proper storage can enhance the flavors and aromas of your wine while preventing spoilage.</p>
+
+        <section>
+          <h3>The Enemies of Wine</h3>
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <h4>1. Temperature</h4>
+              <p>“Temperature is the most important enemy of wine to protect from,” says Tilden. Changes in temperature can disrupt the delicate balance of compounds that make wine aromatic and tasteful.</p>
+              <p>“When it’s too hot, you can have something called maderization where wine turns into vinegar,” further warns sommelier and Wine Enthusiast Tasting Director Anna-Christina Cabrales. This process is irreversible, leaving the wine “cooked” or “stewed” in an unrecognizable form.</p>
+              <p>But too-cold temperatures are problematic, too. “This is why wines aren’t shipped in the winter,” says Cabrales. “[The] wine will expand—especially if it freezes over—because part of wine is water and it will actually make the cork explode out.”</p>
+              <p>Tilden identifies the sweet spot for storing wine at around 55°F. “And that’s all wines—reds, whites, sparkling, fortified.”</p>
+            </div>
+            <div class="col-md-6 mb-4">
+              <h4>2. Humidity</h4>
+              <p>Wine corks rely on moisture in the air to stay in place. Too dry and the corks can shrivel, running the risk of premature oxidation. If we’re keeping score, that makes Wine: 0, Oxidation: 2.</p>
+              <p>Lots of moisture isn’t good, either. “If it’s too humid,” says Cabrales, “the labels start to fall off and you could potentially build a cellar of mold.” Thank you, next.</p>
+              <p>“Somewhere around 50 to 80% is where you want the humidity to be,” says Tilden, “so that the corks can stay moist and oxygen can’t get in.”</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <h4>3. Light</h4>
+              <p>When wine is exposed to the sun for too long, it is said to be “light-struck.” Consider it a sunburn for wine that never goes away—and smells awful.</p>
+              <p>Ultraviolet (U.V.) rays interact with the compounds in wine to produce unpleasant changes in its structure and flavor. “Once they get in, they can break down the tannins,” says Tilden. “Tannins protect wine, [which is] why you can see white wines turn quicker than red wines, since they don’t have that tannin protection on them.”</p>
+              <p>According to Tilden, this is why many wines are packaged in dark bottles, which act just like a layer of SPF. But keeping wine away from light can avoid U.V. damage altogether.</p>
+            </div>
+            <div class="col-md-6 mb-4">
+              <h4>4. Position</h4>
+              <p>When wine is stored, you want it to experience as little movement as possible.</p>
+              <p>“Vibration can shake up the bottles to some degree, move the sediment around and can even create heat and friction inside the bottle,” says Tilden. “The molecular structure of the wine can change as that happens.”</p>
+              <p>Changes in structure equate to a changed experience while sipping. Like a bubble bath gone flat, it loses its entire appeal. Bottle position is also important for the cork.</p>
+              <p>“You want to lay the wines down on its side,” advises Cabrales. “That way the cork stays hydrated at all times.” Like controlling for humidity, this is another effort made to keep the cork moist and prevent oxygen from leeching in.</p>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-4">
+              <h4>5. Odors</h4>
+              <p>Wine “breathes” through its corks. “Off odors from a room or a garage can get into a bottle over time and really affect the flavors and aromas of the wine,” says Tilden. Cigar smells are another common culprit.</p>
+              <p>The TL;DR: Maybe don’t keep your wine near the trash or your cat’s litterbox.</p>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+ {% include "footer.html" %}
+{% else %}
+    <p>Please go to the <a href="/">index page</a>.</p>
+{% endif %}
