@@ -38,6 +38,10 @@ def home():
 def about():
     return render_template("about.html")
 
+@app.route("/tips")
+def tips():
+    return render_template("tips.html")
+
 
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
