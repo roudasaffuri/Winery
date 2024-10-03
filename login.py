@@ -16,7 +16,6 @@ def log(username, password):
                 # Verify the password directly (not recommended for production)
                 if stored_password == password:
                     session['username'] = username
-                    print(session['username'])
                     return redirect(url_for('home'))  # Redirect to a success page
                 else:
                     flash("Invalid password", "error")

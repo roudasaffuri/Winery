@@ -43,6 +43,11 @@ def tips():
     return render_template("tips.html")
 
 
+@app.route("/cart")
+def cart():
+    return render_template("cart.html")
+
+
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":

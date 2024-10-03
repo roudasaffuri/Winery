@@ -19,8 +19,8 @@ class Wine:
 
 def get_wines():
     total_wines = []
-    wines = requests.get("https://api.npoint.io/e92c93ac5012d4a6a315").json()
-    print(wines)
+    wines = requests.get("https://api.npoint.io/0bc53b6f473799086e41").json()
+
     for w in wines:
         wine = Wine(w['img'], w['price'], w['title'], w['country'], w['province'], w['description'])
         total_wines.append(wine)
