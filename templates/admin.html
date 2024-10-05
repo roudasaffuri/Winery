@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Admin Panel</h1>
+
+    <h2>Current Products</h2>
+    <table>
+        <tr>
+            <th>Item ID</th>
+            <th>Item Name</th>
+            <th>Item Price</th>
+            <th>Item Image URL</th>
+            <th>Item Count</th>
+            <th>Actions</th>
+        </tr>
+        <!-- Populate with products from the database -->
+        {% for product in products %}
+        <tr>
+            <td>{{ product[0] }}</td>
+            <td>{{ product[1] }}</td>
+            <td>{{ product[2] }}</td>
+            <td>{{ product[3] }}</td>
+            <td>{{ product[4] }}</td>
+            <td>
+                <!-- Update button -->
+                <button onclick="populateUpdateForm({{ product[0] }}, '{{ product[1] }}', {{ product[2] }}, '{{ product[3] }}', {{ product[4] }})">Update</button>
+                <!-- Delete button -->
+                <form method="POST" action="/delete" style="display:inline;">
+                    <input type="hidden" name="deleteItemId" value="{{ product[0] }}">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Update Product</h2>
+    <form id="updateForm" method="POST" action="/update">
+        <input type="hidden" name="itemId" id="itemId">
+        <label for="itemName">Item Name:</label>
+        <input type="text" name="itemName" id="itemName" required>
+        <br>
+        <label for="itemPrice">Item Price:</label>
+        <input type="text" name="itemPrice" id="itemPrice" required>
+        <br>
+        <label for="itemImgUrl">Item Image URL:</label>
+        <input type="text" name="itemImgUrl" id="itemImgUrl" required>
+        <br>
+        <label for="itemCount">Item Count:</label>
+        <input type="number" name="itemCount" id="itemCount" required>
+        <br>
+        <button type="submit">Update Item</button>
+    </form>
+
+    <script>
+        function populateUpdateForm(itemId, itemName, itemPrice, itemImgUrl, itemCount) {
+            document.getElementById('itemId').value = itemId;
+            document.getElementById('itemName').value = itemName;
+            document.getElementById('itemPrice').value = itemPrice;
+            document.getElementById('itemImgUrl').value = itemImgUrl;
+            document.getElementById('itemCount').value = itemCount;
+        }
+    </script>
+</body>
+</html>
