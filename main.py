@@ -4,7 +4,7 @@ from dateTimeYear import get_year
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from registration import registration
 from login import log
-
+from winesForSale import wineForSale
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_I_am_the_big_BOSS'  # Replace with a strong secret key for production
@@ -62,9 +62,9 @@ def products():
     return render_template('products.html', all_wines=get_wines())
 
 
-@app.route('/store')
+@app.route('/store',)
 def store():
-    return render_template('store.html', all_wines=get_wines())
+    return render_template('store.html', all_wines=wineForSale())
 
 
 @app.route('/admin')
