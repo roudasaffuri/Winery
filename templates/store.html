@@ -1,10 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
-</body>
-</html>
+{% if session.username %}
+{% include "header.html" %}
+
+<!-- Page Header-->
+<header
+  class="masthead"
+  style="background-image: url('../static/assets/img/store-bg.jpg')"
+>
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading">
+          <h1>STORE</h1>
+          <span class="subheading">OUR STORE</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<!-- Main Content-->
+<main class="mb-4">
+ <div class="container my-5">
+        <h1 class="text-center">Welcome to the Wine Store</h1>
+
+        <div class="row mt-4">
+            {% if all_wines %}
+                {% for wine in all_wines %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="{{ wine[3] }}" class="card-img-top" alt="{{ wine[1] }}"> <!-- Assuming wine[3] is the image URL -->
+                        <div class="card-body">
+                            <h5 class="card-title">{{ wine[1] }}</h5> <!-- Name -->
+                            <p class="card-text">Price: ${{ '%.2f' | format(wine[2]) }}</p> <!-- Price -->
+                            <p class="card-text">Quantity Available: {{ wine[4] }}</p> <!-- Quantity Available -->
+
+                            {% if wine[4] > 0 %}
+                                <form method="post" action="">
+                                    <div class="input-group mb-3">
+                                        <input type="number" class="form-control" name="quantity" value="1" min="1" max="{{ wine[4] }}">
+                                        <input type="hidden" name="itemId" value="{{ wine[0] }}">
+                                        <div class="input-group-append">
+                                            <button type="submit" class="btn btn-primary">Add to Cart</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            {% else %}
+                                <p style="color: red;">Out of Stock</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No products available.</p>
+            {% endif %}
+        </div>
+    </div>
+</main>
+
+ {% include "footer.html" %}
+{% else %}
+    <p>Please go to the <a href="/">index page</a>.</p>
+{% endif %}
