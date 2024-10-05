@@ -53,13 +53,23 @@ def contact():
     if request.method == "POST":
         data = request.form
         send_email(data["name"], data["email"], data["phone"], data["message"])
-        return render_template("contact.html", msg_sent=True, current_year=get_year()) # Redirect to avoid form resubmission
+        return render_template("contact.html", msg_sent=True) # Redirect to avoid form resubmission
     return render_template("contact.html", msg_sent=False)
 
 
 @app.route('/products')
 def products():
     return render_template('products.html', all_wines=get_wines())
+
+
+@app.route('/store')
+def store():
+    return render_template('store.html', all_wines=get_wines())
+
+
+@app.route('/admin')
+def admin():
+    return render_template('admin.html')
 
 
 @app.route('/login', methods=['GET', 'POST'])

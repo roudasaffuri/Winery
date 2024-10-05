@@ -127,3 +127,31 @@ def disconnection(conn, cur):
 #         print(f"Error inserting items: {e}")
 #     finally:
 #         disconnection(conn, cur)
+
+###---------------------- Insert user to table USERS ----------########
+# conn = create_connection()
+# if conn is not None:
+#     try:
+#         cur = conn.cursor()
+#
+#         # Prepare the insert statement
+#         insert_query = '''
+#             INSERT INTO users (firstname, lastname, email, password)
+#             VALUES (%s, %s, %s, %s)
+#         '''
+#
+#         # Define the user data
+#         user_data = ('admin', 'admin', 'admin@gmail.com', '123')
+#
+#         # Execute the insert statement
+#         cur.execute(insert_query, user_data)
+#
+#         # Commit the transaction
+#         conn.commit()
+#
+#         print("User inserted successfully.")
+#
+#     except Exception as e:
+#         print(f"Error inserting user: {e}")
+#     finally:
+#         disconnection(conn, cur)
