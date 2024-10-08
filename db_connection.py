@@ -22,6 +22,24 @@ def disconnection(conn, cur):
         conn.close()
 
 
+def get_wine_by_id(item_id):
+    """Fetch wine details using itemId from the tblproducts."""
+    conn = create_connection()
+    cur = None
+    wine_details = None
+    try:
+        cur = conn.cursor()
+        # Fetch wine details
+        cur.execute("SELECT * FROM tblproducts WHERE itemId = %s", (item_id,))
+        wine_details = cur.fetchone()  # Get one record
+    except Exception as e:
+        print(f"Error fetching wine details: {e}")
+    finally:
+        disconnection(conn, cur)
+
+    return wine_details
+
+
 ##------------------------------------------------------------------#
 ####"""Create the USERS table."""####
 

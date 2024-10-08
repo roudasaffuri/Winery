@@ -15,9 +15,10 @@ def log(username, password):
                 stored_password = result[0]
                 # Verify the password directly (not recommended for production)
                 if stored_password == password:
-                    session['username'] = username
                     if username == 'admin@gmail.com' and password == '123':
+                        session['admin'] = username
                         return redirect(url_for('admin'))
+                    session['username'] = username
                     return redirect(url_for('home'))  # Redirect to a success page
                 else:
                     flash("Invalid password", "error")

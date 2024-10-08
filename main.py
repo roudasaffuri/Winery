@@ -1,3 +1,5 @@
+from addItem import addItemToDB
+from deleteProduct import deleteItemFromDB
 from wine import get_wines
 from sendEmail import send_email, forgetPassword
 from dateTimeYear import get_year
@@ -5,6 +7,9 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from registration import registration
 from login import log
 from winesForSale import wineForSale
+from getProductByID import get_wine_by_id
+from updateProduct import updateProduct
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key_I_am_the_big_BOSS'  # Replace with a strong secret key for production
@@ -69,7 +74,13 @@ def store():
 
 @app.route('/admin')
 def admin():
-    return render_template('admin.html')
+    wines = wineForSale()
+    return render_template('admin.html', all_wines=wines)
+
+@app.route('/addProduct')
+def addProduct():
+    return render_template('addProduct.html')
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -78,6 +89,21 @@ def login():
         username = request.form['username']
         password = request.form['password']
         return log(username,password)
+
+
+@app.route('/up', methods=['GET', 'POST'])
+def up():
+    if request.method == 'POST':
+        item_id = request.form['itemId']
+        name = request.form['name']
+        price = request.form['price']
+        quantity = request.form['quantity']
+        image = request.form['image']
+
+        return updateProduct(item_id,name,price,quantity,image)
+
+    # Handle the GET request
+    return render_template('edit_product.html')  # You may want to pass item_id for pre-filling data
 
 
 @app.route('/resetPassword', methods=['GET', 'POST'])
@@ -89,6 +115,38 @@ def resetPassword():
         else:
             flash("Email does not exist. Please try a different email.", "error")
         return redirect(url_for('index'))
+
+
+@app.route('/add-wine', methods=['POST'])
+def add_wine():
+    if request.method == 'POST':
+        wine_name = request.form['wineName']
+        wine_price = request.form['winePrice']
+        wine_quantity = request.form['wineQuantity']
+        wine_image = request.form['wineImage']
+        return addItemToDB(wine_name,wine_price,wine_quantity,wine_image)
+
+@app.route('/edit-product', methods=['POST'])
+def edit_product():
+    item_id = request.form.get('itemId')  # Get the itemId from the form data
+    print(f"Received item_id: {item_id}")  # Debug output
+
+
+    wine_details = get_wine_by_id(item_id)  # Fetch wine details using item_id
+    if wine_details is None:
+        flash("Wine not found.", "danger")
+        return redirect(url_for('admin'))  # Redirect if not found
+
+    return render_template('editProduct.html', wine=wine_details)
+
+
+@app.route('/delete-wine', methods=['POST'])
+def delete_wine():
+    if request.method == 'POST':
+        item_id = request.form['itemId']
+        return deleteItemFromDB(item_id)
+
+
 
 
 @app.route('/logout')

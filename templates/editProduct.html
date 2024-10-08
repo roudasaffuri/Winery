@@ -1,0 +1,37 @@
+{% if session.admin %}
+
+  {% include "headerAdmin.html" %}
+    <div class="container my-5">
+        <h1>Edit Wine</h1>
+        <form method="POST" action="/up">
+            <input type="hidden" name="itemId" value="{{ wine[0] }}">
+            <div class="form-group">
+                <label for="name">Wine Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ wine[1] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ wine[2] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="quantity">Quantity Available</label>
+                <input type="number" class="form-control" id="quantity" name="quantity" value="{{ wine[4] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="image">Image URL</label>
+                <input type="text" class="form-control" id="image" name="image" value="{{ wine[3] }}" required>
+            </div>
+            <button type="submit" class="btn btn-success">Update Wine</button>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
+</body>
+</html>
+
+{% include "footer.html" %}
+{% else %}
+    <p>Please go to the <a href="/">index page</a>.</p>
+{% endif %}

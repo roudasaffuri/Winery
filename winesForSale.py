@@ -13,9 +13,6 @@ def wineForSale():
         # Fetch all results
         rows = cur.fetchall()
 
-        # Print the results
-        for row in rows:
-            print(row)
 
     except Exception as e:
         print(f"An error occurred: {e}")
