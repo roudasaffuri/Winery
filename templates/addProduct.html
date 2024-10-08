@@ -1,0 +1,64 @@
+{% if session.admin %}
+
+{% include "headerAdmin.html" %}
+
+<style>
+  /* styles.css */
+.table img {
+    border-radius: 5px; /* Rounded corners for images */
+}
+
+.table th {
+    background-color: #f8f9fa; /* Light background for headers */
+}
+
+.table th, .table td {
+    vertical-align: middle; /* Center-align content */
+}
+
+.btn-sm {
+    margin-right: 5px; /* Spacing between buttons */
+}
+
+/* Custom styles for the Add Wine button */
+.btn-yellow {
+    background-color: #ffc107; /* Bootstrap yellow color */
+    color: white; /* Text color */
+    border: none; /* Remove border */
+}
+
+.btn-yellow:hover {
+    background-color: #e0a800; /* Darker shade on hover */
+}
+</style>
+<body>
+
+<div class="row mt-4">
+    <div class="col-md-12 mb-4">
+        <h3 class="text-danger text-center">Add New Wine</h3> <!-- Updated heading -->
+        <form method="post" action="/add-wine" class="shadow p-4 rounded bg-light">
+            <div class="mb-3">
+                <label for="wineName" class="form-label">Wine Name</label>
+                <input type="text" class="form-control" id="wineName" name="wineName" required>
+            </div>
+            <div class="mb-3">
+                <label for="winePrice" class="form-label">Price</label>
+                <input type="number" class="form-control" id="winePrice" name="winePrice" step="0.01" required>
+            </div>
+            <div class="mb-3">
+                <label for="wineQuantity" class="form-label">Quantity</label>
+                <input type="number" class="form-control" id="wineQuantity" name="wineQuantity" required>
+            </div>
+            <div class="mb-3">
+                <label for="wineImage" class="form-label">Image URL</label>
+                <input type="text" class="form-control" id="wineImage" name="wineImage" required>
+            </div>
+            <button type="submit" class="btn btn-yellow">Add Wine</button>
+        </form>
+    </div>
+</div>
+
+
+{% else %}
+    <p>Please go to the <a href="/">index page</a>.</p>
+{% endif %}
