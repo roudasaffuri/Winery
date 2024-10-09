@@ -1,4 +1,25 @@
 
+### Project Name
+WINERY
+
+### Description
+The WINERY project is an online store and information hub for wines. The project is divided into two parts:
+
+## USER Section: Allows users to register (signup), log in (login), add products to their cart, and contact the store via email. It also includes a password recovery option for forgotten passwords.
+## ADMIN Section: Enables product management, including adding, updating, and deleting products.
+Technologies
+Programming Language: Python
+Design: Bootstrap
+Database: PostgreSQL (managed via pgAdmin)
+Libraries
+# The project uses the following libraries:
+
+Flask==2.3.2
+Requests==2.31.0
+psycopg2~=2.9.9
+python-dotenv>=0.19.0
+os
+smtplib
 
 ![Screenshot 2024-10-02 182829](https://github.com/user-attachments/assets/a5fb4444-6b44-49ad-9d2d-7184cb817770)
 
