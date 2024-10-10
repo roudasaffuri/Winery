@@ -18,9 +18,19 @@ app.secret_key = 'your_secret_key_I_am_the_big_BOSS'  # Replace with a strong se
 def inject_current_year():
     return {'current_year': get_year()}
 
+
+#---------------------- Index / Login / Signup / Reset ------------------------#
 @app.route('/')
 def index():
     return render_template("index.html")
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        return log(username,password)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -34,6 +44,20 @@ def signup():
     return render_template('signup.html')  # Render the signup form
 
 
+
+@app.route('/resetPassword', methods=['GET', 'POST'])
+def resetPassword():
+    if request.method == 'POST':
+        username = request.form['email']
+        if forgetPassword(username):
+            flash('A password reset link has been sent to your email.', 'success')
+        else:
+            flash("Email does not exist. Please try a different email.", "error")
+        return redirect(url_for('index'))
+
+
+#-------------------------------- USER  ---------------------------------#
+
 @app.route('/home')
 def home():
     return render_template("home.html")
@@ -42,6 +66,7 @@ def home():
 @app.route("/about")
 def about():
     return render_template("about.html")
+
 
 @app.route("/tips")
 def tips():
@@ -77,18 +102,34 @@ def admin():
     wines = wineForSale()
     return render_template('admin.html', all_wines=wines)
 
+
 @app.route('/addProduct')
 def addProduct():
     return render_template('addProduct.html')
 
 
+#-------------------------------- Admin  ---------------------------------#
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
+@app.route('/add-wine', methods=['POST'])
+def add_wine():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        return log(username,password)
+        wine_name = request.form['wineName']
+        wine_price = request.form['winePrice']
+        wine_quantity = request.form['wineQuantity']
+        wine_image = request.form['wineImage']
+        return addItemToDB(wine_name,wine_price,wine_quantity,wine_image)
+
+
+@app.route('/edit-product', methods=['POST'])
+def edit_product():
+    item_id = request.form.get('itemId')  # Get the itemId from the form data
+    print(f"Received item_id: {item_id}")  # Debug output
+    wine_details = get_wine_by_id(item_id)  # Fetch wine details using item_id
+    if wine_details is None:
+        flash("Wine not found.", "danger")
+        return redirect(url_for('admin'))  # Redirect if not found
+
+    return render_template('editProduct.html', wine=wine_details)
 
 
 @app.route('/up', methods=['GET', 'POST'])
@@ -106,40 +147,6 @@ def up():
     return render_template('edit_product.html')  # You may want to pass item_id for pre-filling data
 
 
-@app.route('/resetPassword', methods=['GET', 'POST'])
-def resetPassword():
-    if request.method == 'POST':
-        username = request.form['email']
-        if forgetPassword(username):
-            flash('A password reset link has been sent to your email.', 'success')
-        else:
-            flash("Email does not exist. Please try a different email.", "error")
-        return redirect(url_for('index'))
-
-
-@app.route('/add-wine', methods=['POST'])
-def add_wine():
-    if request.method == 'POST':
-        wine_name = request.form['wineName']
-        wine_price = request.form['winePrice']
-        wine_quantity = request.form['wineQuantity']
-        wine_image = request.form['wineImage']
-        return addItemToDB(wine_name,wine_price,wine_quantity,wine_image)
-
-@app.route('/edit-product', methods=['POST'])
-def edit_product():
-    item_id = request.form.get('itemId')  # Get the itemId from the form data
-    print(f"Received item_id: {item_id}")  # Debug output
-
-
-    wine_details = get_wine_by_id(item_id)  # Fetch wine details using item_id
-    if wine_details is None:
-        flash("Wine not found.", "danger")
-        return redirect(url_for('admin'))  # Redirect if not found
-
-    return render_template('editProduct.html', wine=wine_details)
-
-
 @app.route('/delete-wine', methods=['POST'])
 def delete_wine():
     if request.method == 'POST':
@@ -147,7 +154,7 @@ def delete_wine():
         return deleteItemFromDB(item_id)
 
 
-
+#------------------------------- Logout User and Admin --------------------------------#
 
 @app.route('/logout')
 def logout():

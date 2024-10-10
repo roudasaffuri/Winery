@@ -12,6 +12,5 @@ def get_wine_by_id(item_id):
     finally:
         disconnection(conn, cur)
 
-print(get_wine_by_id(1))
 
 
