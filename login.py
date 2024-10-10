@@ -1,6 +1,6 @@
-from db_connection import create_connection,disconnection
+from db_connection import create_connection, disconnection
 from flask import redirect, url_for, flash, session
-
+import hashlib
 
 def log(username, password):
     conn = create_connection()
@@ -8,14 +8,24 @@ def log(username, password):
         try:
             cur = conn.cursor()
             # Check if the username (email) exists in the database
-            cur.execute("SELECT password FROM users WHERE email = %s", (username,))
+            cur.execute("SELECT password, isAdmin FROM users WHERE email = %s", (username,))
             result = cur.fetchone()
 
             if result is not None:
-                stored_password = result[0]
-                # Verify the password directly (not recommended for production)
-                if stored_password == password:
-                    if username == 'admin@gmail.com' and password == '123':
+                stored_password, isAdmin = result
+                # Encode the password to bytes
+                encoded_password = password.encode('utf-8')
+
+                # Create a SHA-256 hash object
+                hash_object = hashlib.sha256(encoded_password)
+
+                # Get the hexadecimal representation of the hash
+                hash_hex = hash_object.hexdigest()
+
+                # Verify the password
+                if stored_password == hash_hex:
+                    # Check admin status
+                    if username == 'admin@gmail.com' and isAdmin:
                         session['admin'] = username
                         return redirect(url_for('admin'))
                     session['username'] = username
