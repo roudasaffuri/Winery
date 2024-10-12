@@ -11,12 +11,14 @@ from getProductByID import get_wine_by_id
 from updateProduct import updateProduct
 from dotenv import load_dotenv
 import os
+
 load_dotenv()
 
 KEY = os.getenv("KEY")
 
 app = Flask(__name__)
 app.secret_key = KEY  # Replace with a strong secret key for production
+
 
 @app.context_processor
 def inject_current_year():

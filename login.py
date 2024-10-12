@@ -1,7 +1,7 @@
 from db_connection import create_connection, disconnection
 from flask import redirect, url_for, flash, session
-import hashlib
-
+from fernet_encryption import decode_string
+import  base64
 def log(username, password):
     conn = create_connection()
     if conn is not None:
@@ -12,20 +12,15 @@ def log(username, password):
             result = cur.fetchone()
 
             if result is not None:
-                stored_password, isAdmin = result
-                # Encode the password to bytes
-                encoded_password = password.encode('utf-8')
-
-                # Create a SHA-256 hash object
-                hash_object = hashlib.sha256(encoded_password)
-
-                # Get the hexadecimal representation of the hash
-                hash_hex = hash_object.hexdigest()
+                stored_password_base64, isAdmin = result
+                # Decode the stored password from base64
+                stored_password = base64.b64decode(stored_password_base64)
+                decrypted_password = decode_string(stored_password)
 
                 # Verify the password
-                if stored_password == hash_hex:
+                if decrypted_password == password:
                     # Check admin status
-                    if username == 'admin@gmail.com' and isAdmin:
+                    if username == 'admin@email.com' and isAdmin:
                         session['admin'] = username
                         return redirect(url_for('admin'))
                     session['username'] = username
