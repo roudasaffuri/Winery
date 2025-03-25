@@ -1,8 +1,8 @@
 from addItem import addItemToDB
+from context_processors import inject_current_year
 from deleteProduct import deleteItemFromDB
 from wine import get_wines
-from sendEmail import send_email, forgetPassword
-from dateTimeYear import get_year
+from sendEmail import send_email
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from registration import registration
 from login import log
@@ -11,6 +11,8 @@ from getProductByID import get_wine_by_id
 from updateProduct import updateProduct
 from dotenv import load_dotenv
 import os
+from resetPassword import resetPass
+from clearSessionAndLogout import exitAndClearSession
 
 load_dotenv()
 
@@ -20,9 +22,8 @@ app = Flask(__name__)
 app.secret_key = KEY  # Replace with a strong secret key for production
 
 
-@app.context_processor
-def inject_current_year():
-    return {'current_year': get_year()}
+# Register the context processor
+app.context_processor(inject_current_year)
 
 
 #---------------------- Index / Login / Signup / Reset ------------------------#
@@ -34,9 +35,9 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
-        return log(username,password)
+        return log(email,password)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
@@ -54,8 +55,8 @@ def signup():
 @app.route('/resetPassword', methods=['GET', 'POST'])
 def resetPassword():
     if request.method == 'POST':
-        username = request.form['email']
-        if forgetPassword(username):
+        userEmail = request.form['email']
+        if resetPass(userEmail):
             flash('A password reset link has been sent to your email.', 'success')
         else:
             flash("Email does not exist. Please try a different email.", "error")
@@ -164,9 +165,7 @@ def delete_wine():
 
 @app.route('/logout')
 def logout():
-    session.clear()  # Clear the user session
-    flash("You have been logged out.", "info")  # Flash a logout message
-    return redirect(url_for('index'))  # Redirect to the home page
+    return exitAndClearSession()
 
 
 if __name__ == "__main__":
