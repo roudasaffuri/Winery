@@ -1,9 +1,10 @@
+from flask import Flask, render_template, request, redirect, url_for, flash
+from Tips import get_wine_tips
 from addItem import addItemToDB
 from context_processors import inject_current_year
 from deleteProduct import deleteItemFromDB
 from wine import get_wines
 from sendEmail import send_email
-from flask import Flask, render_template, request, redirect, url_for, flash, session
 from registration import registration
 from login import log
 from winesForSale import wineForSale
@@ -13,10 +14,10 @@ from dotenv import load_dotenv
 import os
 from resetPassword import resetPass
 from clearSessionAndLogout import exitAndClearSession
-
+from ageVerified import ageVerified
 load_dotenv()
 
-KEY = os.getenv("KEY")
+KEY = os.getenv("SECRET_KEY")
 
 app = Flask(__name__)
 app.secret_key = KEY  # Replace with a strong secret key for production
@@ -27,27 +28,23 @@ app.context_processor(inject_current_year)
 
 
 #---------------------- Index / Login / Signup / Reset ------------------------#
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
+    if request.method == 'POST':
+        return ageVerified()
     return render_template("index.html")
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        email = request.form['email']
-        password = request.form['password']
-        return log(email,password)
+        return log()
+    return render_template("login.html")
 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
-        firstname = request.form['firstname']
-        lastname = request.form['lastname']
-        email = request.form['email']
-        password = request.form['password']  # Make sure to hash this in production!
-        return registration(firstname, lastname, email, password)
+        return registration()
     return render_template('signup.html')  # Render the signup form
 
 
@@ -97,6 +94,11 @@ def contact():
 @app.route('/products')
 def products():
     return render_template('products.html', all_wines=get_wines())
+
+@app.route("/tipsPage")
+def tipsPage():
+    return render_template("tipsPage.html",tips=get_wine_tips())
+
 
 
 @app.route('/store',)

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <!-- FontAwesome CSS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <link rel="icon" href="static/assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/static/css/stylesLogSign.css">
+
+
+</head>
+<body>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="offset-md-2 col-lg-5 col-md-7 offset-lg-4 offset-md-3">
+            <div class="panel border bg-white">
+                <div class="panel-heading">
+                    <h3 class="pt-3 font-weight-bold">Login</h3>
+                </div>
+                <div class="panel-body p-3">
+                    <!-- Flash Messages Section -->
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            <div class="alert-container">
+                                <ul class="list-unstyled">
+                                {% for category, message in messages %}
+                                    <li class="alert alert-{{ category }}">{{ message }}</li>
+                                {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+                <div class="panel-body p-3">
+                    <form action="/login" method="POST">
+                        <div class="form-group py-2">
+                            <div class="input-field">
+                                <span class="far fa-user p-2"></span>
+                                <input type="text" name="email" placeholder="User E-mail" required>
+                            </div>
+                        </div>
+                        <div class="form-group py-1 pb-2">
+                            <div class="input-field">
+                                <span class="fas fa-lock px-2"></span>
+                                <input type="password" name="password" placeholder="Enter your Password" required>
+                                <button type="button" class="btn bg-white text-muted">
+                                    <span class="far fa-eye-slash"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="form-inline">
+<!--                            <input type="checkbox" name="remember" id="remember">-->
+<!--                            <label for="remember" class="text-muted">Remember me</label>-->
+                            <a href="#" id="forgot" class="font-weight-bold" data-toggle="modal" data-target="#forgotPasswordModal">Forgot password?</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block mt-3">Login</button>
+                        <div class="text-center pt-4 text-muted">Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Forgot Password Modal -->
+<div class="modal fade" id="forgotPasswordModal" tabindex="-1" role="dialog" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="forgotPasswordModalLabel">Forgot Password</h5>
+<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true">&times;</span>-->
+<!--                </button>-->
+            </div>
+            <div class="modal-body">
+                <form action="/resetPassword" method="POST">
+                    <div class="form-group">
+                        <label for="email">Enter your email address</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Reset Link</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>

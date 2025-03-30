@@ -1,20 +1,25 @@
 from db_connection import create_connection, disconnection
-from flask import redirect, url_for, flash, session
+from flask import redirect, url_for, flash, session ,request
 from fernet_encryption import decode_string
 import  base64
-def log(useremail, password):
+
+def log():
+
+    useremail = request.form['email']
+    password = request.form['password']
+
     conn = create_connection()
     if conn is not None:
         try:
             cur = conn.cursor()
             # Check if the username (email) exists in the database
             # and also fetch the password,isAdmin and firstname.
-            cur.execute("SELECT  password, isAdmin , firstname FROM users WHERE email = %s", (useremail,))
+            cur.execute("SELECT  password, is_admin , firstname FROM users WHERE email = %s", (useremail,))
             result = cur.fetchone()
 
             if result is not None:
                 print(result)
-                stored_password_base64, isAdmin, firstname = result
+                stored_password_base64, is_admin, firstname = result
                 # Decode the stored password from base64
                 stored_password = base64.b64decode(stored_password_base64)
                 decrypted_password = decode_string(stored_password)
@@ -23,7 +28,7 @@ def log(useremail, password):
                 if decrypted_password == password:
 
                     # Check admin status
-                    if useremail == 'admin@email.com' and isAdmin:
+                    if useremail == 'admin@email.com' and is_admin:
                         session['admin'] = useremail
                         return redirect(url_for('admin'))
                     session['username'] = firstname

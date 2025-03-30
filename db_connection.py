@@ -4,6 +4,7 @@ import os
 load_dotenv()
 
 OWN_PASSWORD_PG = os.getenv("OWN_PASSWORD_PG")
+
 def create_connection():
     """Create a database connection."""
     return psycopg2.connect(
@@ -14,6 +15,8 @@ def create_connection():
         port=5432
     )
 
+if create_connection():
+    print("yes")
 def disconnection(conn, cur):
     """Close the database cursor and connection."""
     if cur is not None:
@@ -43,25 +46,29 @@ def get_wine_by_id(item_id):
 ##------------------------------------------------------------------#
 ####"""Create the USERS table."""####
 
-# conn = create_connection()
-# if conn is not None:
-#     try:
-#         cur = conn.cursor()
-#         cur.execute('''
-#             CREATE TABLE IF NOT EXISTS users (
-#                 id SERIAL PRIMARY KEY,
-#                 firstname VARCHAR(100) NOT NULL,
-#                 lastname VARCHAR(100) NOT NULL,
-#                 email VARCHAR(100) UNIQUE NOT NULL,
-#                 password VARCHAR(255) NOT NULL,
-#                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-#             )
-#         ''')
-#         conn.commit()
-#     except Exception as e:
-#         print(f"Error creating table: {e}")
-#     finally:
-#         disconnection(conn, cur)
+conn = create_connection()
+if conn is not None:
+    try:
+        cur = conn.cursor()
+        cur.execute('''
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                firstname VARCHAR(100) NOT NULL,
+                lastname VARCHAR(100) NOT NULL,
+                email VARCHAR(100) UNIQUE NOT NULL,
+                password VARCHAR(255) NOT NULL,
+                birth_year INTEGER NOT NULL,
+                gender VARCHAR(10) NOT NULL,
+                is_admin BOOLEAN DEFAULT FALSE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        ''')
+        conn.commit()
+    except Exception as e:
+        print(f"Error creating table: {e}")
+    finally:
+        disconnection(conn, cur)
+
 
 ##------------------------------------------------------------------#
 
