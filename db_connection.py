@@ -15,8 +15,6 @@ def create_connection():
         port=5432
     )
 
-if create_connection():
-    print("yes")
 def disconnection(conn, cur):
     """Close the database cursor and connection."""
     if cur is not None:

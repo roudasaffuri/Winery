@@ -57,7 +57,7 @@ def resetPassword():
             flash('A password reset link has been sent to your email.', 'success')
         else:
             flash("Email does not exist. Please try a different email.", "error")
-        return redirect(url_for('index'))
+        return redirect(url_for('login'))
 
 
 #-------------------------------- USER  ---------------------------------#
