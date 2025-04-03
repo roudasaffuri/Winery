@@ -1,0 +1,82 @@
+{% if session.username %}
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ wine.wine_name }} - Product Detail</title>
+
+
+  <style>
+    html, body {
+      height: 100%;
+    }
+    body {
+      background-image: url('../static/assets/img/store-bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
+      display: flex;
+      flex-direction: column;
+    }
+    .content {
+      flex: 1 0 auto;
+    }
+    .footer {
+      flex-shrink: 0;
+       background:white;
+    }
+  </style>
+</head>
+<body class="py-5">
+{% include "header.html" %}
+
+<div class="content">
+  <div class="container bg-white rounded shadow mx-auto my-4 p-4" style="max-width: 1200px;">
+    <div class="row g-4">
+      <!-- Product Image Column -->
+      <div class="col-md-6">
+        <div class="d-flex align-items-center justify-content-center bg-light rounded" style="min-height: 400px;">
+          <img src="{{ wine.image_url }}" alt="{{ wine.wine_name }}" class="img-fluid" style="max-height: 400px; object-fit: cover;">
+        </div>
+      </div>
+      <!-- Product Details Column -->
+      <div class="col-md-6">
+        <h1 class="display-5 fw-bold mb-3">{{ wine.wine_name }}</h1>
+        <div class="mb-4">
+          <span class="fs-3 fw-bold">${{ '%.2f' | format(wine.price) }}</span>
+        </div>
+        <div class="mb-4">
+          <p class="lead">Quantity:{{wine.stock}}</p>
+        </div>
+        <div class="mb-4">
+          <p class="lead">{{ wine. description or "Product description goes here." }}</p>
+        </div>
+        <div class="d-flex align-items-center mb-4">
+          {% if wine.stock > 0 %}
+          <div class="input-group me-3" style="width: 100px;">
+            <input type="number" class="form-control text-center" value="1" min="1" max="{{wine.stock}}" id="quantity">
+          </div>
+          <button class="btn btn-primary">
+            <i class="fas fa-shopping-cart me-2"></i>Add to cart
+          </button>
+          {% else %}
+              <p style="color: red;">Out of Stock</p>
+          {% endif %}
+        </div>
+        <div>
+          <a href="{{ url_for('store') }}" class="btn btn-link"><i class="fas fa-arrow-left me-1"></i>Back to Store</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="footer mt-auto">
+  {% include "footer.html" %}
+</div>
+</body>
+</html>
+{% else %}
+<p>Please go to the <a href="/">index page</a>.</p>
+{% endif %}
