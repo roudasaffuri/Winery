@@ -41,115 +41,95 @@ def get_wine_by_id(item_id):
     return wine_details
 
 
-##------------------------------------------------------------------#
+#------------------------------------------------------------------#
+
+
 ####"""Create the USERS table."""####
 
-conn = create_connection()
-if conn is not None:
-    try:
-        cur = conn.cursor()
-        cur.execute('''
-            CREATE TABLE IF NOT EXISTS users (
-                id SERIAL PRIMARY KEY,
-                firstname VARCHAR(100) NOT NULL,
-                lastname VARCHAR(100) NOT NULL,
-                email VARCHAR(100) UNIQUE NOT NULL,
-                password VARCHAR(255) NOT NULL,
-                birth_year INTEGER NOT NULL,
-                gender VARCHAR(10) NOT NULL,
-                is_admin BOOLEAN DEFAULT FALSE,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        ''')
-        conn.commit()
-    except Exception as e:
-        print(f"Error creating table: {e}")
-    finally:
-        disconnection(conn, cur)
-
-
-##------------------------------------------------------------------#
-
-# conn = create_connection()
-# if conn is not None:
-#     try:
-#         cur = conn.cursor()
-#         cur.execute("SELECT * FROM users")  # Use correct SQL syntax
-#         all_users = cur.fetchall()  # Fetch all results
-#         for user in all_users:
-#             print(user)  # Print each user
-#     except Exception as e:
-#         print(f"Error: {e}")
-#     finally:
-#         cur.close()  # Ensure cursor is closed
-#         conn.close()  # Ensure connection is closed
-
-##------------------------------------------------------------------#
-
-
-####"""Create the tblproducts table."""####
-
-# conn = create_connection()
-# if conn is not None:
-#     try:
-#         cur = conn.cursor()
-#         # Create items table
-#         cur.execute('''
-#             CREATE TABLE IF NOT EXISTS tblproducts (
-#                 itemId SERIAL PRIMARY KEY,
-#                 itemName VARCHAR(255) NOT NULL,
-#                 itemPrice DECIMAL(10, 2) NOT NULL,
-#                 itemImgUrl TEXT NOT NULL,
-#                 itemCount INT NOT NULL
+#             CREATE TABLE IF NOT EXISTS users (
+#                 id SERIAL PRIMARY KEY,
+#                 firstname VARCHAR(100) NOT NULL,
+#                 lastname VARCHAR(100) NOT NULL,
+#                 email VARCHAR(100) UNIQUE NOT NULL,
+#                 password VARCHAR(255) NOT NULL,
+#                 birth_year INTEGER NOT NULL,
+#                 gender VARCHAR(10) NOT NULL,
+#                 is_admin BOOLEAN DEFAULT FALSE,
+#                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 #             )
-#         ''')
-#         conn.commit()
-#         print("Table 'tblproducts' created successfully.")
-#     except Exception as e:
-#         print(f"Error creating table: {e}")
-#     finally:
-#         disconnection(conn, cur)
 
 
-##------------------------------------------------------------------#
+####"""Create the wines table."""####
+
+# CREATE TABLE wines (
+#     id SERIAL PRIMARY KEY,
+#     wine_name VARCHAR(255) NOT NULL,
+#     wine_type VARCHAR(100) NOT NULL,
+#    image_url VARCHAR(255) DEFAULT 'https://bravofarms.com/cdn/shop/products/red-wine.jpg?v=1646253890',
+#    price DECIMAL(10,2) NOT NULL,
+#    stock INT NOT NULL DEFAULT 0,
+#    description TEXT,
+#    best_before DATE,
+#    product_registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+#    );
 
 
-# ####"""to insert multiple items into tblproducts"""####
+
+#------------------------- DATA WINES -----------------------------------------#
+#White Wine
+# INSERT INTO wines (wine_name, wine_type, price, stock, description, best_before, product_registration_date)
+# VALUES
+#   ('Chardonnay', 'White', 20.50, 30, 'A classic Chardonnay with buttery notes and a smooth finish.', '2026-12-31', '2025-03-20'),
+#   ('Sauvignon Blanc', 'White', 18.75, 25, 'Crisp Sauvignon Blanc bursting with tropical aromas.', '2026-11-15', '2025-03-21'),
+#   ('Riesling', 'White', 19.00, 28, 'A sweet Riesling with hints of peach and apricot.', '2026-10-10', '2025-03-22'),
+#   ('Pinot Grigio', 'White', 17.50, 20, 'Light-bodied Pinot Grigio with a refreshing citrus finish.', '2026-09-30', '2025-03-23'),
+#   ('Viognier', 'White', 21.00, 22, 'Aromatic Viognier with subtle stone fruit nuances.', '2026-12-01', '2025-03-24'),
+#   ('Semillon', 'White', 20.00, 30, 'Rich Semillon with a touch of honey sweetness.', '2026-08-20', '2025-03-25'),
+#   ('Gewürztraminer', 'White', 22.00, 18, 'Spicy and floral with a distinctive aromatic profile.', '2026-07-15', '2025-03-26'),
+#   ('Moscato', 'White', 16.50, 35, 'Sweet Moscato with gentle fizz and fruity hints.', '2026-06-05', '2025-03-27'),
+#   ('Albariño', 'White', 19.50, 26, 'Fresh Albariño with hints of apricot and citrus.', '2026-05-25', '2025-03-28'),
+#   ('Grüner Veltliner', 'White', 18.25, 24, 'Crisp and peppery with a subtle mineral finish.', '2026-04-15', '2025-03-29');
+# White Red
+# INSERT INTO wines (wine_name, wine_type, price, stock, description, best_before, product_registration_date)
+# VALUES
+#   ('Cabernet Sauvignon', 'Red', 25.00, 40, 'Bold and structured with rich dark fruit flavors.', '2027-01-15', '2025-04-01'),
+#   ('Merlot', 'Red', 23.50, 38, 'Smooth Merlot with plum nuances and soft tannins.', '2027-02-20', '2025-04-02'),
+#   ('Pinot Noir', 'Red', 27.00, 35, 'Elegant Pinot Noir with cherry and subtle spice notes.', '2027-03-15', '2025-04-03'),
+#   ('Syrah', 'Red', 26.00, 32, 'Robust Syrah with hints of pepper and dark berries.', '2027-04-10', '2025-04-04'),
+#   ('Malbec', 'Red', 24.50, 30, 'Velvety Malbec with rich tannins and a smooth finish.', '2027-05-05', '2025-04-05'),
+#   ('Zinfandel', 'Red', 22.75, 36, 'Fruity Zinfandel with a subtle spicy kick.', '2027-06-01', '2025-04-06'),
+#   ('Sangiovese', 'Red', 23.00, 34, 'Medium-bodied with bright cherry flavors and earthy undertones.', '2027-07-10', '2025-04-07'),
+#   ('Tempranillo', 'Red', 25.50, 33, 'Complex Tempranillo with red fruit and spice notes.', '2027-08-15', '2025-04-08'),
+#   ('Grenache', 'Red', 21.50, 37, 'Juicy Grenache with a delicate touch of spice.', '2027-09-20', '2025-04-09'),
+#   ('Mourvèdre', 'Red', 28.00, 29, 'Deep Mourvèdre with intense berry flavors and an earthy finish.', '2027-10-25', '2025-04-10');
+# White Rosé
+# INSERT INTO wines (wine_name, wine_type, price, stock, description, best_before, product_registration_date)
+# VALUES
+#   ('Provence Rosé', 'Rosé', 19.00, 30, 'Light and crisp with delicate floral and red fruit aromas.', '2026-11-30', '2025-05-01'),
+#   ('Pinot Noir Rosé', 'Rosé', 20.00, 28, 'Delicate rosé with balanced acidity and subtle berry notes.', '2026-10-20', '2025-05-02'),
+#   ('Grenache Rosé', 'Rosé', 18.50, 25, 'Fruit-forward rosé with hints of strawberry and melon.', '2026-09-10', '2025-05-03'),
+#   ('Syrah Rosé', 'Rosé', 19.50, 27, 'Vibrant and zesty with a touch of spicy character.', '2026-08-15', '2025-05-04'),
+#   ('Sangiovese Rosé', 'Rosé', 20.25, 29, 'Elegant rosé with refreshing red fruit and floral notes.', '2026-07-05', '2025-05-05'),
+#   ('Tempranillo Rosé', 'Rosé', 19.75, 30, 'Smooth and aromatic with subtle spice undertones.', '2026-06-25', '2025-05-06'),
+#   ('Zinfandel Rosé', 'Rosé', 18.25, 26, 'Lively with bright red berry flavors and a crisp finish.', '2026-05-15', '2025-05-07'),
+#   ('Cabernet Rosé', 'Rosé', 20.50, 24, 'Rich and crisp with a pleasantly lingering finish.', '2026-04-10', '2025-05-08'),
+#   ('Merlot Rosé', 'Rosé', 19.00, 28, 'Soft and fruity with a refreshing character.', '2026-03-20', '2025-05-09'),
+#   ('Malbec Rosé', 'Rosé', 20.00, 27, 'A vibrant blend with distinctive fruit and floral notes.', '2026-02-15', '2025-05-10');
+# White Sparkling :
+# INSERT INTO wines (wine_name, wine_type, price, stock, description, best_before, product_registration_date)
+# VALUES
+#   ('Prosecco', 'Sparkling', 22.00, 20, 'Light and bubbly with delicate floral hints.', '2026-12-05', '2025-06-01'),
+#   ('Cava', 'Sparkling', 21.00, 22, 'Refreshing and crisp with a citrus finish.', '2026-11-01', '2025-06-02'),
+#   ('Champagne', 'Sparkling', 35.00, 18, 'Elegant and complex with fine bubbles and toasted nuances.', '2026-10-01', '2025-06-03'),
+#   ('Crémant', 'Sparkling', 23.50, 20, 'Smooth and balanced with a subtle fruity profile.', '2026-09-15', '2025-06-04'),
+#   ('Sparkling Rosé', 'Sparkling', 24.00, 19, 'Vibrant with red fruit flavors and lively effervescence.', '2026-08-10', '2025-06-05'),
+#   ('Moscato d''Asti', 'Sparkling', 20.00, 21, 'Sweet and aromatic with gentle fizz and floral hints.', '2026-07-05', '2025-06-06'),
+#   ('Sekt', 'Sparkling', 19.50, 23, 'Fresh and lively with notes of green apple and pear.', '2026-06-25', '2025-06-07'),
+#   ('Lambrusco', 'Sparkling', 18.75, 25, 'Lightly sparkling with a hint of sweetness and bright fruit.', '2026-05-20', '2025-06-08'),
+#   ('Franciacorta', 'Sparkling', 30.00, 17, 'Complex with fine bubbles and a balanced, creamy texture.', '2026-04-15', '2025-06-09'),
+#   ('Sparkling Shiraz', 'Sparkling', 28.00, 16, 'Bold and unique with intense berry flavors and a velvety finish.', '2026-03-10', '2025-06-10');
 #
-# conn = create_connection()
-# if conn is not None:
-#     try:
-#         cur = conn.cursor()
-#
-#         # Optionally reset the sequence to start from 1 (if table is empty)
-#         cur.execute("ALTER SEQUENCE tblproducts_itemid_seq RESTART WITH 1;")
-#
-#         # List of items to insert
-#         items = [
-#             ("Macallan 18 Year Old", 50, "https://img.thewhiskyexchange.com/700/macob.18yov1...", 0),
-#             ("Jura 18 Year Old", 400, "https://img.thewhiskyexchange.com/700/iojob.18yov2...", 18),
-#             ("Ballantine's 21 Year Old", 550, "https://img.thewhiskyexchange.com/700/blend_bal21y...", 32),
-#             ("Glenfiddich 15 Year Old Solera", 150, "https://img.thewhiskyexchange.com/700/gfdob.15yo.j...", 29),
-#             ("Chivas Regal 12 Year Old", 550, "https://img.thewhiskyexchange.com/700/blend_chi5.j...", 17),
-#             ("Chivas Regal 12", 20, "https://img.thewhiskyexchange.com/700/blend_chi1.j...", 94),
-#             ("The Exceptional Grain Third Ed", 180, "https://img.thewhiskyexchange.com/700/grain_exc1.j...", 44),
-#             ("Macallan 12 Year Old Triple Cask", 400, "https://img.thewhiskyexchange.com/700/macob.12yov3...", 8),
-#             ("Johnnie Walker Blue Label Ghost", 60, "https://img.thewhiskyexchange.com/700/blend_joh230...", 0),
-#         ]
-#
-#         # Insert each item
-#         for item in items:
-#             cur.execute('''
-#                     INSERT INTO tblproducts (itemName, itemPrice, itemImgUrl, itemCount)
-#                     VALUES (%s, %s, %s, %s)
-#                 ''', item)
-#
-#         conn.commit()
-#         print("Items inserted successfully.")
-#     except Exception as e:
-#         print(f"Error inserting items: {e}")
-#     finally:
-#         disconnection(conn, cur)
+
 
 ###---------------------- Insert user to table USERS ----------########
 # conn = create_connection()

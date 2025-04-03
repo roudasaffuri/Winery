@@ -3,7 +3,7 @@ from Tips import get_wine_tips
 from addItem import addItemToDB
 from context_processors import inject_current_year
 from deleteProduct import deleteItemFromDB
-from wine import get_wines
+from wine1 import get_wines
 from sendEmail import send_email
 from registration import registration
 from login import log

@@ -1,21 +1,5 @@
 from db_connection import create_connection, disconnection
-
-# Define a Wine class to structure the data
-class Wine:
-    def __init__(self, id, wine_name, wine_type, image_url, price, stock, description, best_before, product_registration_date):
-        self.id = id
-        self.wine_name = wine_name
-        self.wine_type = wine_type
-        self.image_url = image_url
-        self.price = price
-        self.stock = stock
-        self.description = description
-        self.best_before = best_before
-        self.product_registration_date = product_registration_date
-
-    def __repr__(self):
-        return f"Wine(id={self.id}, wine_name={self.wine_name}, wine_type={self.wine_type}, price={self.price})"
-
+from Wine import Wine
 
 def wineForSale():
     # Create a connection to the database
@@ -59,6 +43,3 @@ def wineForSale():
 # Call the wineForSale function and print the array of wine objects
 wines = wineForSale()
 
-# # Print all wine objects
-# for wine in wines:
-#     print(wine)
