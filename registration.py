@@ -27,7 +27,7 @@ def registration():
         cur.execute(insert_query, (firstname, lastname, email, password_encrypt_base64, birth_year, gender))
         conn.commit()
 
-        return redirect(url_for('index'))  # Redirect to the home page after successful signup
+        return redirect(url_for('login'))  # Redirect to the home page after successful signup
 
     except Exception as e:
         print(f"Error: {e}")

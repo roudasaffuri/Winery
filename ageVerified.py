@@ -1,6 +1,5 @@
 from flask import request, redirect, url_for
 
-
 def ageVerified():
     age_verified = request.form['age_verified']
     if age_verified == 'yes':

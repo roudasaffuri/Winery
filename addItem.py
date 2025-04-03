@@ -7,7 +7,7 @@ def addItemToDB(wine_name,wine_price,wine_quantity,wine_image):
 
     # SQL insert query
     sql = """
-            INSERT INTO tblproducts (itemName, itemPrice, itemImgUrl, itemCount)
+            INSERT INTO wines (itemName, itemPrice, itemImgUrl, itemCount)
             VALUES (%s, %s, %s, %s);
             """
 

@@ -14,8 +14,7 @@ class Wine:
         self.product_registration_date = product_registration_date
 
     def __repr__(self):
-        return f"Wine(id={self.id}, wine_name={self.wine_name}, wine_type={self.wine_type}, price={self.price})"
-
+        return f"Wine(wine_id={self.id}, wine_name={self.wine_name}, wine_type={self.wine_type}, price={self.price})"
 
 def wineForSale():
     # Create a connection to the database
@@ -27,7 +26,6 @@ def wineForSale():
     try:
         # Execute the SQL query to select all records from wines
         cur.execute("SELECT * FROM wines")
-
         # Fetch all results
         rows = cur.fetchall()
 
@@ -43,7 +41,7 @@ def wineForSale():
                 description=row[6],
                 best_before=row[7],
                 product_registration_date=row[8]
-            )
+                )
             wines.append(wine)
 
     except Exception as e:
@@ -56,9 +54,7 @@ def wineForSale():
 
     return wines
 
-# Call the wineForSale function and print the array of wine objects
-wines = wineForSale()
-
-# # Print all wine objects
+# Uncomment the lines below to test the function locally
+# wines = wineForSale()
 # for wine in wines:
 #     print(wine)

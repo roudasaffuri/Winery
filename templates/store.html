@@ -1,7 +1,6 @@
 {% if session.username %}
 {% include "header.html" %}
-
-<!-- Page Header-->
+<!-- Page Header -->
 <header class="masthead" style="background-image: url('../static/assets/img/store-bg.jpg')">
   <div class="container position-relative px-4 px-lg-5">
     <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -15,43 +14,23 @@
   </div>
 </header>
 
-<!-- Main Content-->
+<!-- Main Content -->
 <main class="mb-4">
   <div class="container my-5">
     <h1 class="text-center">Welcome to the Wine Store</h1>
-
     <div class="row mt-4">
       {% if all_wines %}
         {% for wine in all_wines %}
-        <div class="col-md-4 mb-4">
-          <div class="card">
-            <!-- Wine Image -->
-            <img src="{{ wine.image_url }}" class="card-img-top" alt="{{ wine.wine_name }}">
-            <div class="card-body">
-              <!-- Wine Name -->
-              <h5 class="card-title">{{ wine.wine_name }}</h5>
-              <!-- Price -->
-              <p class="card-text">Price: ${{ '%.2f' | format(wine.price) }}</p>
-              <!-- Quantity Available -->
-              <p class="card-text">Quantity Available: {{ wine.stock }}</p>
-
-              {% if wine.stock > 0 %}
-              <!-- Add to Cart Form -->
-              <form method="post" action="">
-                <div class="input-group mb-3">
-                  <input type="number" class="form-control" name="quantity" value="1" min="1" max="{{ wine.stock }}">
-                  <input type="hidden" name="itemId" value="{{ wine.id }}">
-                  <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary">Add to Cart</button>
-                  </div>
-                </div>
-              </form>
-              {% else %}
-              <p style="color: red;">Out of Stock</p>
-              {% endif %}
+          <div class="col-md-4 mb-4">
+            <div class="card" style="width: 18rem;">
+              <img src="{{ wine.image_url }}" class="card-img-top" alt="{{ wine.wine_name }}">
+              <div class="card-body text-center">
+                <h5 class="card-title">{{ wine.wine_name }}</h5>
+                <p class="card-text">Price: ${{ '%.2f' | format(wine.price) }}</p>
+                <a href="{{ url_for('single_page', id=wine.id) }}" class="btn btn-primary">View Product</a>
+              </div>
             </div>
           </div>
-        </div>
         {% endfor %}
       {% else %}
         <p>No products available.</p>
@@ -62,5 +41,5 @@
 
 {% include "footer.html" %}
 {% else %}
-<p>Please go to the <a href="/">index page</a>.</p>
+  <p>Please go to the <a href="/">index page</a>.</p>
 {% endif %}

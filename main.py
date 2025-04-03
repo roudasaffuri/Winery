@@ -116,6 +116,16 @@ def admin():
 def addProduct():
     return render_template('addProduct.html')
 
+@app.route('/singlePage/<int:id>')
+def single_page(id):
+    wine = get_wine_by_id(id)
+    if wine:
+        return render_template("singlePage.html", wine=wine)
+    else:
+        return "Product not found", 404
+
+
+
 
 #-------------------------------- Admin  ---------------------------------#
 

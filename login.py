@@ -1,5 +1,6 @@
+import time
 from db_connection import create_connection, disconnection
-from flask import redirect, url_for, flash, session ,request
+from flask import redirect, url_for, flash, session, request, render_template
 from fernet_encryption import decode_string
 import  base64
 
@@ -35,11 +36,11 @@ def log():
                     session['useremail']=useremail
                     return redirect(url_for('home'))  # Redirect to a success page
                 else:
-                    flash("Invalid password", "error")
-                    return redirect(url_for('index'))
+                    flash("Invalid email or password.", "danger")
+                    return render_template('login.html')
             else:
-                flash("Username not found", "error")
-                return redirect(url_for('index'))
+                flash("Invalid email or password.", "danger")
+                return render_template('login.html')
         except Exception as e:
             print(f"Error: {e}")
         finally:
