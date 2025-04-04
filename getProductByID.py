@@ -1,5 +1,5 @@
 from db_connection import create_connection, disconnection
-from winesForSale import Wine  # Import the Wine class
+from store import Wine  # Import the Wine class
 
 def get_wine_by_id(id):
     conn = create_connection()

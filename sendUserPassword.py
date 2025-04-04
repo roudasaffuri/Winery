@@ -1,3 +1,4 @@
+from flask import flash
 from db_connection import create_connection,disconnection
 from dotenv import load_dotenv
 import os
@@ -9,7 +10,7 @@ load_dotenv()
 OWN_EMAIL = os.getenv("OWN_EMAIL")
 OWN_PASSWORD = os.getenv("OWN_PASSWORD_EMAIL")
 
-def resetPass(email):
+def sendPass(email):
     # Establish a database connection
     conn = create_connection()
     cur = conn.cursor()
@@ -32,9 +33,10 @@ def resetPass(email):
                 connection.starttls()
                 connection.login(OWN_EMAIL, OWN_PASSWORD)
                 connection.sendmail(OWN_EMAIL, user_email, email_message)
+                flash('A password reset link has been sent to your email.', 'success')
                 return True
         else:
-            print("User not found.")
+            flash("Email does not exist. Please try a different email.", "error")
             return False
 
     finally:

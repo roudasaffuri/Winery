@@ -1,288 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart | YourStore</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        .cart-item-img {
-            max-width: 100px;
-            height: auto;
-        }
-        .quantity-input {
-            width: 70px;
-        }
-        .cart-header {
-            border-bottom: 2px solid #eee;
-        }
-        .coupon-section {
-            background-color: #f8f9fa;
-        }
-    </style>
-</head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container">
-            <a class="navbar-brand" href="{{ url_for('home') }}">YourStore</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Shop</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Categories</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Contact</a>
-                    </li>
-                </ul>
-                <div class="d-flex">
-                    <a href="#" class="btn btn-outline-dark me-2">
-                        <i class="fas fa-user me-1"></i> Account
-                    </a>
-                    <a href="{{ url_for('cart') }}" class="btn btn-dark position-relative">
-                        <i class="fas fa-shopping-cart me-1"></i> Cart
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            {{ cart_count|default(0) }}
-                        </span>
-                    </a>
-                </div>
-            </div>
+{% if session.username %}
+{% include "header.html" %}
+
+<header
+  class="masthead"
+  style="background-image: url('../static/assets/img/products-bg.jpg')">
+<div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading">
+
+          <h1 style="color: white;">Cart</h1>
         </div>
-    </nav>
-
-    <!-- Main Content -->
-    <div class="container my-5">
-        <h1 class="mb-4">Shopping Cart</h1>
-
-        <!-- Cart Items -->
-        <div class="card mb-4 shadow-sm">
-            <div class="card-body">
-                {% if cart_items %}
-                <div class="row cart-header pb-3 d-none d-md-flex">
-                    <div class="col-md-6">Product</div>
-                    <div class="col-md-2 text-center">Price</div>
-                    <div class="col-md-2 text-center">Quantity</div>
-                    <div class="col-md-2 text-end">Total</div>
-                </div>
-
-                <form action="{{ url_for('update_cart') }}" method="post">
-                    {% for item in cart_items %}
-                    <!-- Cart Item -->
-                    <div class="row align-items-center py-3 {% if not loop.last %}border-bottom{% endif %}">
-                        <div class="col-md-6 mb-3 mb-md-0">
-                            <div class="d-flex align-items-center">
-                                <img src="{{ item.image }}" alt="{{ item.name }}" class="cart-item-img rounded me-3">
-                                <div>
-                                    <h5 class="mb-1">{{ item.name }}</h5>
-                                    <p class="text-muted mb-0">{{ item.details }}</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6 col-md-2 text-md-center">
-                            <span class="d-inline d-md-none">Price: </span>
-                            <span>${{ "%.2f"|format(item.price) }}</span>
-                        </div>
-                        <div class="col-6 col-md-2 text-md-center my-3 my-md-0">
-                            <div class="input-group quantity-input mx-auto">
-                                <button class="btn btn-outline-secondary quantity-btn" type="button" data-action="decrease" data-id="{{ item.id }}">-</button>
-                                <input type="text" name="quantity_{{ item.id }}" class="form-control text-center" value="{{ item.quantity }}">
-                                <button class="btn btn-outline-secondary quantity-btn" type="button" data-action="increase" data-id="{{ item.id }}">+</button>
-                            </div>
-                        </div>
-                        <div class="col-md-2 text-md-end mt-3 mt-md-0 d-flex justify-content-between align-items-center">
-                            <span class="d-inline d-md-none">Total: </span>
-                            <span>${{ "%.2f"|format(item.total) }}</span>
-                            <a href="{{ url_for('remove_from_cart', product_id=item.id) }}" class="btn btn-sm text-danger ms-2 ms-md-3">
-                                <i class="fas fa-trash"></i>
-                            </a>
-                        </div>
-                    </div>
-                    {% endfor %}
-
-                {% else %}
-                <div class="text-center py-5">
-                    <i class="fas fa-shopping-cart fa-3x mb-3 text-muted"></i>
-                    <h4>Your cart is empty</h4>
-                    <p class="text-muted">Looks like you haven't added any products to your cart yet.</p>
-                    <a href="{{ url_for('home') }}" class="btn btn-primary mt-3">Continue Shopping</a>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-
-        {% if cart_items %}
-        <!-- Cart Actions and Summary -->
-        <div class="row">
-            <!-- Coupon and Actions -->
-            <div class="col-md-6 mb-4 mb-md-0">
-                <div class="card shadow-sm">
-                    <div class="card-body coupon-section">
-                        <h5>Have a coupon?</h5>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Coupon code">
-                            <button class="btn btn-outline-dark" type="button">Apply</button>
-                        </div>
-                        <div class="d-flex justify-content-between">
-                            <a href="{{ url_for('home') }}" class="btn btn-outline-secondary">
-                                <i class="fas fa-arrow-left me-2"></i>Continue Shopping
-                            </a>
-                            <button type="submit" class="btn btn-outline-danger">
-                                <i class="fas fa-sync-alt me-2"></i>Update Cart
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            </form>
-
-            <!-- Order Summary -->
-            <div class="col-md-6">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-dark text-white">
-                        <h5 class="mb-0">Order Summary</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Subtotal</span>
-                            <span>${{ "%.2f"|format(subtotal) }}</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Shipping</span>
-                            <span>$0.00</span>
-                        </div>
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>Tax</span>
-                            <span>${{ "%.2f"|format(tax) }}</span>
-                        </div>
-                        <hr>
-                        <div class="d-flex justify-content-between mb-3">
-                            <strong>Total</strong>
-                            <strong>${{ "%.2f"|format(total) }}</strong>
-                        </div>
-                        <button class="btn btn-primary w-100">
-                            <i class="fas fa-lock me-2"></i>Proceed to Checkout
-                        </button>
-                        <div class="text-center mt-3">
-                            <small class="text-muted">Secure checkout with:</small>
-                            <div class="mt-2">
-                                <i class="fab fa-cc-visa fa-2x mx-1"></i>
-                                <i class="fab fa-cc-mastercard fa-2x mx-1"></i>
-                                <i class="fab fa-cc-amex fa-2x mx-1"></i>
-                                <i class="fab fa-cc-paypal fa-2x mx-1"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Recommended Products -->
-        {% if recommended %}
-        <div class="mt-5">
-            <h3 class="mb-4">You might also like</h3>
-            <div class="row row-cols-1 row-cols-md-4 g-4">
-                {% for product in recommended %}
-                <!-- Product {{ loop.index }} -->
-                <div class="col">
-                    <div class="card h-100">
-                        <img src="{{ product.image }}" class="card-img-top" alt="{{ product.name }}">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ product.name }}</h5>
-                            <p class="card-text text-muted">${{ "%.2f"|format(product.price) }}</p>
-                            <a href="{{ url_for('add_to_cart', product_id=product.id) }}" class="btn btn-sm btn-outline-dark">Add to Cart</a>
-                        </div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
+      </div>
     </div>
+  </div>
+</header>
 
-    <!-- Footer -->
-    <footer class="bg-dark text-white py-4 mt-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3 mb-4 mb-md-0">
-                    <h5>YourStore</h5>
-                    <p class="text-muted">The best place to shop online for quality products at competitive prices.</p>
-                    <div class="mt-3">
-                        <a href="#" class="text-white me-2"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-white me-2"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-white me-2"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="text-white"><i class="fab fa-pinterest"></i></a>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-4 mb-md-0">
-                    <h5>Quick Links</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-muted">About Us</a></li>
-                        <li><a href="#" class="text-muted">Contact Us</a></li>
-                        <li><a href="#" class="text-muted">Terms & Conditions</a></li>
-                        <li><a href="#" class="text-muted">Privacy Policy</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3 mb-4 mb-md-0">
-                    <h5>Customer Service</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#" class="text-muted">My Account</a></li>
-                        <li><a href="#" class="text-muted">Order Tracking</a></li>
-                        <li><a href="#" class="text-muted">Wishlist</a></li>
-                        <li><a href="#" class="text-muted">Returns & Exchanges</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <h5>Newsletter</h5>
-                    <p class="text-muted">Subscribe to receive updates, access to exclusive deals, and more.</p>
-                    <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Your email">
-                        <button class="btn btn-light" type="button">Subscribe</button>
+<div class="container my-5">
+    <div class="row">
+        {% for wine in all_wines %}
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <img src="{{ wine.img }}" class="card-img-top" alt="{{ wine.title }}" width="200" height="300">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ wine.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">{{ wine.province }}, {{ wine.country }}</h6>
+                        <p class="card-text">{{ wine.description }}</p>
+                        <p class="amount">{{ wine.price }} $</p>
                     </div>
                 </div>
             </div>
-            <hr class="my-4">
-            <div class="text-center">
-                <p class="mb-0">&copy; 2025 YourStore. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+        {% endfor %}
+    </div>
+</div>
 
-    <!-- Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom JavaScript for quantity buttons -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const quantityBtns = document.querySelectorAll('.quantity-btn');
 
-            quantityBtns.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const action = this.dataset.action;
-                    const productId = this.dataset.id;
-                    const inputField = document.querySelector(`input[name="quantity_${productId}"]`);
-                    let currentValue = parseInt(inputField.value);
 
-                    if (action === 'increase') {
-                        inputField.value = currentValue + 1;
-                    } else if (action === 'decrease' && currentValue > 1) {
-                        inputField.value = currentValue - 1;
-                    }
-                });
-            });
-        });
-    </script>
-</body>
-</html>
+
+
+ {% include "footer.html" %}
+{% else %}
+    <p>Please go to the <a href="/">index page</a>.</p>
+{% endif %}

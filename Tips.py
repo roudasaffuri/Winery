@@ -1,6 +1,8 @@
+# https://www.npoint.io/   to create API
+
 import requests
 
-
+urlEndPointTipsJson = "https://api.npoint.io/9e5a10a7b6fe21ba98aa"
 class WineTip:
     def __init__(self, number, tip, image):
         self.number = number
@@ -10,7 +12,6 @@ class WineTip:
 
 def get_wine_tips():
     wine_tips_list = []
-    urlEndPointTipsJson = "https://api.npoint.io/9e5a10a7b6fe21ba98aa"
     response = requests.get(urlEndPointTipsJson).json()
 
     for tip in response["wine_tips"]:

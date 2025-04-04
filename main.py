@@ -3,16 +3,16 @@ from Tips import get_wine_tips
 from addItem import addItemToDB
 from context_processors import inject_current_year
 from deleteProduct import deleteItemFromDB
-from wine1 import get_wines
+from getWineById import getWineById
 from sendEmail import send_email
 from registration import registration
 from login import log
-from winesForSale import wineForSale
+from store import wineForSale
 from getProductByID import get_wine_by_id
 from updateProduct import updateProduct
 from dotenv import load_dotenv
 import os
-from resetPassword import resetPass
+from sendUserPassword import sendPass
 from clearSessionAndLogout import exitAndClearSession
 from ageVerified import ageVerified
 load_dotenv()
@@ -49,15 +49,12 @@ def signup():
 
 
 
-@app.route('/resetPassword', methods=['GET', 'POST'])
-def resetPassword():
+@app.route('/sendPasswordToEmail', methods=['GET', 'POST'])
+def sendPasswordToEmail():
     if request.method == 'POST':
         userEmail = request.form['email']
-        if resetPass(userEmail):
-            flash('A password reset link has been sent to your email.', 'success')
-        else:
-            flash("Email does not exist. Please try a different email.", "error")
-        return redirect(url_for('login'))
+        sendPass(userEmail)
+    return redirect(url_for('login'))
 
 
 #-------------------------------- USER  ---------------------------------#
@@ -91,20 +88,25 @@ def contact():
     return render_template("contact.html", msg_sent=False)
 
 
-@app.route('/products')
-def products():
-    return render_template('products.html', all_wines=get_wines())
-
 @app.route("/tipsPage")
 def tipsPage():
     return render_template("tipsPage.html",tips=get_wine_tips())
-
 
 
 @app.route('/store',)
 def store():
     return render_template('store.html', all_wines=wineForSale())
 
+
+@app.route('/singlePage/<int:id>')
+def singlePage(id):
+    return getWineById(id)
+
+
+
+
+
+#-------------------------------- Admin  ---------------------------------#
 
 @app.route('/admin')
 def admin():
@@ -115,19 +117,6 @@ def admin():
 @app.route('/addProduct')
 def addProduct():
     return render_template('addProduct.html')
-
-@app.route('/singlePage/<int:id>')
-def single_page(id):
-    wine = get_wine_by_id(id)
-    if wine:
-        return render_template("singlePage.html", wine=wine)
-    else:
-        return "Product not found", 404
-
-
-
-
-#-------------------------------- Admin  ---------------------------------#
 
 @app.route('/add-wine', methods=['POST'])
 def add_wine():

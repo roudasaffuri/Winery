@@ -6,7 +6,7 @@
     <div class="row gx-4 gx-lg-5 justify-content-center">
       <div class="col-md-10 col-lg-8 col-xl-7">
         <div class="page-heading">
-          <h1>STORE</h1>
+          <h1>Store</h1>
           <span class="subheading">OUR STORE</span>
         </div>
       </div>
@@ -27,7 +27,7 @@
               <div class="card-body text-center">
                 <h5 class="card-title">{{ wine.wine_name }}</h5>
                 <p class="card-text">Price: ${{ '%.2f' | format(wine.price) }}</p>
-                <a href="{{ url_for('single_page', id=wine.id) }}" class="btn btn-primary">View Product</a>
+                <a href="{{ url_for('singlePage', id=wine.id) }}" class="btn btn-primary">View Product</a>
               </div>
             </div>
           </div>
