@@ -4,10 +4,10 @@ from addItem import addItemToDB
 from context_processors import inject_current_year
 from deleteProduct import deleteItemFromDB
 from getWineById import getWineById
-from sendEmail import send_email
+from sentMessage import sentMessage
 from registration import registration
 from login import log
-from store import wineForSale
+from store import wines
 from getProductByID import get_wine_by_id
 from updateProduct import updateProduct
 from dotenv import load_dotenv
@@ -81,9 +81,9 @@ def cart():
 
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
-    if request.method == "POST":
+    if request.method == "POST" :
         data = request.form
-        send_email(data["name"], data["email"], data["phone"], data["message"])
+        sentMessage(data)
         return render_template("contact.html", msg_sent=True) # Redirect to avoid form resubmission
     return render_template("contact.html", msg_sent=False)
 
@@ -95,13 +95,16 @@ def tipsPage():
 
 @app.route('/store',)
 def store():
-    return render_template('store.html', all_wines=wineForSale())
+    return render_template('store.html', all_wines=wines())
 
 
 @app.route('/singlePage/<int:id>')
 def singlePage(id):
     return getWineById(id)
 
+@app.route('/history')
+def history():
+    return render_template("history.html")
 
 
 
@@ -110,7 +113,7 @@ def singlePage(id):
 
 @app.route('/admin')
 def admin():
-    wines = wineForSale()
+    wines = wines()
     return render_template('admin.html', all_wines=wines)
 
 

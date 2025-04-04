@@ -66,12 +66,13 @@
                         <div class="form-group py-1 pb-2">
                             <div class="input-field">
                                 <span class="fas fa-lock px-2"></span>
-                                <input type="password" name="password" placeholder="Create a Password" required>
-                                <button type="button" class="btn bg-white text-muted">
-                                    <span class="far fa-eye-slash"></span>
+                                <input type="password" name="password" class="password" placeholder="Enter your Password" required>
+                                <button type="button" class="togglePassword btn bg-white text-muted">
+                                    <span class="toggleIcon far fa-eye-slash"></span>
                                 </button>
                             </div>
                         </div>
+
 
                         <button type="submit" class="btn btn-primary btn-block mt-3">Sign Up</button>
                         <div class="text-center pt-4 text-muted">Already have an account? <a href="{{ url_for('login') }}">Login</a></div>
@@ -82,26 +83,13 @@
     </div>
 </div>
 
-<script>
-    document.getElementById('birthyear').addEventListener('input', function() {
-        const birthYear = parseInt(this.value);
-        const currentYear = new Date().getFullYear();
-        const age = currentYear - birthYear;
-        const ageMessage = document.getElementById('ageMessage');
-
-        if (age < 18) {
-            ageMessage.style.display = 'block';
-            this.setCustomValidity("You must be at least 18 years old to sign up.");
-        } else {
-            ageMessage.style.display = 'none';
-            this.setCustomValidity("");
-        }
-    });
-</script>
 
 <!-- jQuery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 <!-- Bootstrap JS -->
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+<script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
 </body>
 </html>

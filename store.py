@@ -4,7 +4,7 @@ from Wine import Wine
 
 
 
-def wineForSale():
+def wines():
     # Create a connection to the database
     conn = create_connection()
     cur = conn.cursor()

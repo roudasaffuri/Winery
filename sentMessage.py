@@ -8,7 +8,11 @@ OWN_PASSWORD = os.getenv("OWN_PASSWORD_EMAIL")
 
 
 
-def send_email(name, email, phone, message):
+def sentMessage(data):
+    name = data["name"]
+    email = data["email"]
+    phone = data["phone"]
+    message = data["message"]
     email_message = f"Subject:New Message\n\nName: {name}\nEmail: {email}\nPhone: {phone}\nMessage:{message}"
     with smtplib.SMTP("smtp.gmail.com") as connection:
         connection.starttls()
