@@ -10,14 +10,13 @@ from registration import registration
 from login import log
 from store import wines
 from getProductByID import get_wine_by_id
-from userUpdateCart import userUpdateCart
 from updateProduct import updateProduct
 from dotenv import load_dotenv
 import os
 from sendUserPassword import sendPass
 from clearSessionAndLogout import exitAndClearSession
 from ageVerified import ageVerified
-from decimal import Decimal
+
 
 from userCart import getCart
 
@@ -161,9 +160,6 @@ def update_quantity():
     cart_item_id = request.form.get('cart_item_id')
     action = request.form.get('action')
 
-    if not cart_item_id or action not in ['increase', 'decrease']:
-        flash("Invalid update request.")
-        return redirect(url_for('cart'))
 
     conn = create_connection()
     cur = None

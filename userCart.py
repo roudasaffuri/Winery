@@ -1,29 +1,16 @@
 from _pydecimal import Decimal
-
 from flask import session, flash, render_template, redirect, url_for
-
 from db_connection import create_connection, disconnection
 
 
 def getCart():
-    # Check if the user is logged in using session data
-    useremail = session.get('useremail')
-    if not useremail:
-        flash("Please log in to view your cart.")
-        return redirect(url_for('login'))
 
     conn = create_connection()
     cur = None
     cart_items = []
     try:
         cur = conn.cursor()
-        # Get user id
-        cur.execute("SELECT id FROM users WHERE email = %s", (useremail,))
-        result = cur.fetchone()
-        if not result:
-            flash("User not found.")
-            return redirect(url_for('login'))
-        user_id = result[0]
+        user_id = session.get('id')
 
         # Get cart_id
         cur.execute("SELECT cart_id FROM carts WHERE user_id = %s", (user_id,))
@@ -67,7 +54,7 @@ def getCart():
                     "total": total
                 })
     except Exception as e:
-        flash("Error retrieving cart items.")
+        flash(f"product not available {wine_name} ")
         print(f"Cart error: {e}")
     finally:
         if cur:
@@ -82,4 +69,5 @@ def getCart():
                            subtotal=subtotal,
                            tax=tax,
                            total=total)
+
     return render_template("cart.html", cart_items=cart_items, subtotal=subtotal, tax=tax, total=total)
