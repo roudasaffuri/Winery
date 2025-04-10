@@ -15,19 +15,19 @@ def log():
             cur = conn.cursor()
             # Check if the username (email) exists in the database
             # and also fetch the password,isAdmin and firstname.
-            cur.execute("SELECT  password, is_admin , firstname FROM users WHERE email = %s", (useremail,))
+            cur.execute("SELECT  id, password, is_admin , firstname FROM users WHERE email = %s", (useremail,))
             result = cur.fetchone()
 
             if result is not None:
                 print(result)
-                stored_password_base64, is_admin, firstname = result
+                id, stored_password_base64, is_admin, firstname = result
                 # Decode the stored password from base64
                 stored_password = base64.b64decode(stored_password_base64)
                 decrypted_password = decode_string(stored_password)
 
                 # Verify the password
                 if decrypted_password == password:
-
+                    session['id'] = id
                     # Check admin status
                     if useremail == 'admin@email.com' and is_admin:
                         session['admin'] = useremail

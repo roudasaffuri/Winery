@@ -1,0 +1,36 @@
+/* static/css/cart.css */
+
+body {
+    background-image: url('/static/assets/img/store-bg.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+.cart-item-img {
+    max-width: 150px;
+    height: auto;
+    object-fit: contain;
+}
+
+.quantity-input {
+    max-width: 120px;
+}
+
+.quantity-input input {
+    max-width: 50px;
+}
+
+.cart-item {
+    padding: 1rem 0;
+}
+
+@media (max-width: 767.98px) {
+    .cart-item-img {
+        max-width: 100px;
+    }
+
+    .quantity-input {
+        max-width: 100%;
+    }
+}

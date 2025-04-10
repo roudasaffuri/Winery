@@ -1,46 +1,109 @@
-{% if session.username %}
-{% include "header.html" %}
+{% include 'header.html' %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styleCart.css') }}">
 
-<header
-  class="masthead"
-  style="background-image: url('../static/assets/img/products-bg.jpg')">
-<div class="container position-relative px-4 px-lg-5">
-    <div class="row gx-4 gx-lg-5 justify-content-center">
-      <div class="col-md-10 col-lg-8 col-xl-7">
-        <div class="page-heading">
+<div class="container my-5">
+  <h1 class="mb-4 text-dark">Shopping Cart</h1>
 
-          <h1 style="color: white;">Cart</h1>
-            <span class="subheading" >#####</span>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-info">
+        {% for msg in messages %}<p>{{ msg }}</p>{% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      {% if cart_items %}
+        <div class="row cart-header pb-3 d-none d-md-flex">
+          <div class="col-md-6 text-dark">Product</div>
+          <div class="col-md-2 text-center text-dark">Price</div>
+          <div class="col-md-2 text-center text-dark">Quantity</div>
+          <div class="col-md-2 text-end text-dark">Total</div>
+        </div>
+
+        {% for item in cart_items %}
+        <div class="row align-items-center py-3 cart-item {% if not loop.last %}border-bottom{% endif %}">
+          <!-- Product Image and Name -->
+          <div class="col-md-6 d-flex align-items-center mb-3 mb-md-0">
+            <img src="{{ item.image }}" alt="{{ item.name }}" class="cart-item-img rounded me-3" style="max-height: 80px; max-width: 80px;">
+            <h5 class="mb-1 text-dark">{{ item.name }}</h5>
+          </div>
+
+          <!-- Product Price -->
+          <div class="col-6 col-md-2 text-center text-dark">
+            ${{ "%.2f"|format(item.price) }}
+          </div>
+
+          <!-- Quantity Control -->
+          <div class="col-6 col-md-2 text-md-center my-3 my-md-0">
+            <form action="{{ url_for('update_quantity') }}" method="post" class="d-inline">
+              <input type="hidden" name="cart_item_id" value="{{ item.cart_item_id }}">
+              <input type="hidden" name="action" value="decrease">
+              <button type="submit" class="btn btn-outline-secondary" {% if item.quantity == 1 %}disabled{% endif %}>–</button>
+            </form>
+
+            <span class="mx-2 text-dark">{{ item.quantity }}</span>
+
+            <form action="{{ url_for('update_quantity') }}" method="post" class="d-inline">
+              <input type="hidden" name="cart_item_id" value="{{ item.cart_item_id }}">
+              <input type="hidden" name="action" value="increase">
+              <button type="submit" class="btn btn-outline-secondary" {% if item.quantity >= item.stock %}disabled{% endif %}>+</button>
+            </form>
+          </div>
+
+          <!-- Product Total -->
+          <div class="col-md-2 text-md-end mt-3 mt-md-0 d-flex justify-content-between align-items-center text-dark">
+            <span>${{ "%.2f"|format(item.total) }}</span>
+            <a href="{{ url_for('remove_from_cart', product_id=item.id) }}" class="btn btn-sm text-danger ms-2">
+              <i class="fas fa-trash"></i>
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+
+      {% else %}
+        <div class="text-center py-5">
+          <i class="fas fa-shopping-cart fa-3x mb-3 text-muted"></i>
+          <h4 class="text-dark">Your cart is empty</h4>
+          <a href="{{ url_for('home') }}" class="btn btn-primary mt-3">Continue Shopping</a>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if cart_items %}
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white"><h5 class="mb-0">Order Summary</h5></div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-2 text-dark">
+            <span>Subtotal</span>
+            <span>${{ "%.2f"|format(subtotal) }}</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2 text-dark">
+            <span>Shipping</span>
+            <span>$0.00</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2 text-dark">
+            <span>Tax</span>
+            <span>${{ "%.2f"|format(tax) }}</span>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between mb-3 text-dark">
+            <strong>Total</strong>
+            <strong>${{ "%.2f"|format(total) }}</strong>
+          </div>
+          <button class="btn btn-primary w-100">
+            <i class="fas fa-lock me-2"></i>Proceed to Checkout
+          </button>
         </div>
       </div>
     </div>
   </div>
-</header>
+  {% endif %}
 
-<div class="container my-5">
-    <div class="row">
-        {% for wine in all_wines %}
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <img src="{{ wine.img }}" class="card-img-top" alt="{{ wine.title }}" width="200" height="300">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ wine.title }}</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">{{ wine.province }}, {{ wine.country }}</h6>
-                        <p class="card-text">{{ wine.description }}</p>
-                        <p class="amount">{{ wine.price }} $</p>
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
 </div>
 
-
-
-
-
-
- {% include "footer.html" %}
-{% else %}
-    <p>Please go to the <a href="/">index page</a>.</p>
-{% endif %}
+{% include 'footer.html' %}
