@@ -19,6 +19,8 @@ from ageVerified import ageVerified
 
 
 from userCart import getCart
+from userRemoveProduct import removeProduct
+from userUpdateQuantity import handle_quantity_update
 
 load_dotenv()
 
@@ -111,48 +113,18 @@ def singlePage(id):
 def history():
     return render_template("history.html")
 #-------------------------------- ADD TO CART  ---------------------------------#
-
-
-
-
-
 @app.route('/cart')
 def cart():
     return getCart()
     return render_template("cart.html")
 
 
-
-
 @app.route('/remove_from_cart/<int:product_id>')
 def remove_from_cart(product_id):
     """Remove a product from the user's cart."""
-    conn = create_connection()
-    try:
-        cur = conn.cursor()
+    removeProduct(product_id)
 
-        # Get cart_id
-        user_id = session.get('id')
-        cur.execute("SELECT cart_id FROM carts WHERE user_id = %s", (user_id,))
-        cart_row = cur.fetchone()
-
-        cart_id = cart_row[0]
-
-        # Delete item
-        cur.execute(
-            "DELETE FROM cart_items WHERE cart_id = %s AND wine_id = %s",
-            (cart_id, product_id)
-        )
-        conn.commit()
-        flash("Item removed from cart.")
-    except Exception as e:
-        flash("Error removing item from cart.")
-    finally:
-        if cur:
-            disconnection(conn, cur)
-
-    # Redirect back to where the user came from
-    return redirect(request.referrer or url_for('singlePage', id=product_id))
+    return redirect(url_for('cart'))
 
 
 @app.route('/cart/update_quantity', methods=['POST'])
@@ -160,41 +132,8 @@ def update_quantity():
     cart_item_id = request.form.get('cart_item_id')
     action = request.form.get('action')
 
-
-    conn = create_connection()
-    cur = None
-    try:
-        cur = conn.cursor()
-        cur.execute("""
-            SELECT ci.quantity, w.stock 
-            FROM cart_items ci 
-            JOIN wines w ON ci.wine_id = w.id 
-            WHERE ci.cart_item_id = %s
-        """, (cart_item_id,))
-        row = cur.fetchone()
-
-        if row:
-            quantity, stock = row
-
-            if action == 'increase' and quantity < stock:
-                cur.execute("UPDATE cart_items SET quantity = quantity + 1 WHERE cart_item_id = %s", (cart_item_id,))
-            elif action == 'decrease' and quantity > 1:
-                cur.execute("UPDATE cart_items SET quantity = quantity - 1 WHERE cart_item_id = %s", (cart_item_id,))
-            else:
-                flash("Quantity limit reached.")
-            conn.commit()
-        else:
-            flash("Item not found.")
-    except Exception as e:
-        print(f"Update error: {e}")
-        flash("Failed to update quantity.")
-    finally:
-        if cur:
-            disconnection(conn, cur)
-
+    handle_quantity_update(cart_item_id, action)
     return redirect(url_for('cart'))
-
-
 
 
 
