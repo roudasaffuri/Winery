@@ -33,7 +33,8 @@ def getCart():
             for cart_item_id, quantity, price_at_addition, wine_id, wine_name, image_url, stock in cur.fetchall():
                 # אם הכמות בעגלה גדולה מהמלאי
                 if quantity > stock:
-                    flash(f"Not enough stock for {wine_name}: requested {quantity}, available {stock}.")
+                    flash(
+                        f"Only {stock} left in stock for {wine_name}. Requested {quantity}, so the product wasn't added to your cart.")
                     # נמחק את הפריט מהעגלה, או נאפס את הכמות ל־stock, לפי מדיניות
                     quantity = stock
                     cur.execute(
@@ -54,7 +55,6 @@ def getCart():
                     "total": total
                 })
     except Exception as e:
-        flash(f"product not available {wine_name} ")
         print(f"Cart error: {e}")
     finally:
         if cur:
@@ -62,12 +62,22 @@ def getCart():
 
     subtotal = sum(item["total"] for item in cart_items)
     tax = subtotal * Decimal('0.1')
-    total = subtotal + tax
+
+    # Shipping logic
+    if subtotal < Decimal('50'):
+        shipping = Decimal('20.00')
+    else:
+        shipping = Decimal('0.00')
+
+    total = subtotal + tax + shipping
+
+
 
     return render_template("cart.html",
                            cart_items=cart_items,
                            subtotal=subtotal,
                            tax=tax,
+                           shipping=shipping,
                            total=total)
 
     return render_template("cart.html", cart_items=cart_items, subtotal=subtotal, tax=tax, total=total)

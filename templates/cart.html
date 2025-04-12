@@ -84,7 +84,12 @@
           </div>
           <div class="d-flex justify-content-between mb-2 text-dark">
             <span>Shipping</span>
-            <span>$0.00</span>
+            <span>
+              {% if shipping == 0 %}
+                  Free Shipping
+               {% else %}
+                   ${{ "%.2f"|format(shipping) }}
+               {% endif %}</span>
           </div>
           <div class="d-flex justify-content-between mb-2 text-dark">
             <span>Tax</span>
