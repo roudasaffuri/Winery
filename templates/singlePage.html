@@ -29,18 +29,6 @@
 <body class="py-5">
   {% include "header.html" %}
 
-  <!-- Flash messages -->
-  <div class="container mt-3">
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <div class="alert alert-info">
-          {% for msg in messages %}
-            <div>{{ msg }}</div>
-          {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
-  </div>
 
   <div class="content">
     <div class="container bg-white rounded shadow mx-auto my-4 p-4" style="max-width: 1200px;">

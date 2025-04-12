@@ -16,15 +16,7 @@
 
   <!-- Flash messages -->
   <div class="container mt-3">
-    {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <div class="alert alert-info">
-          {% for msg in messages %}
-            <div>{{ msg }}</div>
-          {% endfor %}
-        </div>
-      {% endif %}
-    {% endwith %}
+  {% include 'flash.html' %}
   </div>
 
 <!-- Main Content -->
