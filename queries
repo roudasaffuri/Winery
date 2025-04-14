@@ -60,6 +60,51 @@ CREATE TABLE cart_items (
 );
 
 
+####"""Create the purchases table."""####
+
+CREATE TABLE purchases (
+    purchase_id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    total_amount DECIMAL(10,2) NOT NULL,
+    shipping_price DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    tax DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    purchased_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+####"""Create the purchase_items table."""####
+
+CREATE TABLE purchase_items (
+    purchase_item_id SERIAL PRIMARY KEY,
+    purchase_id INTEGER NOT NULL,
+    wine_id INTEGER NOT NULL,
+    wine_name VARCHAR(255) NOT NULL,
+    quantity INTEGER NOT NULL CHECK (quantity > 0),
+    price_at_purchase DECIMAL(10,2) NOT NULL,
+    subtotal DECIMAL(10,2) NOT NULL,
+    FOREIGN KEY (purchase_id) REFERENCES purchases(purchase_id),
+    FOREIGN KEY (wine_id) REFERENCES wines(id)
+);
+
+
+
+
+Example Query: "What did user X buy?"
+
+
+SELECT
+    p.purchase_id,
+    p.purchased_at,
+    w.wine_name,
+    pi.quantity,
+    pi.price_at_purchase,
+    (pi.quantity * pi.price_at_purchase) AS subtotal
+FROM purchases p
+JOIN purchase_items pi ON p.purchase_id = pi.purchase_id
+JOIN wines w ON pi.wine_id = w.id
+WHERE p.user_id = $USER_ID
+ORDER BY p.purchased_at DESC;
+
 
 
 ------------------------- DATA WINES -----------------------------------------#

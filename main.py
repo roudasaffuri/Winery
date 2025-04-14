@@ -1,3 +1,4 @@
+from _decimal import Decimal
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from Tips import get_wine_tips
 from addItem import addItemToDB
@@ -17,7 +18,6 @@ from sendUserPassword import sendPass
 from clearSessionAndLogout import exitAndClearSession
 from ageVerified import ageVerified
 from userAddToCart import handle_add_to_cart
-
 from userCart import getCart
 from userRemoveProduct import removeProduct
 from userUpdateQuantity import handle_quantity_update
@@ -79,11 +79,6 @@ def about():
 @app.route("/tips")
 def tips():
     return render_template("tips.html")
-
-
-# @app.route("/cart")
-# def cart():
-#     return render_template("cart.html")
 
 
 @app.route("/contact", methods=["GET", "POST"])
@@ -148,12 +143,78 @@ def add_to_cart(product_id):
 
 
 
+@app.route('/process-payment', methods=['POST'])
+def process_payment_route():
+    user_id = session.get('id')
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    # 1. Fetch cart items for this user
+    cursor.execute("""
+        SELECT ci.cart_item_id, ci.wine_id, ci.quantity, ci.price_at_addition,
+               w.wine_name, w.stock
+        FROM cart_items ci
+        JOIN carts c ON ci.cart_id = c.cart_id
+        JOIN wines w ON ci.wine_id = w.id
+        WHERE c.user_id = %s
+    """, (user_id,))
+    cart_items = cursor.fetchall()
+
+    if not cart_items:
+        print("Cart is empty.")
+        return redirect(url_for('home'))
+
+    subtotal = Decimal('0.00')
+    for item in cart_items:
+        _, _, quantity, price_at_addition, _, _ = item
+        subtotal += Decimal(price_at_addition) * quantity
+
+    # 2. Calculate shipping, tax, total
+    shipping = Decimal('0.00') if subtotal > 50 else Decimal('20.00')
+    tax = subtotal * Decimal('0.10')
+    total = subtotal + shipping + tax
+
+    # 3. Insert into purchases table
+    cursor.execute("""
+        INSERT INTO purchases (user_id, total_amount, shipping_price, tax)
+        VALUES (%s, %s, %s, %s)
+        RETURNING purchase_id
+    """, (user_id, total, shipping, tax))
+    purchase_id = cursor.fetchone()[0]
+
+    # 4. Insert into purchase_items for each item
+    for item in cart_items:
+        cart_item_id, wine_id, quantity, price_at_addition, wine_name, stock = item
+        subtotal_item = Decimal(price_at_addition) * quantity
+
+        cursor.execute("""
+            INSERT INTO purchase_items (purchase_id, wine_id, wine_name, quantity, price_at_purchase, subtotal)
+            VALUES (%s, %s, %s, %s, %s, %s)
+        """, (purchase_id, wine_id, wine_name, quantity, price_at_addition, subtotal_item))
+
+        # Optional: update wine stock
+        cursor.execute("""
+            UPDATE wines
+            SET stock = stock - %s
+            WHERE id = %s
+        """, (quantity, wine_id))
+
+    # 5. Optionally clear the cart
+    cursor.execute("""
+        DELETE FROM cart_items
+        USING carts
+        WHERE cart_items.cart_id = carts.cart_id AND carts.user_id = %s
+    """, (user_id,))
+
+    conn.commit()
+    conn.close()
+
+    print("Purchase processed and saved.")
+    return redirect(url_for('home'))
 
 
 
-
-from flask import request, redirect, url_for, flash, session
-from db_connection import create_connection, disconnection
+from flask import request, redirect, url_for, flash
 
 
 
