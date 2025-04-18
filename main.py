@@ -149,7 +149,9 @@ def process_payment_route():
     paymentCart()
     return redirect(url_for('home'))
 
-
+@app.route("/m")
+def m():
+    return render_template("tipsPage.html",tips=get_wine_tips())
 
 #-------------------------------- Admin  ---------------------------------#
 

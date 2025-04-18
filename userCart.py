@@ -31,10 +31,15 @@ def getCart():
                """
             cur.execute(query, (cart_id,))
             for cart_item_id, quantity, price_at_addition, wine_id, wine_name, image_url, stock in cur.fetchall():
-                # אם הכמות בעגלה גדולה מהמלאי
-                if quantity > stock:
+                if stock == 0:
                     flash(
-                        f"Only {stock} left in stock for {wine_name}. Requested {quantity}, so the product wasn't added to your cart.")
+                        f"Your cart was updated regarding to products stock.")
+                    cur.execute("DELETE FROM cart_items WHERE wine_id = %s", (wine_id,))
+                    conn.commit()
+                # אם הכמות בעגלה גדולה מהמלאי
+                elif quantity > stock:
+                    flash(
+                        f"Your cart was updated ,Only {stock} left in stock for {wine_name}. Requested {quantity}")
                     # נמחק את הפריט מהעגלה, או נאפס את הכמות ל־stock, לפי מדיניות
                     quantity = stock
                     cur.execute(
@@ -43,6 +48,7 @@ def getCart():
                     )
                     conn.commit()
 
+            if stock != 0:
                 total = Decimal(quantity) * Decimal(str(price_at_addition))
                 cart_items.append({
                     "cart_item_id": cart_item_id,
