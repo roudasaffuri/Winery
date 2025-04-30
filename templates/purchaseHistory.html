@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Purchase History</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .purchase { border: 1px solid #ccc; margin-bottom: 20px; padding: 10px; border-radius: 10px; }
+        .purchase h3 { margin: 0 0 10px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #aaa; padding: 8px; text-align: left; }
+    </style>
+</head>
+<body>
+    <h1>Purchase History</h1>
+    {% for purchase in purchases %}
+    <div class="purchase">
+        <h3>Purchase ID: {{ purchase.purchase_id }} | Date: {{ purchase.purchased_at }}</h3>
+        <p>Total: ${{ purchase.total_amount }} | Shipping: ${{ purchase.shipping_price }} | Tax: ${{ purchase.tax }}</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Wine Name</th>
+                    <th>Quantity</th>
+                    <th>Price at Purchase</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in purchase.items %}
+                <tr>
+                    <td>{{ item.wine_name }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ item.price_at_purchase }}</td>
+                    <td>${{ item.subtotal }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
+</body>
+</html>

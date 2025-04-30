@@ -8,6 +8,7 @@ from deleteProduct import deleteItemFromDB
 from getWineById import getWineById
 from paypalPayment import paypalPayment
 from userPaymentByCard import PaymentByCard
+from userPurchseHistory import getPurchaseHistory
 from userSentMessage import sentMessage
 from registration import registration
 from login import log
@@ -109,7 +110,12 @@ def singlePage(id):
 
 @app.route('/history')
 def history():
-    return render_template("history.html")
+
+    return getPurchaseHistory()
+
+
+
+
 
 #-------------------------------- ADD TO CART  ---------------------------------#
 
@@ -185,6 +191,10 @@ def process_payment_credit_card():
     user_id = session.get('id')
     complete_order(user_id)
     return render_template("home.html")
+
+
+
+
 
 #-------------------------------- Admin  ---------------------------------#
 

@@ -1,25 +1,57 @@
-{% if (session.username and session.useremail) %}
+{% if session.username %}
 {% include "header.html" %}
 
-        <!-- Page Header-->
-        <header class="masthead" style="background-image: url('../static/assets/img/history.jpg')">
-            <div class="container position-relative px-4 px-lg-5">
-                <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <div class="col-md-10 col-lg-8 col-xl-7">
-                        <div class="site-heading">
-                            <h1>History</h1>
-                            <span class="subheading" >#####</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
+<header class="masthead" style="background-image: url('../static/assets/img/home-bg.jpg')">
+  <div class="container position-relative px-4 px-lg-5">
+    <div class="row gx-4 gx-lg-5 justify-content-center">
+      <div class="col-md-10 col-lg-8 col-xl-7">
+        <div class="page-heading">
+          <h1>Purchase History</h1>
+          <span class="subheading">See your previous orders</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
 
+<main class="mb-4">
+  <div class="container my-5">
+    {% if purchases %}
+      {% for purchase in purchases %}
+        <div class="card mb-4">
+          <div class="card-header bg-primary text-white">
+            <strong>Purchase ID:</strong> {{ purchase['purchase_id'] }} |
+            <strong>Date:</strong> {{ purchase['purchased_at'].strftime('%Y-%m-%d %H:%M:%S') }}
+          </div>
+          <div class="card-body">
+            <p><strong>Total Amount:</strong> ${{ '%.2f' | format(purchase['total_amount']) }}</p>
+            <p><strong>Shipping:</strong> ${{ '%.2f' | format(purchase['shipping_price']) }} |
+               <strong>Tax:</strong> ${{ '%.2f' | format(purchase['tax']) }}</p>
 
+            <h5 class="mt-3">Items:</h5>
+            <ul class="list-group">
+              {% if purchase['items'] %}
+                {% for item in purchase['items'] %}
+                  <li class="list-group-item">
+                    <strong>{{ item['wine_name'] }}</strong> —
+                    {{ item['quantity'] }} x ${{ '%.2f' | format(item['price_at_purchase']) }} =
+                    ${{ '%.2f' | format(item['subtotal']) }}
+                  </li>
+                {% endfor %}
+              {% else %}
+                <p>No items found for this purchase.</p>
+              {% endif %}
+            </ul>
+          </div>
+        </div>
+      {% endfor %}
+    {% else %}
+      <p class="text-center">You haven't made any purchases yet.</p>
+    {% endif %}
+  </div>
+</main>
 
-
-
- {% include "footer.html" %}
+{% include "footer.html" %}
 {% else %}
-    <p>Please go to the <a href="/">index page</a>.</p>
+  <p>Please go to the <a href="/">index page</a>.</p>
 {% endif %}
