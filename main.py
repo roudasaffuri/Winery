@@ -2,6 +2,7 @@ import paypalrestsdk as paypalrestsdk
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from Tips import get_wine_tips
 from addItem import addItemToDB
+from adminGetAllWines import getAllWines
 from complete_order import complete_order
 from context_processors import inject_current_year
 from deleteProduct import deleteItemFromDB
@@ -201,8 +202,7 @@ def process_payment_credit_card():
 
 @app.route('/admin')
 def admin():
-    wines = wines()
-    return render_template('admin.html', all_wines=wines)
+    return render_template('admin.html', all_wines=getAllWines())
 
 
 @app.route('/addProduct')

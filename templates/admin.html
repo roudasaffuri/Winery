@@ -1,6 +1,6 @@
 {% if session.admin %}
 
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -21,6 +21,10 @@
         .btn-sm {
             margin-right: 5px; /* Spacing between buttons */
         }
+        .table td, .table th {
+    vertical-align: middle; /* already in your CSS */
+    text-align: center;     /* add this if not using Bootstrap classes */
+}
     </style>
 </head>
 <body>
@@ -48,42 +52,55 @@
                         <tr>
                             <th>ID Item</th>
                             <th>Wine Name</th>
+                            <th>Type</th>
                             <th>Price</th>
                             <th>Quantity Available</th>
+                            <th>Registration Date</th>
                             <th>Image</th>
+                            <th>Status</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {% if all_wines %}
-                            {% for wine in all_wines %}
-                            <tr>
-                                <td>{{ wine[0] }}</td>
-                                <td>{{ wine[1] }}</td>
-                                <td>${{ '%.2f' | format(wine[2]) }}</td>
-                                <td>{{ wine[4] }}</td>
-                                <td><img src="{{ wine[3] }}" alt="{{ wine[1] }}" style="width: 50px; height: auto;"></td>
-                                <td>
-                                    <!-- Edit Wine Form -->
-                                    <form method="post" action="{{ url_for('edit_product') }}" style="display:inline;">
-                                        <input type="hidden" name="itemId" value="{{ wine[0] }}">
-                                        <button type="submit" class="btn btn-warning btn-sm">Edit</button>
-                                    </form>
+                   <tbody>
+    {% if all_wines %}
+        {% for wine in all_wines %}
+        <tr>
+            <td>{{ wine.id }}</td>
+            <td>{{ wine.wine_name }}</td>
+            <td>{{ wine.wine_type }}</td>
+            <td>${{ '%.2f' | format(wine.price) }}</td>
+            <td>{{ wine.stock }}</td>
+            <td>{{ wine.product_registration_date.strftime('%Y-%m-%d') }}</td>
+            <td><img src="{{ wine.image_url }}" alt="{{ wine.wine_name }}" style="width: 50px; height: auto;"></td>
+            <td>
+                {% if wine.stock < 5 %}
+                    <span class="text-danger font-weight-bold">Only {{ wine.stock }} left!</span>
+                {% else %}
+                    <span class="text-success">In stock</span>
+                {% endif %}
+            </td>
+            <td>
+                <!-- Edit Wine Form -->
+                <form method="post" action="{{ url_for('edit_product') }}" style="display:inline;">
+                    <input type="hidden" name="itemId" value="{{ wine.id }}">
+                    <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                </form>
 
-                                    <!-- Delete Wine Form -->
-                                    <form method="post" action="/delete-wine" style="display:inline;">
-                                        <input type="hidden" name="itemId" value="{{ wine[0] }}">
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        {% else %}
-                            <tr>
-                                <td colspan="6" class="text-center">No wines available.</td>
-                            </tr>
-                        {% endif %}
-                    </tbody>
+                <!-- Delete Wine Form -->
+                <form method="post" action="/delete-wine" style="display:inline;">
+                    <input type="hidden" name="itemId" value="{{ wine.id }}">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="6" class="text-center">No wines available.</td>
+        </tr>
+    {% endif %}
+</tbody>
+
                 </table>
             </div>
         </div>

@@ -47,7 +47,7 @@ def wines():
         # Fetch users within the same age range
         results = cursor.fetchall()
         print(f"Total users in the same age group: {len(results)}")
-        print(results)
+        # print(results)
 
         # Extract user IDs
         list_id_users = [row[0] for row in results]
@@ -130,7 +130,6 @@ def wines():
 
     finally:
         # Close the cursor and database connection
-        cursor.close()
         disconnection(conn, cursor)
 
 
