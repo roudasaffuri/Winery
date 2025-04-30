@@ -1,8 +1,9 @@
 
-
+from ClassWine import Wine
 from collections import Counter
 from datetime import datetime
 from db_connection import create_connection
+
 
 # Create database connection
 conn = create_connection()
@@ -83,6 +84,39 @@ for i in range(1, 41):
         sorted_unique_wine_ids.append(i)
 
 print(f"Final list of wine IDs (popular first, then missing ones): {sorted_unique_wine_ids}")
+
+wines = []  # Array to store wine objects
+
+
+# Execute the SQL query to select all records from wines
+cursor.execute("SELECT * FROM wines")
+
+# Fetch all results
+rows = cursor.fetchall()
+
+# Map each row to a Wine object and append to the wines list
+for row in rows:
+    wine = Wine(
+        id=row[0],
+        wine_name=row[1],
+        wine_type=row[2],
+        image_url=row[3],
+        price=row[4],
+        stock=row[5],
+        description=row[6],
+        best_before=row[7],
+        product_registration_date=row[8]
+    )
+    wines.append(wine)
+
+final_sorted_wine = []
+for id in sorted_unique_wine_ids:
+    for wine in wines:
+        if wine.id == id :
+            final_sorted_wine.append(wine)
+
+print(final_sorted_wine)
+
 
 # Close the database connection
 conn.close()

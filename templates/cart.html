@@ -1,3 +1,4 @@
+{% if session.username %}
 {% include 'header.html' %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/styleCart.css') }}">
 
@@ -67,7 +68,6 @@
   </div>
 
   {% if cart_items %}
-  <form action="/process-payment" method="POST">
   <div class="row">
     <div class="col-md-6">
       <div class="card shadow-sm">
@@ -95,15 +95,20 @@
             <strong>Total</strong>
             <strong>${{ "%.2f"|format(total) }}</strong>
           </div>
-          <button class="btn btn-primary w-100">
-            <i class="fas fa-lock me-2"></i>Proceed to Checkout
-          </button>
+          <a href="{{ url_for('creditCardCheckout') }}" class="btn btn-primary w-100">
+            <i class="fas fa-lock me-2"></i>Credit card Checkout</a>
+
+            <a href="{{ url_for('paypal_payment', total=total) }}" class="btn btn-primary w-100">
+              <i class="fas fa-lock me-2"></i>PayPal Checkout</a>
+
         </div>
       </div>
     </div>
   </div>
   {% endif %}
-</form>
-</div>
 
+</div>
 {% include 'footer.html' %}
+{% else %}
+  <p>Please go to the <a href="/">index page</a>.</p>
+{% endif %}

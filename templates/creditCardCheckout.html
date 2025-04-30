@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout</title>
+  <!-- Bootstrap CSS only -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <style>
+    /* –– Pin header/navbar to top –– */
+    header, nav, .navbar {
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      z-index: 1030 !important;
+    }
+    /* –– Background + blur –– */
+    body {
+      background-image: url('../static/assets/img/about-bg.jpg') !important;
+      background-repeat: no-repeat !important;
+      background-size: cover !important;
+      background-attachment: fixed !important;
+      background-position: center !important;
+      color: #212529 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      position: relative !important;
+    }
+    body::before {
+      content: "" !important;
+      position: fixed !important;
+      top: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      background: inherit !important;
+      background-attachment: fixed !important;
+      filter: blur(5px) !important;
+      z-index: -1 !important;
+    }
+
+    /* Fixed navbar offset for the checkout container */
+    .checkout-container {
+      margin-top: 56px !important; /* adjust if your navbar is taller */
+      padding: 30px !important;
+      background-color: white !important;
+      border-radius: 10px !important;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+      position: relative !important;
+      z-index: 10 !important;
+    }
+
+    /* Color theme */
+    .wine-primary {
+      background-color: #722F37 !important;
+      border-color: #722F37 !important;
+    }
+    .wine-primary:hover {
+      background-color: #5e2730 !important;
+      border-color: #5e2730 !important;
+    }
+    .card-header {
+      background-color: #722F37 !important;
+      color: white !important;
+    }
+    .wine-text {
+      color: #722F37 !important;
+    }
+    .cart-wine-item {
+      border-left: 3px solid #722F37 !important;
+    }
+
+    /* SHOW bootstrap invalid-feedback on invalid fields */
+    input:invalid ~ .invalid-feedback,
+    select:invalid ~ .invalid-feedback,
+    textarea:invalid ~ .invalid-feedback {
+      display: block !important;
+    }
+  </style>
+</head>
+<body>
+  {% include 'header.html' %}
+  <div class="container py-5 checkout-container">
+    <h4 class="mb-4 checkout-title wine-text">Checkout</h4>
+    <div class="row">
+      <!-- Cart Summary -->
+      <div class="col-md-4 order-md-2 mb-4">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">
+              Your Cart
+              <span class="badge bg-secondary rounded-pill">{{ cart_items|length }}</span>
+            </h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              {% for item in cart_items %}
+                <li class="list-group-item d-flex justify-content-between lh-sm cart-wine-item px-0">
+                  <div>
+                    <h6 class="my-0">{{ item.name }}</h6>
+                    <small class="text-muted">Qty: {{ item.quantity }}</small>
+                  </div>
+                  <span class="text-muted">${{ "%.2f"|format(item.total) }}</span>
+                </li>
+              {% endfor %}
+              <li class="list-group-item d-flex justify-content-between px-0">
+                <span>Subtotal</span>
+                <strong>${{ "%.2f"|format(subtotal) }}</strong>
+              </li>
+              <li class="list-group-item d-flex justify-content-between px-0">
+                <span>Shipping</span>
+                <strong>
+                  {% if shipping_cost == 0 %}
+                    Free Shipping
+                  {% else %}
+                    ${{ "%.2f"|format(shipping_cost) }}
+                  {% endif %}
+                </strong>
+              </li>
+              <li class="list-group-item d-flex justify-content-between px-0">
+                <span>Tax</span>
+                <strong>${{ "%.2f"|format(tax) }}</strong>
+              </li>
+              <li class="list-group-item d-flex justify-content-between px-0">
+                <span>Total (USD)</span>
+                <strong>${{ "%.2f"|format(total) }}</strong>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Checkout Form -->
+      <div class="col-md-8 order-md-1">
+        <form method="post" action="{{ url_for('process_payment_credit_card') }}">
+          <!-- Shipping Address -->
+          <div class="card mb-4">
+            <div class="card-header"><h5 class="mb-0">Shipping Address</h5></div>
+            <div class="card-body">
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="firstName" class="form-label">First name</label>
+                  <input type="text" class="form-control" id="firstName" name="firstName" value="{{ session.get('username','') }}" required>
+                  <div class="invalid-feedback">Valid first name is required.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="lastName" class="form-label">Last name</label>
+                  <input type="text" class="form-control" id="lastName" name="lastName" value="{{ session.get('lastname','') }}" required>
+                  <div class="invalid-feedback">Valid last name is required.</div>
+                </div>
+                <div class="col-12">
+                  <label for="email" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" value="{{ session.get('useremail','') }}" required>
+                  <div class="invalid-feedback">Please enter a valid email address.</div>
+                </div>
+                <div class="col-12">
+                  <label for="address" class="form-label">Address</label>
+                  <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St" required>
+                  <div class="invalid-feedback">Please enter your shipping address.</div>
+                </div>
+                <div class="col-md-3">
+                  <label for="zip" class="form-label">Zip</label>
+                  <input type="text" class="form-control" id="zip" name="zip" maxlength="7" pattern="\d*" inputmode="numeric" required>
+                  <div class="invalid-feedback">Zip code required.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Payment Method (Credit Card Only) -->
+          <div class="card mb-4">
+            <div class="card-header"><h5 class="mb-0">Payment Details</h5></div>
+            <div class="card-body">
+              <!-- Hidden input to maintain the paymentMethod parameter -->
+              <input type="hidden" name="paymentMethod" value="credit">
+
+              <div class="row g-3">
+                <div class="col-md-6">
+                  <label for="cardName" class="form-label">Name on card</label>
+                  <input type="text" class="form-control" id="cardName" name="cardName" placeholder="Name on card" required>
+                  <div class="invalid-feedback">Name on card is required.</div>
+                </div>
+                <div class="col-md-6">
+                  <label for="cardNumber" class="form-label">Credit card number</label>
+                  <input type="text" class="form-control" id="cardNumber" name="cardNumber" placeholder="XXXX-XXXX-XXXX-XXXX" pattern="\d{16}" maxlength="16" inputmode="numeric" required>
+                  <div class="invalid-feedback">A 16-digit number is required.</div>
+                </div>
+                <div class="col-md-3">
+                  <label for="expMonth" class="form-label">Exp Month</label>
+                  <select class="form-select" id="expMonth" name="expMonth" required>
+                    <option value="">Month</option>
+                    {% for m in ['01','02','03','04','05','06','07','08','09','10','11','12'] %}
+                      <option value="{{ m }}">{{ m }}</option>
+                    {% endfor %}
+                  </select>
+                  <div class="invalid-feedback">Expiration month required.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="expYear" class="form-label">Exp Year</label>
+                  <select class="form-select" id="expYear" name="expYear" required>
+                    <option value="">Year</option>
+                    {% for y in ['2026','2027','2028','2029','2030'] %}
+                      <option value="{{ y }}">{{ y }}</option>
+                    {% endfor %}
+                  </select>
+                  <div class="invalid-feedback">Expiration year required.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="cvv" class="form-label">CVV</label>
+                  <input type="text" class="form-control" id="cvv" name="cvv" placeholder="XXX" pattern="\d{3}" maxlength="3" inputmode="numeric" required>
+                  <div class="invalid-feedback">Security code required.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Confirmation -->
+          <div class="card mb-4">
+            <div class="card-header"><h5 class="mb-0">Order Confirmation</h5></div>
+            <div class="card-body">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="confirm-info" name="confirm_info" required>
+                <label class="form-check-label" for="confirm-info">
+                  I confirm that I am at least 18 years of age and all information provided is correct
+                </label>
+                <div class="invalid-feedback">You must confirm before proceeding.</div>
+              </div>
+            </div>
+          </div>
+          <button class="w-100 btn btn-lg wine-primary" type="submit">Complete Purchase</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,14 +1,14 @@
+import os
+import smtplib
+import base64
 from flask import flash
 from db_connection import create_connection,disconnection
 from dotenv import load_dotenv
-import os
-import smtplib
 from fernet_encryption import decode_string
-import base64
+
 load_dotenv()
 
-OWN_EMAIL = os.getenv("OWN_EMAIL")
-OWN_PASSWORD = os.getenv("OWN_PASSWORD_EMAIL")
+
 
 def sendPass(email):
     # Establish a database connection

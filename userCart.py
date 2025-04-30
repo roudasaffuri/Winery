@@ -32,23 +32,17 @@ def getCart():
             cur.execute(query, (cart_id,))
             for cart_item_id, quantity, price_at_addition, wine_id, wine_name, image_url, stock in cur.fetchall():
                 if stock == 0:
-                    flash(
-                        f"Your cart was updated regarding to products stock.")
+                    flash("Your cart was updated regarding to products stock.")
                     cur.execute("DELETE FROM cart_items WHERE wine_id = %s", (wine_id,))
                     conn.commit()
-                # אם הכמות בעגלה גדולה מהמלאי
+                    continue  # <-- skip this item
                 elif quantity > stock:
-                    flash(
-                        f"Your cart was updated ,Only {stock} left in stock for {wine_name}. Requested {quantity}")
-                    # נמחק את הפריט מהעגלה, או נאפס את הכמות ל־stock, לפי מדיניות
+                    flash(f"Your cart was updated, only {stock} left in stock for {wine_name}. Requested {quantity}")
                     quantity = stock
-                    cur.execute(
-                        "UPDATE cart_items SET quantity = %s WHERE cart_item_id = %s",
-                        (stock, cart_item_id)
-                    )
+                    cur.execute("UPDATE cart_items SET quantity = %s WHERE cart_item_id = %s", (stock, cart_item_id))
                     conn.commit()
 
-            if stock != 0:
+                # ✅ Always append valid item
                 total = Decimal(quantity) * Decimal(str(price_at_addition))
                 cart_items.append({
                     "cart_item_id": cart_item_id,
@@ -60,6 +54,7 @@ def getCart():
                     "stock": stock,
                     "total": total
                 })
+
     except Exception as e:
         print(f"Cart error: {e}")
     finally:

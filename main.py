@@ -1,23 +1,25 @@
-from _decimal import Decimal
+import paypalrestsdk as paypalrestsdk
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from Tips import get_wine_tips
 from addItem import addItemToDB
+from complete_order import complete_order
 from context_processors import inject_current_year
 from deleteProduct import deleteItemFromDB
 from getWineById import getWineById
-from sentMessage import sentMessage
+from paypalPayment import paypalPayment
+from userPaymentByCard import PaymentByCard
+from userSentMessage import sentMessage
 from registration import registration
 from login import log
 from store import wines
-from getProductByID import get_wine_by_id
 from updateProduct import updateProduct
 from dotenv import load_dotenv
 import os
-from sendUserPassword import sendPass
+from getProductByID import get_wine_by_id
+from userSendUserPassword import sendPass
 from clearSessionAndLogout import exitAndClearSession
 from ageVerified import ageVerified
 from userAddToCart import handle_add_to_cart
-from userCartPayment import paymentCart
 from userCart import getCart
 from userRemoveProduct import removeProduct
 from userUpdateQuantity import handle_quantity_update
@@ -144,16 +146,48 @@ def add_to_cart(product_id):
     return handle_add_to_cart(wine , quantity)
 
 
-@app.route('/process-payment', methods=['POST'])
-def process_payment_route():
-    paymentCart()
-    return redirect(url_for('home'))
+#------------------------------PayPal and Credit Card Payment---------------------------------------#
 
-@app.route("/m")
-def m():
-    return render_template("tipsPage.html",tips=get_wine_tips())
+#Paypal
+@app.route('/paypal_payment/<float:total>')
+def paypal_payment(total):
+    return paypalPayment(total)
+
+@app.route('/paypal_execute')
+def paypal_execute():
+    # 1. Grab the PayPal IDs from the query string
+    payment_id = request.args.get('paymentId')
+    payer_id   = request.args.get('PayerID')
+    # 2. Look up that payment in the PayPal SDK
+    payment = paypalrestsdk.Payment.find(payment_id)
+    # 3. Execute it
+    if not payment.execute({"payer_id": payer_id}):
+        # If execution failed, show an error and send them back
+        app.logger.error("PayPal execute failed: %s", payment.error)
+        flash("Payment execution failed. Please try again.")
+        return redirect(url_for('cart'))
+    # 4. On success, run DB+email logic
+    user_id = session.get('id')
+    total   = complete_order(user_id)
+
+    # 5. Give the user confirmation
+    flash(f"Payment successful! Your order for ${total:.2f} is complete.and email sent.")
+    return render_template("cart.html")
+
+
+# Credit Card
+@app.route('/creditCardCheckout')
+def creditCardCheckout():
+    return PaymentByCard()
+
+@app.route('/process_payment_credit_card', methods=['POST'])
+def process_payment_credit_card():
+    user_id = session.get('id')
+    complete_order(user_id)
+    return render_template("home.html")
 
 #-------------------------------- Admin  ---------------------------------#
+
 
 @app.route('/admin')
 def admin():
