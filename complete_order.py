@@ -1,22 +1,23 @@
 from decimal import Decimal
 from db_connection import create_connection
 from sendOrderConfirmationEmail import send_order_confirmation_email
-from flask import session
+from flask import session, flash, redirect, url_for
 
 def complete_order(user_id):
     """
     1. Fetch cart items for this user
-    2. Calculate subtotal, shipping, tax, total
-    3. Insert into purchases & purchase_items
-    4. Update wine stock
-    5. Clear the cart
-    6. Send confirmation email
-    Returns the total amount.
+    2. **Check availability**: if any qty > stock, flash + redirect
+    3. Calculate subtotal, shipping, tax, total
+    4. Insert into purchases & purchase_items
+    5. Update wine stock
+    6. Clear the cart
+    7. Send confirmation email
+    Returns the total amount, or a redirect Response if stock is insufficient.
     """
     conn    = create_connection()
     cursor  = conn.cursor()
 
-    # — Fetch cart items —
+    # — 1) Fetch cart items (including current stock) —
     cursor.execute("""
         SELECT ci.cart_item_id, ci.wine_id, ci.quantity, ci.price_at_addition,
                w.wine_name, w.stock
@@ -27,7 +28,17 @@ def complete_order(user_id):
     """, (user_id,))
     cart_items = cursor.fetchall()
 
-    # — Calculate totals —
+    # — 2) Availability check —
+    for _, _, qty, _, wine_name, stock in cart_items:
+        if stock < qty:
+            # Not enough stock for this item
+            flash(f"Sorry! only {stock} of “{wine_name}” left in stock. "
+                  "Please adjust your cart and try again.", "warning")
+            conn.close()
+            # return a redirect Response; it has a status_code attribute (e.g. 302 for redirects, 200 for OK)
+            return redirect(url_for('cart'))
+
+    # — 3) Calculate totals —
     subtotal = Decimal('0.00')
     for _, _, qty, price, _, _ in cart_items:
         subtotal += Decimal(price) * qty
@@ -35,7 +46,7 @@ def complete_order(user_id):
     tax      = subtotal * Decimal('0.10')
     total    = subtotal + shipping + tax
 
-    # — Insert purchase record —
+    # — 4) Insert purchase record —
     cursor.execute("""
         INSERT INTO purchases (user_id, total_amount, shipping_price, tax)
              VALUES (%s, %s, %s, %s)
@@ -43,7 +54,7 @@ def complete_order(user_id):
     """, (user_id, total, shipping, tax))
     purchase_id = cursor.fetchone()[0]
 
-    # — Insert items & update stock —
+    # — 5) Insert items & update stock —
     for _, wine_id, qty, price, wine_name, _ in cart_items:
         subtotal_item = Decimal(price) * qty
         cursor.execute("""
@@ -57,7 +68,7 @@ def complete_order(user_id):
             (qty, wine_id)
         )
 
-    # — Clear the cart —
+    # — 6) Clear the cart —
     cursor.execute("""
         DELETE FROM cart_items
         USING carts
@@ -68,16 +79,14 @@ def complete_order(user_id):
     conn.commit()
     conn.close()
 
-    # — Send confirmation email —
-    # build the summary dict, then send
+    # — 7) Send confirmation email —
     summary = {
         "subtotal":      subtotal,
         "shipping_cost": shipping,
         "tax":           tax,
         "total":         total
     }
-    # assume session['useremail'] is populated
     if session.get('useremail'):
-        send_order_confirmation_email(session['useremail'], summary,purchase_id)
+        send_order_confirmation_email(session['useremail'], summary, purchase_id)
 
     return total

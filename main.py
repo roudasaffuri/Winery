@@ -175,10 +175,13 @@ def paypal_execute():
         return redirect(url_for('cart'))
     # 4. On success, run DB+email logic
     user_id = session.get('id')
-    total   = complete_order(user_id)
+    result = complete_order(user_id)
+    #hasattr built-in function that checks whether the object result has an attribute with the given name(status_code).
+    if hasattr(result, 'status_code'):
+        return result
 
-    # 5. Give the user confirmation
-    flash(f"Payment successful! Your order for ${total:.2f} is complete.and email sent.")
+    total = result
+    flash(f"Payment successful! Your order for ${total:.2f} is complete. Email sent.")
     return render_template("cart.html")
 
 
@@ -190,9 +193,12 @@ def creditCardCheckout():
 @app.route('/process_payment_credit_card', methods=['POST'])
 def process_payment_credit_card():
     user_id = session.get('id')
-    complete_order(user_id)
-    return render_template("home.html")
-
+    result = complete_order(user_id)
+    #hasattr built-in function that checks whether the object result has an attribute with the given name(status_code).
+    if hasattr(result, 'status_code'):
+        return result
+    flash(f"Payment successful! Your order for ${result:.2f} is complete. Email sent.")
+    return render_template("cart.html")
 
 
 
