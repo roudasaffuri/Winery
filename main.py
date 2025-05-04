@@ -177,6 +177,7 @@ def paypal_execute():
     user_id = session.get('id')
     result = complete_order(user_id)
     # hasattr built-in function that checks whether the object result has an attribute with the given name(status_code).
+    #hasattr built-in function that checks whether the object result has an attribute with the given name(status_code).
     if hasattr(result, 'status_code'):
         return result
 
@@ -194,6 +195,14 @@ def creditCardCheckout():
 def process_payment_credit_card():
     user_id = session.get('id')
     complete_order(user_id)
+    return render_template("cart.html")
+
+
+    result = complete_order(user_id)
+    #hasattr built-in function that checks whether the object result has an attribute with the given name(status_code).
+    if hasattr(result, 'status_code'):
+        return result
+    flash(f"Payment successful! Your order for ${result:.2f} is complete. Email sent.")
     return render_template("cart.html")
 
 

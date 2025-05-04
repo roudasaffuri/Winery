@@ -89,4 +89,5 @@ def complete_order(user_id):
     if session.get('useremail'):
         send_order_confirmation_email(session['useremail'], summary, purchase_id)
     flash('Purchase successfully!', 'success')
+
     return total
