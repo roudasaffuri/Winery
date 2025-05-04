@@ -1,6 +1,5 @@
 {% if session.admin %}
 
-
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -28,7 +27,7 @@
     </style>
 </head>
 <body>
-    {% include "headerAdmin.html" %}
+    {% include "adminHeader.html" %}
       {% with messages = get_flashed_messages(with_categories=True) %}
         {% if messages %}
             <div class="container">
@@ -82,13 +81,13 @@
             <td>
                 <!-- Edit Wine Form -->
                 <form method="post" action="{{ url_for('edit_product') }}" style="display:inline;">
-                    <input type="hidden" name="itemId" value="{{ wine.id }}">
-                    <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                        <input type="hidden" name="id" value="{{ wine.id }}">
+                        <button type="submit" class="btn btn-warning btn-sm">Edit</button>
                 </form>
 
                 <!-- Delete Wine Form -->
                 <form method="post" action="/delete-wine" style="display:inline;">
-                    <input type="hidden" name="itemId" value="{{ wine.id }}">
+                    <input type="hidden" name="wineId" value="{{ wine.id }}">
                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                 </form>
             </td>
@@ -112,7 +111,7 @@
 </body>
 </html>
 
-{% include "footer.html" %}
+
 {% else %}
     <p>Please go to the <a href="/">index page</a>.</p>
 {% endif %}

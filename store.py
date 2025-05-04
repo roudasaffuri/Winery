@@ -13,7 +13,6 @@ def wines():
     cursor = conn.cursor()
     user_id = session.get('id')
 
-    print(user_id)
 
 
     try:

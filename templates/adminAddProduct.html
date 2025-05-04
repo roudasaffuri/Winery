@@ -1,0 +1,82 @@
+{% if session.admin %}
+
+{% include "adminHeader.html" %}
+
+<style>
+  /* styles.css */
+.table img {
+    border-radius: 5px; /* Rounded corners for images */
+}
+
+.table th {
+    background-color: #f8f9fa; /* Light background for headers */
+}
+
+.table th, .table td {
+    vertical-align: middle; /* Center-align content */
+}
+
+.btn-sm {
+    margin-right: 5px; /* Spacing between buttons */
+}
+
+/* Custom styles for the Add Wine button */
+.btn-yellow {
+    background-color: #ffc107; /* Bootstrap yellow color */
+    color: white; /* Text color */
+    border: none; /* Remove border */
+}
+
+.btn-yellow:hover {
+    background-color: #e0a800; /* Darker shade on hover */
+}
+</style>
+<body>
+
+<!-- Centering Wrapper -->
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6"> <!-- Optional: make form narrower -->
+                <h3 class="text-danger text-center">Add New Wine</h3>
+                <form method="post" action="/add-wine" class="shadow p-4 rounded bg-white">
+                    <div class="mb-3">
+                        <label for="wineName" class="form-label">Wine Name</label>
+                        <input type="text" class="form-control" id="wineName" name="wineName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="wineType" class="form-label">Type</label>
+                        <input type="text" class="form-control" id="wineType" name="wineType" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="winePrice" class="form-label">Price</label>
+                        <input type="number" class="form-control" id="winePrice" name="winePrice" step="0.01" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="wineQuantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="wineQuantity" name="wineQuantity" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="wineDescription" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="wineDescription" name="wineDescription" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="wineBestBefore" class="form-label">Best Before</label>
+                        <input type="date" class="form-control" id="wineBestBefore" name="wineBestBefore" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="wineImage" class="form-label">Image URL</label>
+                        <input type="text" class="form-control" id="wineImage" name="wineImage">
+                    </div>
+                    <button type="submit" class="btn btn-warning w-100">Add Wine</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% else %}
+    <p>Please go to the <a href="/">index page</a>.</p>
+{% endif %}

@@ -15,12 +15,17 @@ def log():
             cur = conn.cursor()
             # Check if the username (email) exists in the database
             # and also fetch the password,isAdmin and firstname.
-            cur.execute("SELECT  id, password, is_admin , firstname , lastname FROM users WHERE email = %s", (useremail,))
+            cur.execute("SELECT  id, password, is_admin , firstname , lastname ,is_blocked FROM users WHERE email = %s", (useremail,))
             result = cur.fetchone()
 
             if result is not None:
 
-                id, stored_password_base64, is_admin, firstname, lastname = result
+                id, stored_password_base64, is_admin, firstname, lastname, is_blocked = result
+
+                if is_blocked :
+                    flash("email blocked by admin ")
+                    return render_template('login.html')
+
                 # Decode the stored password from base64
                 stored_password = base64.b64decode(stored_password_base64)
                 decrypted_password = decode_string(stored_password)
@@ -30,9 +35,9 @@ def log():
                     session['id'] = id
 
                     # Check admin status
-                    if useremail == 'admin@email.com' and is_admin:
+                    if is_admin:
                         session['admin'] = useremail
-                        return redirect(url_for('admin'))
+                        return redirect(url_for('adminHomePage'))
                     session['username'] = firstname
                     session['lastname'] = lastname
                     session['useremail']=useremail

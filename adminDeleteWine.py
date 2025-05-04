@@ -1,4 +1,6 @@
-from flask import redirect, url_for, flash
+from flask import redirect, url_for, flash, render_template
+
+from adminGetAllWines import getAllWines
 from db_connection import create_connection
 
 def deleteItemFromDB(item_id):
@@ -6,7 +8,7 @@ def deleteItemFromDB(item_id):
     cur = conn.cursor()
 
     # SQL delete query
-    sql = "DELETE FROM tblproducts WHERE itemId = %s;"
+    sql = "DELETE FROM wines WHERE id = %s;"
 
     try:
         # Execute the delete query
@@ -19,4 +21,4 @@ def deleteItemFromDB(item_id):
     finally:
         conn.close()
 
-    return redirect(url_for('admin'))  # Redirect back to admin page
+    return render_template('adminManageProducts.html', all_wines=getAllWines())

@@ -12,7 +12,6 @@ def getAllWines():
         for row in result:
             wine = Wine(*row)  # Unpack row into Wine constructor
             wines.append(wine)
-            print(wine)
 
         return wines
     except Exception as e:

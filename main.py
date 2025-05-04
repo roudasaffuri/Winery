@@ -1,11 +1,12 @@
 import paypalrestsdk as paypalrestsdk
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from Tips import get_wine_tips
-from addItem import addItemToDB
+from adminAddWine import addItemToDB
 from adminGetAllWines import getAllWines
 from complete_order import complete_order
 from context_processors import inject_current_year
-from deleteProduct import deleteItemFromDB
+from adminDeleteWine import deleteItemFromDB
+from db_connection import create_connection
 from getWineById import getWineById
 from paypalPayment import paypalPayment
 from userPaymentByCard import PaymentByCard
@@ -14,7 +15,6 @@ from userSentMessage import sentMessage
 from registration import registration
 from login import log
 from store import wines
-from updateProduct import updateProduct
 from dotenv import load_dotenv
 import os
 from getProductByID import get_wine_by_id
@@ -175,10 +175,13 @@ def paypal_execute():
         return redirect(url_for('cart'))
     # 4. On success, run DB+email logic
     user_id = session.get('id')
-    total   = complete_order(user_id)
+    result = complete_order(user_id)
+    # hasattr built-in function that checks whether the object result has an attribute with the given name(status_code).
+    if hasattr(result, 'status_code'):
+        return result
 
-    # 5. Give the user confirmation
-    flash(f"Payment successful! Your order for ${total:.2f} is complete.and email sent.")
+    total = result
+    flash(f"Payment successful! Your order for ${total:.2f} is complete. Email sent.")
     return render_template("cart.html")
 
 
@@ -191,7 +194,7 @@ def creditCardCheckout():
 def process_payment_credit_card():
     user_id = session.get('id')
     complete_order(user_id)
-    return render_template("home.html")
+    return render_template("cart.html")
 
 
 
@@ -200,57 +203,168 @@ def process_payment_credit_card():
 #-------------------------------- Admin  ---------------------------------#
 
 
-@app.route('/admin')
-def admin():
-    return render_template('admin.html', all_wines=getAllWines())
+@app.route('/adminHomePage')
+def adminHomePage():
+    return render_template('adminHomePage.html')
+
+@app.route('/adminManageProducts')
+def adminManageProducts():
+    return render_template('adminManageProducts.html', all_wines=getAllWines())
 
 
-@app.route('/addProduct')
-def addProduct():
-    return render_template('addProduct.html')
+@app.route('/adminAddProduct')
+def adminAddProduct():
+    return render_template('adminAddProduct.html')
 
 @app.route('/add-wine', methods=['POST'])
 def add_wine():
     if request.method == 'POST':
-        wine_name = request.form['wineName']
-        wine_price = request.form['winePrice']
-        wine_quantity = request.form['wineQuantity']
-        wine_image = request.form['wineImage']
-        return addItemToDB(wine_name,wine_price,wine_quantity,wine_image)
+        wineName = request.form['wineName']
+        wineType = request.form['wineType']
+        winePrice = request.form['winePrice']
+        wineQuantity = request.form['wineQuantity']
+        wineDescription = request.form['wineDescription']
+        wineBestBefore = request.form['wineBestBefore']
+        wineImageURL = request.form['wineImage'] or 'https://bravofarms.com/cdn/shop/products/red-wine.jpg?v=1646253890'
 
 
-@app.route('/edit-product', methods=['POST'])
-def edit_product():
-    item_id = request.form.get('itemId')  # Get the itemId from the form data
-    print(f"Received item_id: {item_id}")  # Debug output
-    wine_details = get_wine_by_id(item_id)  # Fetch wine details using item_id
-    if wine_details is None:
-        flash("Wine not found.", "danger")
-        return redirect(url_for('admin'))  # Redirect if not found
-
-    return render_template('editProduct.html', wine=wine_details)
-
-
-@app.route('/up', methods=['GET', 'POST'])
-def up():
-    if request.method == 'POST':
-        item_id = request.form['itemId']
-        name = request.form['name']
-        price = request.form['price']
-        quantity = request.form['quantity']
-        image = request.form['image']
-
-        return updateProduct(item_id,name,price,quantity,image)
-
-    # Handle the GET request
-    return render_template('edit_product.html')  # You may want to pass item_id for pre-filling data
+        # Now pass these correctly to your DB function
+        return addItemToDB(
+            wine_name=wineName,
+            wine_type=wineType,
+            wine_price=winePrice,
+            wine_quantity=wineQuantity,
+            wine_description=wineDescription,
+            wine_best_before=wineBestBefore,
+            wine_image=wineImageURL
+        )
 
 
 @app.route('/delete-wine', methods=['POST'])
 def delete_wine():
     if request.method == 'POST':
-        item_id = request.form['itemId']
+        item_id = request.form['wineId']
+        print(item_id)
         return deleteItemFromDB(item_id)
+
+
+@app.route('/edit_product', methods=['POST'])
+def edit_product():
+    wine_id = request.form.get('id')
+
+    conn = create_connection()
+    cursor = conn.cursor()
+    sql = "SELECT * FROM wines WHERE id = %s;"
+    cursor.execute(sql, (wine_id,))
+    result = cursor.fetchone()
+
+    if result:
+        wine_data = {
+            'id': result[0],
+            'wine_name': result[1],
+            'wine_type': result[2],
+            'price': result[4],
+            'stock': result[5],
+            'year': result[7],
+            'image_url': result[3],
+            'description': result[6],
+        }
+
+        cursor.close()
+        conn.close()
+        return render_template('adminEditWine.html', wine=wine_data)
+    else:
+        cursor.close()
+        conn.close()
+        return "Wine not found", 404
+
+
+
+@app.route('/up', methods=['POST'])
+def update_wine():
+    wine_id = request.form.get('itemId')
+    name = request.form.get('name')
+    wine_type = request.form.get('wine_type')
+    price = request.form.get('price')
+    stock = request.form.get('stock')
+    year = request.form.get('year')
+    description = request.form.get('description')
+    image_url = request.form.get('image')
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    sql = '''
+    UPDATE wines
+    SET wine_name = %s,
+        wine_type = %s,
+        price = %s,
+        stock = %s,
+        best_before = %s,
+        description = %s,
+        image_url = %s
+    WHERE id = %s;
+    '''
+    values = (name, wine_type, price, stock, year, description, image_url, wine_id)
+    cursor.execute(sql, values)
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+    flash(f"Wine '{name}' has been successfully updated.", "success")
+    return redirect('/adminManageProducts')
+
+@app.route('/adminManageUsers')
+def adminManageUsers():
+
+    search = request.args.get('search', '').strip()
+
+    conn = create_connection()
+    cur = conn.cursor()
+    if search:
+        query = """
+                   SELECT id, firstname, lastname, email, birth_year,
+                          gender, is_admin, created_at, is_blocked
+                   FROM users
+                   WHERE is_admin = false AND (
+                       CAST(id AS TEXT) ILIKE %s
+                       OR firstname ILIKE %s
+                       OR lastname ILIKE %s
+                   )
+                   ORDER BY id ASC;
+               """
+        like_pattern = f"%{search}%"
+        cur.execute(query, (like_pattern, like_pattern, like_pattern))
+    else:
+        cur.execute("""
+                SELECT id, firstname, lastname, email, birth_year,
+                        gender, is_admin, created_at, is_blocked
+                         FROM users
+                        WHERE is_admin = false
+                        ORDER BY id ASC;
+                    """)
+    users = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template('adminManageUsers.html', users=users)
+
+@app.route('/block_user', methods=['POST'])
+def block_user():
+    user_id = request.form.get('user_id')
+    is_blocked = request.form.get('is_blocked') == 'true'
+
+    conn = create_connection()
+    cur = conn.cursor()
+    cur.execute("UPDATE users SET is_blocked = %s WHERE id = %s", (is_blocked, user_id))
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect(url_for('adminManageUsers'))
+
+
 
 
 #------------------------------- Logout User and Admin --------------------------------#
