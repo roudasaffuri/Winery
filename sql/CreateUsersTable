@@ -1,14 +1,16 @@
 ------------------------- DATA USERS-  CREATE AND INSERT USERS QUERY -----------------------------------------#
-          CREATE TABLE IF NOT EXISTS users (
-                id SERIAL PRIMARY KEY,
-                firstname VARCHAR(100) NOT NULL,
-                lastname VARCHAR(100) NOT NULL,
-                email VARCHAR(100) UNIQUE NOT NULL,
-                password VARCHAR(255) NOT NULL,
-                birth_year INTEGER NOT NULL,
-                gender VARCHAR(10) NOT NULL,
-                is_admin BOOLEAN DEFAULT FALSE,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
+   CREATE TABLE IF NOT EXISTS users (
+    id SERIAL PRIMARY KEY,
+    firstname VARCHAR(100) NOT NULL,
+    lastname VARCHAR(100) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    birth_year INTEGER NOT NULL,
+    gender VARCHAR(10) NOT NULL,
+    role_id INTEGER DEFAULT 1,  -- Default to role "user" (id = 1)
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT fk_role_id FOREIGN KEY (role_id) REFERENCES roles_table(id) -- Foreign key to roles_table
+);
+
 
 

@@ -45,10 +45,9 @@
     </style>
 </head>
 <body>
+<h2>Manager - Manage Admins</h2>
 
-<h2>Admin - Manage Users</h2>
-
-<form method="GET" action="/adminManageUsers">
+<form method="GET" action="/managerManageAdmins">
     <input type="text" name="search" placeholder="Search by ID or name" value="{{ request.args.get('search', '') }}">
     <button type="submit">Search</button>
 </form>
@@ -61,11 +60,7 @@
             <th>First Name</th>
             <th>Last Name</th>
             <th>Email</th>
-            <th>Birth Year</th>
-            <th>Gender</th>
-            <th>Created At</th>
-            <th>Is Blocked</th>
-
+            <th>Status</th>
 
         </tr>
     </thead>
@@ -76,22 +71,20 @@
             <td>{{ user[1] }}</td>
             <td>{{ user[2] }}</td>
             <td>{{ user[3] }}</td>
-            <td>{{ user[4] }}</td>
-            <td>{{ user[5] }}</td>
-            <td>{{ user[7] }}</td>
-            <td>
-    <form method="POST" action="{{ url_for('block_user') }}">
-      <input type="hidden" name="user_id" value="{{ user[0] }}">
-      <input type="hidden" name="is_blocked" value="{{ 'false' if user[8] else 'true' }}">
-      <input type="checkbox" name="block_user" onChange="this.form.submit()" {% if user[8] %}checked{% endif %}>
-    {% if user[8] %}
-      <span style="color: red;">Blocked</span>
-    {% else %}
-      <span style="color: green;">Active</span>
-    {% endif %}
-    </form>
 
-  </td>
+<td>
+<form method="POST" action="{{ url_for('change_role') }}">
+    <input type="hidden" name="user_id" value="{{ user[0] }}">
+    <select name="role_id" onchange="this.form.submit()">
+      <option value="1" {% if user[4] == 1 %}selected{% endif %}>User</option>
+<option value="2" {% if user[4] == 2 %}selected{% endif %}>Admin</option>
+<option value="3" {% if user[4] == 3 %}selected{% endif %}>Manager</option>
+
+    </select>
+  </form>
+</td>
+
+
         </tr>
         {% endfor %}
     </tbody>

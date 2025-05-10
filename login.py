@@ -15,12 +15,12 @@ def log():
             cur = conn.cursor()
             # Check if the username (email) exists in the database
             # and also fetch the password,isAdmin and firstname.
-            cur.execute("SELECT  id, password, is_admin , firstname , lastname ,is_blocked FROM users WHERE email = %s", (useremail,))
+            cur.execute("SELECT  id, password, role_id , firstname , lastname ,is_blocked FROM users WHERE email = %s", (useremail,))
             result = cur.fetchone()
 
             if result is not None:
 
-                id, stored_password_base64, is_admin, firstname, lastname, is_blocked = result
+                id, stored_password_base64, role_id, firstname, lastname, is_blocked = result
 
                 if is_blocked :
                     flash("email blocked by admin ")
@@ -33,15 +33,21 @@ def log():
                 # Verify the password
                 if decrypted_password == password:
                     session['id'] = id
-
-                    # Check admin status
-                    if is_admin:
-                        session['admin'] = useremail
-                        return redirect(url_for('adminHomePage'))
                     session['username'] = firstname
                     session['lastname'] = lastname
-                    session['useremail']=useremail
-                    return redirect(url_for('home'))  # Redirect to a success page
+                    session['useremail'] = useremail
+
+                    # Set session and redirect based on role
+                    if role_id == 2:  # Admin
+                        session['admin'] = useremail
+                        return redirect(url_for('adminHomePage'))
+                    elif role_id == 3:  # Manager
+                        session['admin'] = useremail
+                        session['manager'] = useremail
+                        return redirect(url_for('adminHomePage'))
+                    else:
+                        return redirect(url_for('home'))  # Regular user
+
                 else:
                     flash("Invalid email or password.", "danger")
                     return render_template('login.html')

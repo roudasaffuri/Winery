@@ -1,4 +1,4 @@
-{% if session.admin %}
+{% if session.admin or session.manager %}
 
   {% include "adminHeader.html" %}
     <div class="container my-5">

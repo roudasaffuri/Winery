@@ -333,9 +333,9 @@ def adminManageUsers():
     if search:
         query = """
                    SELECT id, firstname, lastname, email, birth_year,
-                          gender, is_admin, created_at, is_blocked
+                          gender, role_id, created_at, is_blocked
                    FROM users
-                   WHERE is_admin = false AND (
+                   WHERE role_id = 1 AND (
                        CAST(id AS TEXT) ILIKE %s
                        OR firstname ILIKE %s
                        OR lastname ILIKE %s
@@ -347,9 +347,9 @@ def adminManageUsers():
     else:
         cur.execute("""
                 SELECT id, firstname, lastname, email, birth_year,
-                        gender, is_admin, created_at, is_blocked
+                        gender, role_id, created_at, is_blocked
                          FROM users
-                        WHERE is_admin = false
+                        WHERE role_id = 1
                         ORDER BY id ASC;
                     """)
     users = cur.fetchall()
@@ -373,7 +373,59 @@ def block_user():
 
     return redirect(url_for('adminManageUsers'))
 
+#------------------- Manager -----------------#
 
+@app.route('/managerManageAdmins')
+def managerManageAdmins():
+
+    search = request.args.get('search', '').strip()
+
+    conn = create_connection()
+    cur = conn.cursor()
+    if search:
+        query = """
+            SELECT id, firstname, lastname, email, role_id
+            FROM users
+            WHERE (
+                CAST(id AS TEXT) ILIKE %s
+                OR firstname ILIKE %s
+                OR lastname ILIKE %s
+            )
+            ORDER BY id ASC;
+        """
+
+        like_pattern = f"%{search}%"
+        cur.execute(query, (like_pattern, like_pattern, like_pattern))
+    else:
+        cur.execute("""
+            SELECT id, firstname, lastname, email, role_id
+            FROM users ORDER BY id ASC;
+        """)
+
+    users = cur.fetchall()
+
+    cur.close()
+    conn.close()
+
+    return render_template('managerManageAdmins.html', users=users)
+
+
+@app.route('/changeRole', methods=['POST'])
+def change_role():
+    user_id = request.form['user_id']
+    new_role_id = request.form['role_id']
+    print(new_role_id)
+
+    conn = create_connection()
+    cur = conn.cursor()
+
+    cur.execute("UPDATE users SET role_id = %s WHERE id = %s", (new_role_id, user_id))
+    conn.commit()
+
+    cur.close()
+    conn.close()
+
+    return redirect(request.referrer or url_for('managerManageAdmins'))
 
 
 #------------------------------- Logout User and Admin --------------------------------#
