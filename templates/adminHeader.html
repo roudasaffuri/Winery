@@ -38,6 +38,8 @@
                         {% if session.manager %}
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('managerManageAdmins') }}">Manage Admins</a></li>
                     {% endif %}
+
+                    <li class="nav-item"><a class="nav-link" href="{{ url_for('adminStatistics') }}">Statistics</a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
                 </ul>
             </div>

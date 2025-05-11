@@ -373,6 +373,11 @@ def block_user():
 
     return redirect(url_for('adminManageUsers'))
 
+
+@app.route("/adminStatistics")
+def adminStatistics():
+    return render_template("/adminStatistics.html")
+
 #------------------- Manager -----------------#
 
 @app.route('/managerManageAdmins')
