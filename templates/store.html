@@ -21,6 +21,47 @@
 
 <!-- Main Content -->
 <main class="mb-4">
+<!-- Customer Weekly Choice Section -->
+  <div class="container my-4">
+    <div class="card border-primary">
+      <div class="card-header bg-primary text-white text-center">
+        <h3 class="mb-0">Customers Weekly Choice</h3>
+      </div>
+      <div class="card-body">
+        <div class="row justify-content-center">
+          {% if recommended_wines %}
+            {% for wine in recommended_wines %}
+              <div class="col-md-2 mb-3 text-center">
+                <div class="card h-100">
+                  <img src="{{ wine.image_url }}"
+                       class="card-img-top"
+                       alt="{{ wine.wine_name }}">
+                  <div class="card-body d-flex flex-column">
+                    <div style="height: 50px;"
+                         class="d-flex align-items-center justify-content-center">
+                      <h6 class="card-title mb-0">{{ wine.wine_name }}</h6>
+                    </div>
+                    <p class="card-text mt-2">
+                      <strong>${{ '%.2f'|format(wine.price) }}</strong>
+                    </p>
+                    <div class="mt-auto">
+                      <a href="{{ url_for('singlePage', id=wine.id) }}"
+                         class="btn btn-sm btn-outline-primary">
+                        View
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% else %}
+            <p class="text-center">No featured products available.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="container my-5">
     <h1 class="text-center">Welcome to the Wine Store</h1>
     <div class="row mt-4">

@@ -16,7 +16,7 @@ from userPurchseHistory import getPurchaseHistory
 from userSentMessage import sentMessage
 from registration import registration
 from login import log
-from store import wines
+from store import wines, get_top5_wines_last_week
 from dotenv import load_dotenv
 import os
 from getProductByID import get_wine_by_id
@@ -101,9 +101,12 @@ def tipsPage():
     return render_template("tipsPage.html",tips=get_wine_tips())
 
 
-@app.route('/store',)
+@app.route('/store')
 def store():
-    return render_template('store.html', all_wines=wines())
+    catalog =wines()
+    recommended_wines =get_top5_wines_last_week()
+    return render_template('store.html',all_wines= catalog,recommended_wines  = recommended_wines)
+
 
 
 @app.route('/singlePage/<int:id>')
