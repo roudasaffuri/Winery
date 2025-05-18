@@ -1,91 +1,93 @@
 from db_connection import create_connection
 
-# Connect to PostgreSQL
-conn = create_connection()
+def seasonalSt():
+    # Connect to PostgreSQL
+    conn = create_connection()
+    cursor = conn.cursor()
 
-# SQL query to get total quantity of each wine per season
-query = """
-SELECT
-    CASE
-        WHEN EXTRACT(MONTH FROM p.purchased_at) IN (12, 1, 2) THEN 'Winter'
-        WHEN EXTRACT(MONTH FROM p.purchased_at) IN (3, 4, 5) THEN 'Spring'
-        WHEN EXTRACT(MONTH FROM p.purchased_at) IN (6, 7, 8) THEN 'Summer'
-        WHEN EXTRACT(MONTH FROM p.purchased_at) IN (9, 10, 11) THEN 'Autumn'
-    END AS season,
-    pi.wine_name,
-    SUM(pi.quantity) AS total_quantity_sold
-FROM purchase_items pi
-JOIN purchases p ON pi.purchase_id = p.purchase_id
-GROUP BY season, pi.wine_name
-ORDER BY season, pi.wine_name;
-"""
+    query = """ SELECT * FROM purchases; """
 
-# Execute SQL query and fetch results
-cursor = conn.cursor()
-cursor.execute(query)
-results = cursor.fetchall()
-
-# Close the database connection
-conn.close()
-
-# Initialize empty lists for each season
-Autumn = []
-Winter = []
-Summer = []
-Spring = []
-
-# Process the results and append to appropriate season list
-for row in results:
-    season = row[0]
-    wine_name = row[1]
-    total_quantity_sold = row[2]
-
-    if season == 'Autumn':
-        Autumn.append((wine_name, total_quantity_sold))
-    elif season == 'Winter':
-        Winter.append((wine_name, total_quantity_sold))
-    elif season == 'Summer':
-        Summer.append((wine_name, total_quantity_sold))
-    elif season == 'Spring':
-        Spring.append((wine_name, total_quantity_sold))
-
-# Print the results
-print("Autumn:", Autumn)
-print("Summer:", Summer)
-print("Spring:", Spring)
-print("Winter:", Winter)
+    cursor.execute(query)
+    results = cursor.fetchall()
 
 
-totalAutumn = 0
-totalWinter = 0
-totalSummer = 0
-totalSpring = 0
+    Autumn = []
+    Winter = []
+    Summer = []
+    Spring = []
 
-for i in range(0,40) :
-    totalAutumn += Autumn[i][1]
-    totalSpring += Spring[i][1]
-    totalSummer += Summer[i][1]
-    totalWinter += Winter[i][1]
-print(f"totalSummer :{totalSummer}  , totalSpring:  {totalSpring}  ,totalAutumn:  {totalAutumn} ,  totalWinter:{totalWinter}")
+    def add_to_season(season_list, purchase_id):
+        query = """SELECT * FROM purchase_items WHERE purchase_id = %s;"""
+        cursor.execute(query, (purchase_id,))
+        purchases = cursor.fetchall()
+        for p in purchases:
+           # p[4] = wine name , p[4] = quantity
+            season_list.append((p[3], p[4]))
 
-AutumnItemPercent = []
-WinterItemPercent  = []
-SummerItemPercent  = []
-SpringItemPercent  = []
+    for row in results:
+        # Parse the month from the timestamp
+        # # row[5] = 2024-08-07 14:02:06.000636
+        month = int(str(row[5])[5:7])
+        purchase_id = row[0]
 
-for i in range(0,40) :
 
-    AutumnItemPercent.append((Autumn[i][0],(Autumn[i][1]/totalAutumn)))
-    WinterItemPercent.append((Winter[i][0],(Winter[i][1]/totalWinter)))
-    SummerItemPercent.append((Summer[i][0], (Summer[i][1] / totalSummer)))
-    SpringItemPercent.append((Spring[i][0], (Spring[i][1] / totalSpring)))
+        if month in [12, 1, 2]:
+            add_to_season(Winter, purchase_id)
+        elif month in [3, 4, 5]:
+            add_to_season(Spring, purchase_id)
+        elif month in [6, 7, 8]:
+            add_to_season(Summer, purchase_id)
+        elif month in [9, 10, 11]:
+            add_to_season(Autumn, purchase_id)
 
-print(AutumnItemPercent)
-print(WinterItemPercent)
-print(SummerItemPercent)
-print(SpringItemPercent)
+
+    print("Autumn:", Autumn)
+    print("Summer:", Summer)
+    print("Spring:", Spring)
+    print("Winter:", Winter)
+
+    def sumTotalSeason(season):
+        totalWines=0
+        for s in season:
+            totalWines+=s[1]
+        return totalWines
+
+    totalAutumn = sumTotalSeason(Autumn)
+    totalWinter = sumTotalSeason(Winter)
+    totalSummer = sumTotalSeason(Summer)
+    totalSpring = sumTotalSeason(Spring)
 
 
 
 
+    print(f"totalSummer :{totalSummer}  , totalSpring:  {totalSpring}  ,totalAutumn:  {totalAutumn} ,  totalWinter:{totalWinter}")
 
+    AutumnItemPercent = []
+    WinterItemPercent  = []
+    SummerItemPercent  = []
+    SpringItemPercent  = []
+
+    for i in range(0,40) :
+
+        AutumnItemPercent.append((Autumn[i][0],(Autumn[i][1]/totalAutumn)*100))
+        WinterItemPercent.append((Winter[i][0],(Winter[i][1]/totalWinter)*100))
+        SummerItemPercent.append((Summer[i][0], (Summer[i][1] / totalSummer)*100))
+        SpringItemPercent.append((Spring[i][0], (Spring[i][1] / totalSpring)*100))
+
+    print(f" Autumn : {AutumnItemPercent}")
+    print(f"Winter : {WinterItemPercent}")
+    print(f"Summer :  {SummerItemPercent}")
+    print(f"Spring :  {SpringItemPercent}")
+    # Close the database connection
+    conn.close()
+
+    return {
+        "autumn": AutumnItemPercent,
+        "winter": WinterItemPercent,
+        "summer": SummerItemPercent,
+        "spring": SpringItemPercent
+    }
+
+
+
+# print(seasonalSt())

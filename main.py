@@ -2,6 +2,7 @@ import paypalrestsdk as paypalrestsdk
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from Tips import get_wine_tips
 from adminAddWine import addItemToDB
+from adminGenderDistribution import genderDistribution
 from adminGetAllWines import getAllWines
 from complete_order import complete_order
 from context_processors import inject_current_year
@@ -9,6 +10,7 @@ from adminDeleteWine import deleteItemFromDB
 from db_connection import create_connection
 from getWineById import getWineById
 from paypalPayment import paypalPayment
+from test import seasonalSt
 from userPaymentByCard import PaymentByCard
 from userPurchseHistory import getPurchaseHistory
 from userSentMessage import sentMessage
@@ -376,7 +378,17 @@ def block_user():
 
 @app.route("/adminStatistics")
 def adminStatistics():
-    return render_template("/adminStatistics.html")
+    gender = genderDistribution()
+    male=gender[0]
+    female = gender[1]
+    return render_template("adminStatistics.html", male=male, female=female)
+
+
+@app.route("/seasonalStatistics")
+def seasonalStatistics():
+    seasonal_data = seasonalSt()
+    return render_template("seasonalStatistics.html", **seasonal_data)
+
 
 #------------------- Manager -----------------#
 

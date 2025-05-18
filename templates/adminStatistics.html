@@ -1,10 +1,50 @@
-<!DOCTYPE html>
+{% if session.admin or session.manager %}
+{% include "adminHeader.html" %}
+
+
 <html>
 <head>
     <title>Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <h2>Gender Distribution</h2>
-    <h1>admin Statistics </h1>
+<div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+    <div>
+        <h1>Admin Statistics {{ current_year -1 }}</h1>
+    </div>
+
+    <div style="margin-top: 2rem;">
+        <h2>Gender Distribution</h2>
+        <div style="max-width: 20rem; margin: auto;">
+            <canvas id="myPieChart" width="247" height="247"></canvas>
+        </div>
+    </div>
+</div>
+
+    <script>
+        const ctx = document.getElementById('myPieChart').getContext('2d');
+        const myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Male', 'Female'],
+                datasets: [{
+                    data: [{{ male }}, {{ female }}] , // Example values
+                    backgroundColor: ['#36A2EB', '#FF6384']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+    </script>
 </body>
 </html>
+
+{% else %}
+<p>Please go to the <a href="/">index page</a>.</p>
+{% endif %}

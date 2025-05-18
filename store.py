@@ -28,7 +28,6 @@ def wines():
         # Calculate the user's age
         current_year = datetime.now().year
         user_age = current_year - birth_year
-        print(f"User Age: {user_age}, Gender: {user_gender}")
 
         # Select users of similar age and same gender
         if user_age < 25:
@@ -45,12 +44,9 @@ def wines():
 
         # Fetch users within the same age range
         results = cursor.fetchall()
-        print(f"Total users in the same age group: {len(results)}")
-        # print(results)
 
         # Extract user IDs
         list_id_users = [row[0] for row in results]
-        print(f"User IDs in the same age group: {list_id_users}")
 
         # Get purchase IDs for each user
         list_purchase_id = []
@@ -60,7 +56,6 @@ def wines():
             results = cursor.fetchall()
             list_purchase_id.extend([row[0] for row in results])
 
-        print(f"Purchase IDs from the 'purchases' table: {list_purchase_id}")
 
         # Get wine IDs from purchase items
         wines_popular = []
@@ -70,7 +65,6 @@ def wines():
             results = cursor.fetchall()
             wines_popular.extend([row[0] for row in results])
 
-        print(f"Wine IDs from the 'purchase_items' table: {wines_popular}")
 
         # Count frequency of each wine_id
         counter = Counter(wines_popular)
@@ -81,14 +75,12 @@ def wines():
 
         # Extract only the unique wine IDs, sorted by popularity
         sorted_unique_wine_ids = [item[0] for item in sorted_items]
-        print(f"Sorted unique wine IDs by popularity: {sorted_unique_wine_ids}")
 
         # Add missing wine IDs (1 to 60) that were not in the list
         for i in range(1, 41):
             if i not in sorted_unique_wine_ids:
                 sorted_unique_wine_ids.append(i)
 
-        print(f"Final list of wine IDs (popular first, then missing ones): {sorted_unique_wine_ids}")
 
         wines = []  # Array to store wine objects
 
@@ -119,7 +111,6 @@ def wines():
                 if wine.id == id:
                     final_sorted_wine.append(wine)
 
-        print(f"the finale sorted wine to send to store.html {final_sorted_wine}")
 
         return final_sorted_wine
 

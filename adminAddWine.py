@@ -1,4 +1,4 @@
-from flask import redirect, url_for, flash, render_template
+from flask import flash, render_template
 
 from adminGetAllWines import getAllWines
 from db_connection import create_connection
