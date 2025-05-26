@@ -1,42 +1,301 @@
-{% if session.username %}
-{% include "header.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wine Tips</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
 
-<!-- Page Header -->
-<header class="masthead" style="background-image: url('../static/assets/img/tips-bg.jpg')">
-  <div class="container position-relative px-4 px-lg-5">
-    <div class="row gx-4 gx-lg-5 justify-content-center">
-      <div class="col-md-10 col-lg-8 col-xl-7">
-        <div class="page-heading">
-             <h1>Wine Tips</h1>
-          <span class="subheading">Why Wine Storage Matters</span>
+        /* Header with vineyard background */
+        .masthead {
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../static/assets/img/tips-bg.jpg');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            position: relative;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .position-relative {
+            position: relative;
+        }
+
+        .px-4 {
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        .px-lg-5 {
+            padding-left: 3rem;
+            padding-right: 3rem;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -15px;
+            margin-left: -15px;
+        }
+
+        .gx-4 > * {
+            padding-right: 1.5rem;
+            padding-left: 1.5rem;
+        }
+
+        .gx-lg-5 > * {
+            padding-right: 3rem;
+            padding-left: 3rem;
+        }
+
+        .justify-content-center {
+            justify-content: center;
+        }
+
+        .col-md-10 {
+            flex: 0 0 83.333333%;
+            max-width: 83.333333%;
+        }
+
+        .col-lg-8 {
+            flex: 0 0 66.666667%;
+            max-width: 66.666667%;
+        }
+
+        .col-xl-7 {
+            flex: 0 0 58.333333%;
+            max-width: 58.333333%;
+        }
+
+        .col-md-6 {
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding: 0 15px;
+        }
+
+        .page-heading h1 {
+            font-size: 4rem;
+            font-weight: normal;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .subheading {
+            font-size: 1.2rem;
+            font-weight: normal;
+            color: white;
+        }
+
+        /* Main content styling to match reference page */
+        main {
+            background-color: white;
+            padding: 60px 0;
+        }
+
+        .mb-4 {
+            margin-bottom: 1.5rem;
+        }
+
+        /* Wine tips section styling */
+        .tips-section {
+            margin-top: 2rem;
+        }
+
+        .tips-section h3 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 2rem;
+            font-weight: normal;
+        }
+
+        .tip-item {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tip-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .tip-content {
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+        }
+
+        .tip-image {
+            flex-shrink: 0;
+            width: 200px;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .tip-text {
+            flex: 1;
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #333;
+        }
+        .tip-number {
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        /* Login prompt styling */
+        .login-section {
+            text-align: center;
+            padding: 80px 20px;
+            background: white;
+            margin: 40px auto;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .login-section p {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 25px;
+        }
+        .login-section a {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .login-section a:hover {
+            background-color: #0056b3;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .page-heading h1 {
+                font-size: 2.5rem;
+            }
+
+            .masthead {
+                height: 300px;
+            }
+
+            .col-md-10,
+            .col-lg-8,
+            .col-xl-7,
+            .col-md-6 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+
+            main {
+                padding: 40px 0;
+            }
+
+            .tip-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .tip-image {
+                width: 100%;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .px-4,
+            .px-lg-5 {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+
+            .tip-image {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% if session.username %}
+    {% include "header.html" %}
+
+    <!-- Page Header -->
+    <header class="masthead" style="background-image: url('../static/assets/img/tips-bg.jpg')">
+      <div class="container position-relative px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+          <div class="col-md-10 col-lg-8 col-xl-7">
+            <div class="page-heading">
+                 <h1>Wine Tips</h1>
+              <span class="subheading">Why Wine Storage Matters</span>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</header>
+    </header>
 
-<div class="container my-5">
-    <div class="row">
-        {% for tip in tips %}
-            <div class="col-md-4">
-                <div class="card mb-4">
-                    <img src="{{ tip.image }}" class="card-img-top" alt="{{ tip.number }}" width="200" height="300">
-                    <div class="card-body">
+    <!-- Main Content -->
+    <main class="mb-4">
+      <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+          <div class="col-md-10 col-lg-8 col-xl-7">
 
-                        <p class="card-text">{{ tip.tip }}</p>
+            <p>Proper wine storage is essential for maintaining the quality and flavor of your wine collection. These expert tips will help you preserve your wines at their best.</p>
+
+            <section class="tips-section">
+              <h3>Essential Wine Storage Tips</h3>
+
+              {% for tip in tips %}
+                <div class="tip-item">
+                  <div class="tip-content">
+                    <img src="{{ tip.image }}" class="tip-image" alt="{{ tip.number }}">
+                    <div class="tip-text">
+                      <span class="tip-number">Tip {{ loop.index }}</span>
+                      <p>{{ tip.tip }}</p>
                     </div>
+                  </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
-</div>
+              {% endfor %}
 
+            </section>
 
+          </div>
+        </div>
+      </div>
+    </main>
 
-
-
-
- {% include "footer.html" %}
-{% else %}
-    <p>Please go to the <a href="/">index page</a>.</p>
-{% endif %}
+     {% include "footer.html" %}
+    {% else %}
+        <div class="login-section">
+            <p>Please go to the <a href="/">index page</a>.</p>
+        </div>
+    {% endif %}
+</body>
+</html>

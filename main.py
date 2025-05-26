@@ -1,5 +1,5 @@
 import paypalrestsdk as paypalrestsdk
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, flash, session, g
 from Tips import get_wine_tips
 from adminAddWine import addItemToDB
 from adminGenderDistribution import genderDistribution
@@ -24,7 +24,7 @@ from userSendUserPassword import sendPass
 from clearSessionAndLogout import exitAndClearSession
 from ageVerified import ageVerified
 from userAddToCart import handle_add_to_cart
-from userCart import getCart
+from userCart import getCart, get_cart_count
 from userRemoveProduct import removeProduct
 from userUpdateQuantity import handle_quantity_update
 
@@ -60,6 +60,9 @@ def signup():
         return registration()
     return render_template('signup.html')  # Render the signup form
 
+@app.route('/privacy_policy')
+def privacy_policy():
+    return render_template('PrivacyPolicy.html')
 
 
 @app.route('/sendPasswordToEmail', methods=['GET', 'POST'])
@@ -130,6 +133,10 @@ def history():
 def cart():
     return getCart()
     return render_template("cart.html")
+
+@app.before_request
+def load_cart_count():
+    g.cart_count = get_cart_count()
 
 
 @app.route('/remove_from_cart/<int:product_id>')

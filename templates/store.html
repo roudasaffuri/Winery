@@ -7,7 +7,7 @@
       <div class="col-md-10 col-lg-8 col-xl-7">
         <div class="page-heading">
           <h1>Store</h1>
-          <span class="subheading">OUR STORE</span>
+          <span class="subheading">Our Fine Collection</span>
         </div>
       </div>
     </div>
@@ -21,75 +21,143 @@
 
 <!-- Main Content -->
 <main class="mb-4">
-<!-- Customer Weekly Choice Section -->
-  <div class="container my-4">
-    <div class="card border-primary">
-      <div class="card-header bg-primary text-white text-center">
-        <h3 class="mb-0">Customers Weekly Choice</h3>
-      </div>
-      <div class="card-body">
-        <div class="row justify-content-center">
-          {% if recommended_wines %}
-            {% for wine in recommended_wines %}
-              <div class="col-md-2 mb-3 text-center">
-                <div class="card h-100">
-                  <img src="{{ wine.image_url }}"
-                       class="card-img-top"
-                       alt="{{ wine.wine_name }}">
-                  <div class="card-body d-flex flex-column">
-                    <div style="height: 50px;"
-                         class="d-flex align-items-center justify-content-center">
-                      <h6 class="card-title mb-0">{{ wine.wine_name }}</h6>
-                    </div>
-                    <p class="card-text mt-2">
-                      <strong>${{ '%.2f'|format(wine.price) }}</strong>
-                    </p>
-                    <div class="mt-auto">
-                      <a href="{{ url_for('singlePage', id=wine.id) }}"
-                         class="btn btn-sm btn-outline-primary">
-                        View
-                      </a>
-                    </div>
-                  </div>
+<!-- Weekly Featured Selection Section -->
+  <div class="container my-5">
+    <div class="text-center mb-4">
+      <h2 style="color: #722f37; font-weight: 600;">Weekly Featured Selection</h2>
+      <p class="text-muted">Our Top 5 Bestsellers This Week</p>
+    </div>
+    <div class="row justify-content-center">
+      {% if recommended_wines %}
+        {% for wine in recommended_wines %}
+          <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
+            <div class="card h-100 shadow-sm border-0" style="transition: transform 0.3s;">
+              <div class="position-relative">
+                <img src="{{ wine.image_url }}"
+                     class="card-img-top"
+                     alt="{{ wine.wine_name }}"
+                     style="height: 220px; object-fit: cover;">
+                <div class="position-absolute top-0 start-0 m-2">
+                  <span class="badge" style="background-color: #d4af37; color: white;">
+                    🔥 Bestseller
+                  </span>
                 </div>
               </div>
-            {% endfor %}
-          {% else %}
-            <p class="text-center">No featured products available.</p>
-          {% endif %}
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="container my-5">
-    <h1 class="text-center">Welcome to the Wine Store</h1>
-    <div class="row mt-4">
-      {% if all_wines %}
-        {% for wine in all_wines %}
-          <div class="col-md-4 mb-4">
-            <div class="card" style="width: 18rem;">
-              <img src="{{ wine.image_url }}" class="card-img-top" alt="{{ wine.wine_name }}">
-
-              {% if loop.index <= 10 %}
-                <div><h6 class="text-success">Recommended!</h6></div>
-              {% endif %}
-
-              <div class="card-body text-center">
-                <h5 class="card-title">{{ wine.wine_name }}</h5>
-                <p class="card-text">Price: ${{ '%.2f' | format(wine.price) }}</p>
-                <a href="{{ url_for('singlePage', id=wine.id) }}" class="btn btn-primary">View Product</a>
+              <div class="card-body d-flex flex-column text-center p-3">
+                <h6 class="card-title mb-2" style="color: #722f37; font-weight: 500; min-height: 40px; display: flex; align-items: center; justify-content: center;">
+                  {{ wine.wine_name }}
+                </h6>
+                <p class="card-text mb-3" style="color: #722f37; font-weight: 600; font-size: 1.1rem;">
+                  ${{ '%.2f'|format(wine.price) }}
+                </p>
+                <div class="mt-auto">
+                  <a href="{{ url_for('singlePage', id=wine.id) }}"
+                     class="btn btn-sm px-3"
+                     style="background-color: #722f37; border-color: #722f37; color: white;">
+                    View Details
+                  </a>
+                </div>
               </div>
             </div>
           </div>
         {% endfor %}
       {% else %}
-        <p>No products available.</p>
+        <p class="text-center text-muted">No featured wines available at the moment.</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Recommended Products Section -->
+  <div class="container my-5">
+    <div class="text-center mb-4">
+      <h2 style="color: #722f37; font-weight: 600;">Recommended For You</h2>
+      <p class="text-muted">Customers Like You Also Choose</p>
+    </div>
+    <div class="row justify-content-center">
+      {% if all_wines %}
+        {% for wine in all_wines %}
+          {% if loop.index <= 10 %}
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-4">
+              <div class="card h-100 shadow-sm border-0" style="transition: transform 0.3s;">
+                <div class="position-relative">
+                  <img src="{{ wine.image_url }}"
+                       class="card-img-top"
+                       alt="{{ wine.wine_name }}"
+                       style="height: 220px; object-fit: cover;">
+                  <div class="position-absolute top-0 start-0 m-2">
+                    <span class="badge" style="background-color: #d4af37; color: white;">
+                      <i class="fas fa-star"></i> Recommended
+                    </span>
+                  </div>
+                </div>
+                <div class="card-body d-flex flex-column text-center p-3">
+                  <h6 class="card-title mb-2"
+                      style="color: #722f37; font-weight: 500; min-height: 40px;
+                             display: flex; align-items: center; justify-content: center;">
+                    {{ wine.wine_name }}
+                  </h6>
+                  <p class="card-text mb-3"
+                     style="color: #722f37; font-weight: 600; font-size: 1.1rem;">
+                    ${{ '%.2f'|format(wine.price) }}
+                  </p>
+                  <div class="mt-auto">
+                    <a href="{{ url_for('singlePage', id=wine.id) }}"
+                       class="btn btn-sm px-3"
+                       style="background-color: #722f37; border-color: #722f37; color: white;">
+                      View Details
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <p class="text-center text-muted">No recommendations available at the moment.</p>
+      {% endif %}
+    </div>
+  </div>
+
+
+  <!-- All Products Section -->
+  <div class="container my-5">
+    <div class="text-center mb-4">
+      <h2 style="color: #722f37; font-weight: 600;">Our Wine Collection</h2>
+      <p class="text-muted">Discover our full range of premium wines</p>
+    </div>
+    <div class="row">
+      {% if all_wines %}
+        {% for wine in all_wines %}
+          <div class="col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm border-0" style="transition: transform 0.3s;">
+              <div class="position-relative">
+                <img src="{{ wine.image_url }}"
+                     class="card-img-top"
+                     alt="{{ wine.wine_name }}"
+                     style="height: 300px; object-fit: cover;">
+              </div>
+              <div class="card-body text-center p-4">
+                <h5 class="card-title mb-3" style="color: #722f37; font-weight: 600;">
+                  {{ wine.wine_name }}
+                </h5>
+                <p class="card-text mb-4" style="color: #722f37; font-weight: 600; font-size: 1.2rem;">
+                  ${{ '%.2f' | format(wine.price) }}
+                </p>
+                <a href="{{ url_for('singlePage', id=wine.id) }}"
+                   class="btn px-4 py-2"
+                   style="background-color: #722f37; border-color: #722f37; color: white; font-weight: 500;">
+                  View Details
+                </a>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% else %}
+        <p class="text-center text-muted">No wines available at the moment.</p>
       {% endif %}
     </div>
   </div>
 </main>
-
 
 {% include "footer.html" %}
 {% else %}

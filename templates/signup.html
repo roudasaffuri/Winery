@@ -72,6 +72,20 @@
                                 </button>
                             </div>
                         </div>
+                        <!-- Privacy Policy agreement checkbox -->
+                        <div class="form-group form-check mt-3">
+                            <input
+                              type="checkbox"
+                              class="form-check-input"
+                              id="privacyPolicyCheck"
+                              name="agree_privacy"
+                              required
+                            >
+                            <label class="form-check-label" for="privacyPolicyCheck">
+                              I agree to the
+                              <a href="{{ url_for('privacy_policy') }}">Privacy Policy</a>
+                            </label>
+                        </div>
 
 
                         <button type="submit" class="btn btn-primary btn-block mt-3">Sign Up</button>
