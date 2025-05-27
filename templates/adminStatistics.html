@@ -1,26 +1,119 @@
 {% if session.admin or session.manager %}
-{% include "adminHeader.html" %}
 
-
-<html>
+<html lang="en">
 <head>
-    <title>Admin Dashboard</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <title>Admin Panel</title>
+
+    <!-- Bootstrap & Styles -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .table img {
+            border-radius: 5px;
+        }
+        .table th {
+            background-color: #f8f9fa;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+            text-align: center;
+        }
+        .btn-sm {
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
-<div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-    <div>
-        <h1>Admin Statistics {{ current_year -1 }}</h1>
-    </div>
 
-    <div style="margin-top: 2rem;">
-        <h2>Gender Distribution</h2>
-        <div style="max-width: 20rem; margin: auto;">
-            <canvas id="myPieChart" width="247" height="247"></canvas>
+    {% include "adminHeader.html" %}
+
+    <!-- Flash Messages -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
+            <div class="container mt-3">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Wines Table -->
+    <main class="mb-4">
+        <div class="container my-5">
+            <h1 class="text-center mb-4">Manage Wines</h1>
+            <h3 class="text-success">Current Wines</h3>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th>ID Item</th>
+                            <th>Wine Name</th>
+                            <th>Price</th>
+                            <th>Quantity Available</th>
+                            <th>Status</th>
+                            <th>View</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if all_wines %}
+                            {% for wine in all_wines %}
+                            <tr>
+                                <td>{{ wine.id }}</td>
+                                <td>{{ wine.wine_name }}</td>
+                                <td>${{ '%.2f' | format(wine.price) }}</td>
+                                <td>{{ wine.stock }}</td>
+                                <td>
+                                    {% if wine.stock < 5 %}
+                                        <span class="text-danger font-weight-bold">Only {{ wine.stock }} left!</span>
+                                    {% else %}
+                                        <span class="text-success">In stock</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <form method="post" action="{{ url_for('chart') }}" style="display:inline;">
+                                        <input type="hidden" name="id" value="{{ wine.id }}">
+                                        <button type="submit" class="btn btn-warning btn-sm">View</button>
+                                    </form>
+                            </tr>
+                            {% endfor %}
+                        {% else %}
+                            <tr>
+                                <td colspan="9" class="text-center">No wines available.</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Statistics Section -->
+    <div class="container my-5">
+        <h1 class="text-center mb-4">Admin Statistics {{ current_year -1 }}</h1>
+
+        <div class="text-center">
+            <h2>Gender Distribution</h2>
+            <div style="max-width: 300px; margin: auto;">
+                <canvas id="myPieChart"></canvas>
+            </div>
         </div>
     </div>
-</div>
 
+    <!-- Optional JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+    <!-- Chart Script -->
     <script>
         const ctx = document.getElementById('myPieChart').getContext('2d');
         const myPieChart = new Chart(ctx, {
@@ -28,7 +121,7 @@
             data: {
                 labels: ['Male', 'Female'],
                 datasets: [{
-                    data: [{{ male }}, {{ female }}] , // Example values
+                    data: [{{ male }}, {{ female }}],
                     backgroundColor: ['#36A2EB', '#FF6384']
                 }]
             },
@@ -42,9 +135,9 @@
             }
         });
     </script>
+
 </body>
 </html>
-
 {% else %}
-<p>Please go to the <a href="/">index page</a>.</p>
+    <p>Please go to the <a href="/">index page</a>.</p>
 {% endif %}

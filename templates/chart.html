@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chart Example</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-light p-4">
+<div class="container">
+  <h2 class="text-center mb-4">Monthly Sales Comparison</h2>
+  <div style="max-width: 500px; margin: auto;">
+    <canvas id="chartjs-bar" width="500" height="250"></canvas>
+  </div>
+</div>
+<div class="container mb-4">
+  <h3>סטיית תקן: {{ std_dev }}</h3>
+  <h3>ממוצע: {{ media }}</h3>
+<h3>מומלץ למלאי חודשי של: {{ recommended }}</h3>
+</div>
+
+
+<script>
+  const labels = {{ labels|tojson }};
+  const lastYear = {{ last_year|tojson }};
+  const thisYear = {{ this_year|tojson }};
+  new Chart(document.getElementById("chartjs-bar"), {
+    type: "bar",
+    data: {
+      labels: labels,
+      datasets: [{
+        label: "Last year",
+        backgroundColor: "#0d6efd",
+        data: lastYear
+      }, {
+        label: "This year",
+        backgroundColor: "#dee2e6",
+        data: thisYear
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Sales Comparison'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+
+</body>
+</html>
