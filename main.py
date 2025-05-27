@@ -2,8 +2,10 @@ import paypalrestsdk as paypalrestsdk
 from flask import Flask, render_template, request, redirect, url_for, flash, session, g
 from Tips import get_wine_tips
 from adminAddWine import addItemToDB
+from adminEditProduct import  adminEditProduct
 from adminGenderDistribution import genderDistribution
 from adminGetAllWines import getAllWines
+from adminStatisticWine import statisticWine
 from complete_order import complete_order
 from context_processors import inject_current_year
 from adminDeleteWine import deleteItemFromDB
@@ -239,6 +241,7 @@ def adminAddProduct():
 
 @app.route('/add-wine', methods=['POST'])
 def add_wine():
+
     if request.method == 'POST':
         wineName = request.form['wineName']
         wineType = request.form['wineType']
@@ -265,43 +268,19 @@ def add_wine():
 def delete_wine():
     if request.method == 'POST':
         item_id = request.form['wineId']
-        print(item_id)
         return deleteItemFromDB(item_id)
 
 
 @app.route('/edit_product', methods=['POST'])
 def edit_product():
     wine_id = request.form.get('id')
-
-    conn = create_connection()
-    cursor = conn.cursor()
-    sql = "SELECT * FROM wines WHERE id = %s;"
-    cursor.execute(sql, (wine_id,))
-    result = cursor.fetchone()
-
-    if result:
-        wine_data = {
-            'id': result[0],
-            'wine_name': result[1],
-            'wine_type': result[2],
-            'price': result[4],
-            'stock': result[5],
-            'year': result[7],
-            'image_url': result[3],
-            'description': result[6],
-        }
-
-        cursor.close()
-        conn.close()
-        return render_template('adminEditWine.html', wine=wine_data)
-    else:
-        cursor.close()
-        conn.close()
-        return "Wine not found", 404
+    return adminEditProduct(wine_id)
 
 
 
-@app.route('/up', methods=['POST'])
+
+
+@app.route('/update_wine', methods=['POST'])
 def update_wine():
     wine_id = request.form.get('itemId')
     name = request.form.get('name')
@@ -311,6 +290,7 @@ def update_wine():
     year = request.form.get('year')
     description = request.form.get('description')
     image_url = request.form.get('image')
+
 
     conn = create_connection()
     cursor = conn.cursor()
@@ -334,6 +314,7 @@ def update_wine():
     conn.close()
     flash(f"Wine '{name}' has been successfully updated.", "success")
     return redirect('/adminManageProducts')
+
 
 @app.route('/adminManageUsers')
 def adminManageUsers():
@@ -391,7 +372,7 @@ def adminStatistics():
     gender = genderDistribution()
     male=gender[0]
     female = gender[1]
-    return render_template("adminStatistics.html", male=male, female=female)
+    return render_template("adminStatistics.html", male=male, female=female , all_wines=getAllWines())
 
 
 @app.route("/seasonalStatistics")
@@ -456,6 +437,14 @@ def change_role():
 
 
 #------------------------------- Logout User and Admin --------------------------------#
+@app.route("/chart" , methods=['POST'])
+def chart():
+    wine_id = request.form.get('id')
+    print(wine_id)
+    labels, data_this_year, data_last_year, std_dev, media = statisticWine(wine_id)
+    recommended = round(media + std_dev)
+    return render_template("chart.html", labels=labels, last_year=data_last_year, this_year=data_this_year,
+                       std_dev=round(std_dev), media=round(media), recommended=recommended)
 
 @app.route('/logout')
 def logout():

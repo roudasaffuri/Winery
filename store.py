@@ -108,8 +108,8 @@ def wines():
         disconnection(conn, cursor)
 
 def get_top5_wines_last_week():
-    now = datetime(2025, 4, 20, 0, 0, 0) #for custom date replace with line 135
-    # now      = datetime.now()
+    # now = datetime(2025, 4, 20, 0, 0, 0) #for custom date replace with line 135
+    now      = datetime.now()
     week_ago = now - timedelta(days=7)
 
     conn = create_connection()

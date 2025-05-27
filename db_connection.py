@@ -9,7 +9,7 @@ def create_connection():
     """Create a database connection."""
     return psycopg2.connect(
         host="localhost",
-        dbname="Winery",
+        dbname="postgres",
         user="postgres",
         password=OWN_PASSWORD_PG,
         port=5432
