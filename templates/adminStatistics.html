@@ -47,8 +47,8 @@
     <!-- Wines Table -->
     <main class="mb-4">
         <div class="container my-5">
-            <h1 class="text-center mb-4">Manage Wines</h1>
-            <h3 class="text-success">Current Wines</h3>
+            <h1 class="text-center mb-4">Statistic</h1>
+            <h3 class="text-success">Wines</h3>
 
             <div class="table-responsive">
                 <table class="table table-striped table-bordered">
@@ -60,6 +60,7 @@
                             <th>Quantity Available</th>
                             <th>Status</th>
                             <th>View</th>
+                            <th>Discount</th>
 
                         </tr>
                     </thead>
@@ -79,11 +80,23 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <form method="post" action="{{ url_for('chart') }}" style="display:inline;">
+                                    <form method="post" action="{{ url_for('adminChart') }}" style="display:inline;">
                                         <input type="hidden" name="id" value="{{ wine.id }}">
                                         <button type="submit" class="btn btn-warning btn-sm">View</button>
                                     </form>
+                                </td>
+                                <td>
+                                  <form method="POST" action="{{ url_for('discountByWineId') }}">
+                                    <input type="hidden" name="wine_id" value="{{ wine.id }}">
+                                    <select name="discount" onchange="this.form.submit()">
+                                      {% for i in range(0, 55, 5) %}
+                                        <option value="{{ i }}" {% if wine.discount == i %}selected{% endif %}>{{ i }}%</option>
+                                      {% endfor %}
+                                    </select>
+                                  </form>
+                                </td>
                             </tr>
+
                             {% endfor %}
                         {% else %}
                             <tr>

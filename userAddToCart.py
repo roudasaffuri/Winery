@@ -3,6 +3,7 @@ from db_connection import create_connection
 
 
 def handle_add_to_cart(wine ,quantity ):
+
     conn = create_connection()
     cur = conn.cursor()
     try:
@@ -14,6 +15,7 @@ def handle_add_to_cart(wine ,quantity ):
         row = cur.fetchone()
         if row:
             cart_id = row[0]
+
         else:
             cur.execute(
                 "INSERT INTO carts (user_id, created_at, updated_at) VALUES (%s, NOW(), NOW()) RETURNING cart_id",

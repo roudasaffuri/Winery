@@ -3,6 +3,7 @@ from ClassWine import Wine
 from collections import Counter
 from datetime import datetime,timedelta
 from db_connection import create_connection, disconnection
+from decimal import Decimal
 
 # Define a Wine class to structure the data
 def wines():
@@ -78,17 +79,27 @@ def wines():
         rows = cursor.fetchall()
 
         # Map each row to a Wine object and append to the wines list
+        # Map each row to a Wine object and append to the wines list
         for row in rows:
+            discount = Decimal(row[9])
+            price = row[4]  # בהנחה שזה כבר Decimal, אם לא - להמיר אותו ל-Decimal
+
+            if discount == 0:
+                calculated_price = price
+            else:
+                calculated_price = (Decimal('100') - discount) / Decimal('100') * price
+
             wine = Wine(
                 id=row[0],
                 wine_name=row[1],
                 wine_type=row[2],
                 image_url=row[3],
-                price=row[4],
+                price=calculated_price,
                 stock=row[5],
                 description=row[6],
                 best_before=row[7],
-                product_registration_date=row[8]
+                product_registration_date=row[8],
+                discount=row[9]
             )
             wines.append(wine)
 

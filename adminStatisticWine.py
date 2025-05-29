@@ -16,9 +16,16 @@ def statisticWine(wine_id):
     conn = create_connection()
     cursor = conn.cursor()
 
+    sql = "SELECT * FROM wines WHERE id = %s;"
+    cursor.execute(sql, (wine_id,))
+    result = cursor.fetchone()
+    print(result)
+
     sql = "SELECT * FROM purchase_items WHERE wine_id = %s;"
     cursor.execute(sql, (wine_id,))
     result = cursor.fetchall()
+    discount = result[9]
+    print(f"discount : {discount}")
 
     for row in result :
         purchase_id = row[1]
@@ -48,6 +55,6 @@ def statisticWine(wine_id):
     print("סטיית תקן:", std_dev)
     print(  "ממוצע" , media)
 
-    return labels, monthsOfThisYear, monthsOfLastYear, std_dev, media
+    return labels, monthsOfThisYear, monthsOfLastYear, std_dev, media ,discount
 
 

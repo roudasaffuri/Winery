@@ -1,0 +1,157 @@
+{% if session.admin or session.manager %}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <title>Monthly Sales Comparison</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      background-color: #f4f6f9;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .card {
+      border: none;
+      border-radius: 1rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      transition: 0.3s ease;
+    }
+
+
+
+    h2, h3, h4 {
+      font-weight: 700;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 30px;
+      color: #0d6efd;
+    }
+
+    .list-group-item {
+      background-color: transparent;
+      border: none;
+      font-size: 1.1rem;
+    }
+
+    .list-icon {
+      margin-right: 8px;
+    }
+  </style>
+</head>
+
+<body>
+  {% include "adminHeader.html" %}
+
+  <div class="container">
+    <!-- Chart Card -->
+    <div class="card p-4 mb-5">
+      <h2 class="section-title">Monthly Sales Comparison</h2>
+      <div style="max-width: 700px; margin: auto;">
+        <canvas id="chartjs-bar" height="300"></canvas>
+      </div>
+    </div>
+
+    <!-- Statistics Card -->
+    <div class="card p-4">
+      <h3 class="text-center text-dark mb-4">Statistical Summary</h3>
+
+      <div class="row">
+        <!-- Last Year -->
+        <div class="col-md-6 mb-4">
+          <h4 class="text-primary">Last Year</h4>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <span class="list-icon">📊</span><strong>Standard Deviation:</strong> {{ std_dev }}
+            </li>
+            <li class="list-group-item">
+              <span class="list-icon">📈</span><strong>Average Sales:</strong> {{ media }}
+            </li>
+          </ul>
+        </div>
+
+        <!-- This Year -->
+        <div class="col-md-6 mb-4">
+          <h4 class="text-success">This Year</h4>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item">
+              <span class="list-icon">📦</span><strong>Recommended Monthly Stock:</strong> {{ recommended }}
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart Script -->
+  <script>
+    const labels = {{ labels|tojson }};
+    const lastYear = {{ last_year|tojson }};
+    const thisYear = {{ this_year|tojson }};
+
+    new Chart(document.getElementById("chartjs-bar"), {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Last Year",
+            backgroundColor: "#0d6efd",
+            borderRadius: 6,
+            data: lastYear
+          },
+          {
+            label: "This Year",
+            backgroundColor: "#6c757d",
+            borderRadius: 6,
+            data: thisYear
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          title: {
+            display: true,
+            text: 'Monthly Sales Comparison',
+            font: {
+              size: 18
+            }
+          },
+          legend: {
+            position: 'bottom',
+            labels: {
+              font: {
+                size: 14
+              }
+            }
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 10
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+{% else %}
+  <p>Please go to the <a href="/">index page</a>.</p>
+{% endif %}

@@ -31,7 +31,7 @@ def get_wine_by_id(item_id):
     try:
         cur = conn.cursor()
         # Fetch wine details
-        cur.execute("SELECT * FROM wines WHERE itemId = %s", (item_id,))
+        cur.execute("SELECT * FROM wines WHERE id = %s", (item_id,))
         wine_details = cur.fetchone()  # Get one record
     except Exception as e:
         print(f"Error fetching wine details: {e}")

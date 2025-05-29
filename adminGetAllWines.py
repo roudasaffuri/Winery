@@ -1,3 +1,4 @@
+from decimal import Decimal, ROUND_HALF_UP
 from ClassWine import Wine
 from db_connection import create_connection, disconnection
 
@@ -8,10 +9,26 @@ def getAllWines():
     try:
         cursor.execute("SELECT * FROM public.wines ORDER BY id ASC")
         result = cursor.fetchall()  # Fetch all rows
-        wines=[]
+        wines = []
+
         for row in result:
-            wine = Wine(*row)  # Unpack row into Wine constructor
-            wines.append(wine)
+
+
+            wine = Wine(*row)
+
+            if int(row[9]) == 0:
+                wines.append(wine)
+            else:
+                price_dec = Decimal(wine.price)
+                discount_dec = Decimal(wine.discount)
+                hundred = Decimal('100')
+
+                new_price = ((hundred - discount_dec) / hundred) * price_dec
+                new_price = new_price.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+
+                wine.price = new_price
+
+                wines.append(wine)
 
         return wines
     except Exception as e:
@@ -19,6 +36,5 @@ def getAllWines():
         return None
     finally:
         disconnection(conn, cursor)
-
 
 

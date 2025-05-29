@@ -21,7 +21,6 @@ from login import log
 from store import wines, get_top5_wines_last_week
 from dotenv import load_dotenv
 import os
-from getProductByID import get_wine_by_id
 from userSendUserPassword import sendPass
 from clearSessionAndLogout import exitAndClearSession
 from ageVerified import ageVerified
@@ -109,6 +108,7 @@ def tipsPage():
 @app.route('/store')
 def store():
     catalog =wines()
+    print(catalog)
     recommended_wines =get_top5_wines_last_week()
     return render_template('store.html',all_wines= catalog,recommended_wines  = recommended_wines)
 
@@ -116,8 +116,8 @@ def store():
 
 @app.route('/singlePage/<int:id>')
 def singlePage(id):
-    return getWineById(id)
-
+    print(id)
+    return render_template("singlePage.html", wine=getWineById(id))
 
 @app.route('/history')
 def history():
@@ -161,8 +161,9 @@ def update_quantity():
 # Route to add an item to the cart
 @app.route('/add_to_cart/<int:product_id>', methods=['GET', 'POST'], endpoint='add_to_cart')
 def add_to_cart(product_id):
+    print(product_id)
     quantity = int(request.form.get('quantity', 1))
-    wine = get_wine_by_id(product_id)
+    wine = getWineById(product_id)
 
     return handle_add_to_cart(wine , quantity)
 
@@ -437,14 +438,37 @@ def change_role():
 
 
 #------------------------------- Logout User and Admin --------------------------------#
-@app.route("/chart" , methods=['POST'])
-def chart():
+@app.route("/adminChart" , methods=['POST'])
+def adminChart():
     wine_id = request.form.get('id')
     print(wine_id)
-    labels, data_this_year, data_last_year, std_dev, media = statisticWine(wine_id)
+    labels, data_this_year, data_last_year, std_dev, media , discount = statisticWine(wine_id)
     recommended = round(media + std_dev)
-    return render_template("chart.html", labels=labels, last_year=data_last_year, this_year=data_this_year,
-                       std_dev=round(std_dev), media=round(media), recommended=recommended)
+    return render_template("adminChart.html", labels=labels, last_year=data_last_year, this_year=data_this_year,
+                       std_dev=round(std_dev), media=round(media), recommended=recommended,discount=discount)
+
+
+
+@app.route('/discountByWineId', methods=['POST'])
+def discountByWineId():
+    wine_id = request.form.get('wine_id')
+    discount = request.form.get('discount')
+
+    conn = create_connection()
+    cursor = conn.cursor()
+    sql = "UPDATE wines SET discount = %s WHERE id = %s;"
+
+    cursor.execute(sql, (discount, wine_id))
+    conn.commit()
+    # print(cursor.rowcount) אם בוצע העדכון בהצלחה מחזיר 1 אחרת 0
+    if cursor.rowcount > 0:
+        flash("Wine discount updated successfully", "success")
+    else:
+        flash("No wine found with that ID", "warning")
+
+
+
+    return redirect(request.referrer or url_for('adminStatistics'))
 
 @app.route('/logout')
 def logout():
