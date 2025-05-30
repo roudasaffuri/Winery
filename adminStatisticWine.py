@@ -1,9 +1,6 @@
 from db_connection import create_connection, disconnection
 from datetime import datetime
 
-
-
-
 def statisticWine(wine_id):
     labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     dt = datetime.now()
@@ -19,13 +16,13 @@ def statisticWine(wine_id):
     sql = "SELECT * FROM wines WHERE id = %s;"
     cursor.execute(sql, (wine_id,))
     result = cursor.fetchone()
-    print(result)
+
 
     sql = "SELECT * FROM purchase_items WHERE wine_id = %s;"
     cursor.execute(sql, (wine_id,))
     result = cursor.fetchall()
     discount = result[9]
-    print(f"discount : {discount}")
+
 
     for row in result :
         purchase_id = row[1]
@@ -37,12 +34,11 @@ def statisticWine(wine_id):
         monthOfPurchase = int((str(result[5]))[5:7]) #  ==> to get just the month
         if yearOfPurchase == thisYear:
             monthsOfThisYear[monthOfPurchase-1] += int(row[4])
-            print(monthOfPurchase)
+
         elif yearOfPurchase == lastYear:
             monthsOfLastYear[monthOfPurchase-1] += int(row[4])
 
-    print(monthsOfThisYear)
-    print(monthsOfLastYear)
+
 
 
     n = len(monthsOfLastYear)
@@ -52,9 +48,8 @@ def statisticWine(wine_id):
     variance = (sum_x_squared - (sum_x ** 2) / n) / (n - 1)
     std_dev = variance ** 0.5
     media = (sum_x/12)
-    print("סטיית תקן:", std_dev)
-    print(  "ממוצע" , media)
 
+    disconnection(conn,cursor)
     return labels, monthsOfThisYear, monthsOfLastYear, std_dev, media ,discount
 
 

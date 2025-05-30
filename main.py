@@ -2,6 +2,8 @@ import paypalrestsdk as paypalrestsdk
 from flask import Flask, render_template, request, redirect, url_for, flash, session, g
 from Tips import get_wine_tips
 from adminAddWine import addItemToDB
+from adminChangeRole import changeRole
+from adminDiscountWineById import discountWineById
 from adminEditProduct import  adminEditProduct
 from adminGenderDistribution import genderDistribution
 from adminGetAllWines import getAllWines
@@ -423,27 +425,16 @@ def managerManageAdmins():
 def change_role():
     user_id = request.form['user_id']
     new_role_id = request.form['role_id']
-    print(new_role_id)
-
-    conn = create_connection()
-    cur = conn.cursor()
-
-    cur.execute("UPDATE users SET role_id = %s WHERE id = %s", (new_role_id, user_id))
-    conn.commit()
-
-    cur.close()
-    conn.close()
-
-    return redirect(request.referrer or url_for('managerManageAdmins'))
+    return changeRole(user_id , new_role_id)
 
 
 #------------------------------- Logout User and Admin --------------------------------#
 @app.route("/adminChart" , methods=['POST'])
 def adminChart():
     wine_id = request.form.get('id')
-    print(wine_id)
     labels, data_this_year, data_last_year, std_dev, media , discount = statisticWine(wine_id)
     recommended = round(media + std_dev)
+
     return render_template("adminChart.html", labels=labels, last_year=data_last_year, this_year=data_this_year,
                        std_dev=round(std_dev), media=round(media), recommended=recommended,discount=discount)
 
@@ -451,24 +442,13 @@ def adminChart():
 
 @app.route('/discountByWineId', methods=['POST'])
 def discountByWineId():
+
     wine_id = request.form.get('wine_id')
     discount = request.form.get('discount')
 
-    conn = create_connection()
-    cursor = conn.cursor()
-    sql = "UPDATE wines SET discount = %s WHERE id = %s;"
-
-    cursor.execute(sql, (discount, wine_id))
-    conn.commit()
-    # print(cursor.rowcount) אם בוצע העדכון בהצלחה מחזיר 1 אחרת 0
-    if cursor.rowcount > 0:
-        flash("Wine discount updated successfully", "success")
-    else:
-        flash("No wine found with that ID", "warning")
+    return discountWineById(wine_id, discount)
 
 
-
-    return redirect(request.referrer or url_for('adminStatistics'))
 
 @app.route('/logout')
 def logout():
