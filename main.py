@@ -1,13 +1,15 @@
 import paypalrestsdk as paypalrestsdk
 from flask import Flask, render_template, request, redirect, url_for, flash, session, g
 from Tips import get_wine_tips
-from adminAddWine import addItemToDB
+from adminAddWine import addWine
 from adminChangeRole import changeRole
 from adminDiscountWineById import discountWineById
 from adminEditProduct import  adminEditProduct
 from adminGenderDistribution import genderDistribution
 from adminGetAllWines import getAllWines
 from adminStatisticWine import statisticWine
+from adminUpdateWine import updateWine
+from adminblockUser import blockUser
 from complete_order import complete_order
 from context_processors import inject_current_year
 from adminDeleteWine import deleteItemFromDB
@@ -115,7 +117,6 @@ def store():
     return render_template('store.html',all_wines= catalog,recommended_wines  = recommended_wines)
 
 
-
 @app.route('/singlePage/<int:id>')
 def singlePage(id):
     print(id)
@@ -127,16 +128,13 @@ def history():
     return getPurchaseHistory()
 
 
-
-
-
 #-------------------------------- ADD TO CART  ---------------------------------#
 
 
 @app.route('/cart')
 def cart():
     return getCart()
-    return render_template("cart.html")
+
 
 @app.before_request
 def load_cart_count():
@@ -153,21 +151,14 @@ def remove_from_cart(product_id):
 
 @app.route('/cart/update_quantity', methods=['POST'])
 def update_quantity():
-    cart_item_id = request.form.get('cart_item_id')
-    action = request.form.get('action')
-
-    handle_quantity_update(cart_item_id, action)
-    return redirect(url_for('cart'))
+    return handle_quantity_update()
 
 
 # Route to add an item to the cart
-@app.route('/add_to_cart/<int:product_id>', methods=['GET', 'POST'], endpoint='add_to_cart')
+@app.route('/add_to_cart/<int:product_id>', methods=['GET', 'POST'])
 def add_to_cart(product_id):
-    print(product_id)
-    quantity = int(request.form.get('quantity', 1))
-    wine = getWineById(product_id)
+    return handle_add_to_cart(product_id)
 
-    return handle_add_to_cart(wine , quantity)
 
 
 #------------------------------PayPal and Credit Card Payment---------------------------------------#
@@ -244,27 +235,7 @@ def adminAddProduct():
 
 @app.route('/add-wine', methods=['POST'])
 def add_wine():
-
-    if request.method == 'POST':
-        wineName = request.form['wineName']
-        wineType = request.form['wineType']
-        winePrice = request.form['winePrice']
-        wineQuantity = request.form['wineQuantity']
-        wineDescription = request.form['wineDescription']
-        wineBestBefore = request.form['wineBestBefore']
-        wineImageURL = request.form['wineImage'] or 'https://bravofarms.com/cdn/shop/products/red-wine.jpg?v=1646253890'
-
-
-        # Now pass these correctly to your DB function
-        return addItemToDB(
-            wine_name=wineName,
-            wine_type=wineType,
-            wine_price=winePrice,
-            wine_quantity=wineQuantity,
-            wine_description=wineDescription,
-            wine_best_before=wineBestBefore,
-            wine_image=wineImageURL
-        )
+    return addWine()
 
 
 @app.route('/delete-wine', methods=['POST'])
@@ -281,42 +252,10 @@ def edit_product():
 
 
 
-
-
 @app.route('/update_wine', methods=['POST'])
 def update_wine():
-    wine_id = request.form.get('itemId')
-    name = request.form.get('name')
-    wine_type = request.form.get('wine_type')
-    price = request.form.get('price')
-    stock = request.form.get('stock')
-    year = request.form.get('year')
-    description = request.form.get('description')
-    image_url = request.form.get('image')
+    return updateWine()
 
-
-    conn = create_connection()
-    cursor = conn.cursor()
-
-    sql = '''
-    UPDATE wines
-    SET wine_name = %s,
-        wine_type = %s,
-        price = %s,
-        stock = %s,
-        best_before = %s,
-        description = %s,
-        image_url = %s
-    WHERE id = %s;
-    '''
-    values = (name, wine_type, price, stock, year, description, image_url, wine_id)
-    cursor.execute(sql, values)
-    conn.commit()
-
-    cursor.close()
-    conn.close()
-    flash(f"Wine '{name}' has been successfully updated.", "success")
-    return redirect('/adminManageProducts')
 
 
 @app.route('/adminManageUsers')
@@ -360,14 +299,8 @@ def block_user():
     user_id = request.form.get('user_id')
     is_blocked = request.form.get('is_blocked') == 'true'
 
-    conn = create_connection()
-    cur = conn.cursor()
-    cur.execute("UPDATE users SET is_blocked = %s WHERE id = %s", (is_blocked, user_id))
-    conn.commit()
-    cur.close()
-    conn.close()
+    return blockUser(user_id,is_blocked)
 
-    return redirect(url_for('adminManageUsers'))
 
 
 @app.route("/adminStatistics")
@@ -439,7 +372,6 @@ def adminChart():
                        std_dev=round(std_dev), media=round(media), recommended=recommended,discount=discount)
 
 
-
 @app.route('/discountByWineId', methods=['POST'])
 def discountByWineId():
 
@@ -447,7 +379,6 @@ def discountByWineId():
     discount = request.form.get('discount')
 
     return discountWineById(wine_id, discount)
-
 
 
 @app.route('/logout')

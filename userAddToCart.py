@@ -1,8 +1,11 @@
-from flask import session, flash, redirect, url_for
+from flask import session, flash, redirect, url_for, request
 from db_connection import create_connection
+from getWineById import getWineById
 
 
-def handle_add_to_cart(wine ,quantity ):
+def handle_add_to_cart(product_id):
+    quantity = int(request.form.get('quantity', 1))
+    wine = getWineById(product_id)
 
     conn = create_connection()
     cur = conn.cursor()

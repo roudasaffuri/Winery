@@ -1,17 +1,18 @@
-from flask import flash, render_template
+from flask import flash, render_template, request
 
 from adminGetAllWines import getAllWines
 from db_connection import create_connection
 
-def addItemToDB(
-            wine_name,
-            wine_type,
-            wine_price,
-            wine_quantity,
-            wine_description,
-            wine_best_before,
-            wine_image
-        ):
+def addWine():
+    wine_name = request.form['wineName']
+    wine_type = request.form['wineType']
+    wine_price = request.form['winePrice']
+    wine_quantity = request.form['wineQuantity']
+    wine_description = request.form['wineDescription']
+    wine_best_before = request.form['wineBestBefore']
+    wine_image = request.form['wineImage'] or 'https://bravofarms.com/cdn/shop/products/red-wine.jpg?v=1646253890'
+
+
     conn = create_connection()
     cur = conn.cursor()
 
