@@ -1,8 +1,8 @@
-from flask import session, flash
+from flask import session, flash, redirect, url_for
 from db_connection import create_connection, disconnection
 
 
-def removeProduct(product_id):
+def removeProductFromCart(product_id):
     conn = create_connection()
     try:
         cur = conn.cursor()
@@ -21,6 +21,8 @@ def removeProduct(product_id):
         )
         conn.commit()
         flash("Item removed from cart.")
+        return redirect(url_for('cart'))
+
     except Exception as e:
         flash("Error removing item from cart.")
     finally:

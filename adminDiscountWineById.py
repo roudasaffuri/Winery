@@ -1,8 +1,11 @@
-from flask import flash, redirect, url_for
+from flask import flash, redirect, url_for, request
 from db_connection import create_connection ,disconnection
 
 
-def discountWineById(wine_id , discount) :
+def discountWine() :
+    wine_id = request.form.get('wine_id')
+    discount = request.form.get('discount')
+
     conn = create_connection()
     cursor = conn.cursor()
     sql = "UPDATE wines SET discount = %s WHERE id = %s;"

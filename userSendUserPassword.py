@@ -8,7 +8,8 @@ from fernet_encryption import decode_string
 
 load_dotenv()
 
-
+OWN_EMAIL = os.getenv("OWN_EMAIL")
+OWN_PASSWORD = os.getenv("OWN_PASSWORD_EMAIL")
 
 def sendPass(email):
     # Establish a database connection

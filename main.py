@@ -2,19 +2,20 @@ import paypalrestsdk as paypalrestsdk
 from flask import Flask, render_template, request, redirect, url_for, flash, session, g
 from Tips import get_wine_tips
 from adminAddWine import addWine
-from adminChangeRole import changeRole
-from adminDiscountWineById import discountWineById
+from managerChangeRole import changeRole
+from adminDiscountWineById import discountWine
 from adminEditProduct import  adminEditProduct
 from adminGenderDistribution import genderDistribution
 from adminGetAllWines import getAllWines
-from adminStatisticWine import statisticWine
+from adminManageUsers import manageUsers
+from adminStatisticWine import  viewStatisticByIdWine
 from adminUpdateWine import updateWine
 from adminblockUser import blockUser
 from complete_order import complete_order
 from context_processors import inject_current_year
-from adminDeleteWine import deleteItemFromDB
-from db_connection import create_connection
+from adminDeleteWine import deleteWineFromDB
 from getWineById import getWineById
+from managerManageAdmins import manageAdmins
 from paypalPayment import paypalPayment
 from test import seasonalSt
 from userPaymentByCard import PaymentByCard
@@ -22,7 +23,7 @@ from userPurchseHistory import getPurchaseHistory
 from userSentMessage import sentMessage
 from registration import registration
 from login import log
-from store import wines, get_top5_wines_last_week
+from userStore import getStorePage
 from dotenv import load_dotenv
 import os
 from userSendUserPassword import sendPass
@@ -30,7 +31,7 @@ from clearSessionAndLogout import exitAndClearSession
 from ageVerified import ageVerified
 from userAddToCart import handle_add_to_cart
 from userCart import getCart, get_cart_count
-from userRemoveProduct import removeProduct
+from userRemoveProduct import removeProductFromCart
 from userUpdateQuantity import handle_quantity_update
 
 load_dotenv()
@@ -44,7 +45,7 @@ app.secret_key = KEY  # Replace with a strong secret key for production
 app.context_processor(inject_current_year)
 
 
-#---------------------- Index / Login / Signup / Reset ------------------------#
+# - - - - - - - - - - - - - - Index / Login / Signup / Reset - - - - - - - - - - - - - - #
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
@@ -78,7 +79,7 @@ def sendPasswordToEmail():
     return redirect(url_for('login'))
 
 
-#-------------------------------- USER  ---------------------------------#
+# - - - - - - - - - - - - - - USER - - - - - - - - - - - - - - #
 
 @app.route('/home')
 def home():
@@ -97,7 +98,7 @@ def tips():
 
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
-    if request.method == "POST" :
+    if request.method == "POST":
         data = request.form
         sentMessage(data)
         return render_template("contact.html", msg_sent=True) # Redirect to avoid form resubmission
@@ -111,26 +112,19 @@ def tipsPage():
 
 @app.route('/store')
 def store():
-    catalog =wines()
-    print(catalog)
-    recommended_wines =get_top5_wines_last_week()
-    return render_template('store.html',all_wines= catalog,recommended_wines  = recommended_wines)
+    return getStorePage()
 
 
 @app.route('/singlePage/<int:id>')
 def singlePage(id):
-    print(id)
     return render_template("singlePage.html", wine=getWineById(id))
+
 
 @app.route('/history')
 def history():
-
     return getPurchaseHistory()
 
-
 #-------------------------------- ADD TO CART  ---------------------------------#
-
-
 @app.route('/cart')
 def cart():
     return getCart()
@@ -144,9 +138,7 @@ def load_cart_count():
 @app.route('/remove_from_cart/<int:product_id>')
 def remove_from_cart(product_id):
     """Remove a product from the user's cart."""
-    removeProduct(product_id)
-
-    return redirect(url_for('cart'))
+    return removeProductFromCart(product_id)
 
 
 @app.route('/cart/update_quantity', methods=['POST'])
@@ -160,10 +152,8 @@ def add_to_cart(product_id):
     return handle_add_to_cart(product_id)
 
 
-
-#------------------------------PayPal and Credit Card Payment---------------------------------------#
-
-#Paypal
+# - - - - - - - - - - - - - - PayPal and Credit Card Payment - - - - - - - - - - - - - - #
+# Paypal
 @app.route('/paypal_payment/<float:total>')
 def paypal_payment(total):
     return paypalPayment(total)
@@ -214,15 +204,11 @@ def process_payment_credit_card():
     return render_template("cart.html")
 
 
-
-
-
-#-------------------------------- Admin  ---------------------------------#
-
-
+# - - - - - - - - - - - - - - Admin  - - - - - - - - - - - - - - #
 @app.route('/adminHomePage')
 def adminHomePage():
     return render_template('adminHomePage.html')
+
 
 @app.route('/adminManageProducts')
 def adminManageProducts():
@@ -233,6 +219,7 @@ def adminManageProducts():
 def adminAddProduct():
     return render_template('adminAddProduct.html')
 
+
 @app.route('/add-wine', methods=['POST'])
 def add_wine():
     return addWine()
@@ -240,16 +227,12 @@ def add_wine():
 
 @app.route('/delete-wine', methods=['POST'])
 def delete_wine():
-    if request.method == 'POST':
-        item_id = request.form['wineId']
-        return deleteItemFromDB(item_id)
+    return deleteWineFromDB()
 
 
 @app.route('/edit_product', methods=['POST'])
 def edit_product():
-    wine_id = request.form.get('id')
-    return adminEditProduct(wine_id)
-
+    return adminEditProduct()
 
 
 @app.route('/update_wine', methods=['POST'])
@@ -257,50 +240,24 @@ def update_wine():
     return updateWine()
 
 
-
 @app.route('/adminManageUsers')
 def adminManageUsers():
+    return manageUsers()
 
-    search = request.args.get('search', '').strip()
-
-    conn = create_connection()
-    cur = conn.cursor()
-    if search:
-        query = """
-                   SELECT id, firstname, lastname, email, birth_year,
-                          gender, role_id, created_at, is_blocked
-                   FROM users
-                   WHERE role_id = 1 AND (
-                       CAST(id AS TEXT) ILIKE %s
-                       OR firstname ILIKE %s
-                       OR lastname ILIKE %s
-                   )
-                   ORDER BY id ASC;
-               """
-        like_pattern = f"%{search}%"
-        cur.execute(query, (like_pattern, like_pattern, like_pattern))
-    else:
-        cur.execute("""
-                SELECT id, firstname, lastname, email, birth_year,
-                        gender, role_id, created_at, is_blocked
-                         FROM users
-                        WHERE role_id = 1
-                        ORDER BY id ASC;
-                    """)
-    users = cur.fetchall()
-
-    cur.close()
-    conn.close()
-
-    return render_template('adminManageUsers.html', users=users)
 
 @app.route('/block_user', methods=['POST'])
 def block_user():
-    user_id = request.form.get('user_id')
-    is_blocked = request.form.get('is_blocked') == 'true'
+    return blockUser()
 
-    return blockUser(user_id,is_blocked)
 
+@app.route('/discountWineById', methods=['POST'])
+def discountWineById():
+    return discountWine()
+
+
+@app.route("/adminViewStatistic" , methods=['POST'])
+def adminViewStatistic():
+    return viewStatisticByIdWine()
 
 
 @app.route("/adminStatistics")
@@ -317,70 +274,19 @@ def seasonalStatistics():
     return render_template("seasonalStatistics.html", **seasonal_data)
 
 
-#------------------- Manager -----------------#
+# - - - - - - - - - - - - - - Manager  - - - - - - - - - - - - - - #
 
 @app.route('/managerManageAdmins')
 def managerManageAdmins():
-
-    search = request.args.get('search', '').strip()
-
-    conn = create_connection()
-    cur = conn.cursor()
-    if search:
-        query = """
-            SELECT id, firstname, lastname, email, role_id
-            FROM users
-            WHERE (
-                CAST(id AS TEXT) ILIKE %s
-                OR firstname ILIKE %s
-                OR lastname ILIKE %s
-            )
-            ORDER BY id ASC;
-        """
-
-        like_pattern = f"%{search}%"
-        cur.execute(query, (like_pattern, like_pattern, like_pattern))
-    else:
-        cur.execute("""
-            SELECT id, firstname, lastname, email, role_id
-            FROM users ORDER BY id ASC;
-        """)
-
-    users = cur.fetchall()
-
-    cur.close()
-    conn.close()
-
-    return render_template('managerManageAdmins.html', users=users)
+    return manageAdmins()
 
 
 @app.route('/changeRole', methods=['POST'])
 def change_role():
-    user_id = request.form['user_id']
-    new_role_id = request.form['role_id']
-    return changeRole(user_id , new_role_id)
+    return changeRole()
 
 
-#------------------------------- Logout User and Admin --------------------------------#
-@app.route("/adminChart" , methods=['POST'])
-def adminChart():
-    wine_id = request.form.get('id')
-    labels, data_this_year, data_last_year, std_dev, media , discount = statisticWine(wine_id)
-    recommended = round(media + std_dev)
-
-    return render_template("adminChart.html", labels=labels, last_year=data_last_year, this_year=data_this_year,
-                       std_dev=round(std_dev), media=round(media), recommended=recommended,discount=discount)
-
-
-@app.route('/discountByWineId', methods=['POST'])
-def discountByWineId():
-
-    wine_id = request.form.get('wine_id')
-    discount = request.form.get('discount')
-
-    return discountWineById(wine_id, discount)
-
-
+# - - - - - - - - - - - - - - Logout User and Admin - - - - - - - - - - - - - - #
 @app.route('/logout')
 def logout():
     return exitAndClearSession()

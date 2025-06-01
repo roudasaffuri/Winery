@@ -80,13 +80,13 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <form method="post" action="{{ url_for('adminChart') }}" style="display:inline;">
+                                    <form method="post" action="{{ url_for('adminViewStatistic') }}" style="display:inline;">
                                         <input type="hidden" name="id" value="{{ wine.id }}">
                                         <button type="submit" class="btn btn-warning btn-sm">View</button>
                                     </form>
                                 </td>
                                 <td>
-                                  <form method="POST" action="{{ url_for('discountByWineId') }}">
+                                  <form method="POST" action="{{ url_for('discountWineById') }}">
                                     <input type="hidden" name="wine_id" value="{{ wine.id }}">
                                     <select name="discount" onchange="this.form.submit()">
                                       {% for i in range(0, 55, 5) %}

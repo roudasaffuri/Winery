@@ -1,9 +1,12 @@
-from flask import redirect, url_for, flash, render_template
+from flask import  flash, render_template, request
 
 from adminGetAllWines import getAllWines
-from db_connection import create_connection
+from db_connection import create_connection ,disconnection
 
-def deleteItemFromDB(item_id):
+def deleteWineFromDB():
+
+    item_id = request.form['wineId']
+
     conn = create_connection()
     cur = conn.cursor()
 
@@ -19,6 +22,6 @@ def deleteItemFromDB(item_id):
         print(f"An error occurred: {e}")
         flash('An error occurred while deleting the wine.', 'danger')  # Flash error message
     finally:
-        conn.close()
+        disconnection(conn,cur)
 
     return render_template('adminManageProducts.html', all_wines=getAllWines())

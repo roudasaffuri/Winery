@@ -1,4 +1,4 @@
-from db_connection import create_connection
+from db_connection import create_connection ,disconnection
 
 
 def updateWineInStock(quantity,wine_id):
@@ -11,5 +11,5 @@ def updateWineInStock(quantity,wine_id):
                         SET stock = stock - %s
                         WHERE id = %s
                     """, (quantity, wine_id))
-    conn.commit()
-    conn.close()
+
+    disconnection(conn,cursor)

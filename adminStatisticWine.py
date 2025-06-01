@@ -1,7 +1,11 @@
+from flask import request, render_template
+
 from db_connection import create_connection, disconnection
 from datetime import datetime
 
-def statisticWine(wine_id):
+def viewStatisticByIdWine():
+    wine_id = request.form.get('id')
+
     labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
     dt = datetime.now()
     thisYear = dt.year
@@ -48,8 +52,11 @@ def statisticWine(wine_id):
     variance = (sum_x_squared - (sum_x ** 2) / n) / (n - 1)
     std_dev = variance ** 0.5
     media = (sum_x/12)
-
+    recommended = round(media + std_dev)
     disconnection(conn,cursor)
-    return labels, monthsOfThisYear, monthsOfLastYear, std_dev, media ,discount
+
+
+    return render_template("adminViewStatistic.html", labels=labels, last_year=monthsOfLastYear, this_year=monthsOfThisYear,
+                           std_dev=round(std_dev), media=round(media), recommended=recommended, discount=discount)
 
 

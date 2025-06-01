@@ -1,9 +1,16 @@
-from flask import session
+from flask import session, render_template
 from ClassWine import Wine
 from collections import Counter
 from datetime import datetime,timedelta
 from db_connection import create_connection, disconnection
 from decimal import Decimal
+
+
+def getStorePage():
+    catalog = wines()
+    recommended_wines = get_top5_wines_last_week()
+    return render_template('store.html', all_wines=catalog, recommended_wines=recommended_wines)
+
 
 # Define a Wine class to structure the data
 def wines():

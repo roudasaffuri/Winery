@@ -1,9 +1,9 @@
-from flask import render_template
+from flask import render_template, request
+from db_connection import create_connection ,disconnection
 
-from db_connection import create_connection
 
-
-def adminEditProduct(wine_id):
+def adminEditProduct():
+    wine_id = request.form.get('id')
     conn = create_connection()
     cursor = conn.cursor()
     sql = "SELECT * FROM wines WHERE id = %s;"
@@ -22,10 +22,8 @@ def adminEditProduct(wine_id):
             'description': result[6],
         }
 
-        cursor.close()
-        conn.close()
+        disconnection(conn,cursor)
         return render_template('adminEditWine.html', wine=wine_data)
     else:
-        cursor.close()
-        conn.close()
+        disconnection(conn,cursor)
         return "Wine not found", 404
