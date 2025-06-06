@@ -1,5 +1,5 @@
 import paypalrestsdk as paypalrestsdk
-from flask import Flask, render_template, request, redirect, url_for, flash, session, g
+from flask import Flask, render_template, request, redirect, url_for, flash,  g
 from Tips import get_wine_tips
 from adminAddWine import addWine
 from managerChangeRole import changeRole
@@ -88,11 +88,6 @@ def home():
 @app.route("/about")
 def about():
     return render_template("about.html")
-
-
-@app.route("/tips")
-def tips():
-    return render_template("tips.html")
 
 
 @app.route("/contact", methods=["GET", "POST"])

@@ -5,242 +5,141 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wine Tips</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f8f8;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
+       body {
+  font-family: Arial, sans-serif;
+  background: #f8f8f8;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
 
-        /* Header with vineyard background */
-        .masthead {
-            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../static/assets/img/tips-bg.jpg');
-            background-size: cover;
-            background-position: center;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            position: relative;
-        }
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
+.page-heading h1 {
+  font-size: 4rem;
+  font-weight: normal;
+  margin-bottom: 15px;
+  color: white;
+}
 
-        .position-relative {
-            position: relative;
-        }
+.subheading {
+  font-size: 1.2rem;
+  font-weight: normal;
+  color: white;
+}
 
-        .px-4 {
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
-        }
+main {
+  background: white;
+  padding: 60px 0;
+}
 
-        .px-lg-5 {
-            padding-left: 3rem;
-            padding-right: 3rem;
-        }
+.tips-section {
+  margin-top: 2rem;
+}
 
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            margin-right: -15px;
-            margin-left: -15px;
-        }
+.tips-section h3 {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  font-weight: normal;
+}
 
-        .gx-4 > * {
-            padding-right: 1.5rem;
-            padding-left: 1.5rem;
-        }
+.tip-item {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #eee;
+}
 
-        .gx-lg-5 > * {
-            padding-right: 3rem;
-            padding-left: 3rem;
-        }
+.tip-item:last-child {
+  border-bottom: none;
+  margin: 0;
+  padding: 0;
+}
 
-        .justify-content-center {
-            justify-content: center;
-        }
+.tip-content {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
 
-        .col-md-10 {
-            flex: 0 0 83.333333%;
-            max-width: 83.333333%;
-        }
+.tip-image {
+  width: 200px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
 
-        .col-lg-8 {
-            flex: 0 0 66.666667%;
-            max-width: 66.666667%;
-        }
+.tip-text {
+  flex: 1;
+  font-size: 1rem;
+  line-height: 1.6;
+}
 
-        .col-xl-7 {
-            flex: 0 0 58.333333%;
-            max-width: 58.333333%;
-        }
+.tip-number {
+  font-weight: bold;
+  color: #007bff;
+  margin-bottom: 0.5rem;
+  display: block;
+}
 
-        .col-md-6 {
-            flex: 0 0 50%;
-            max-width: 50%;
-            padding: 0 15px;
-        }
+.login-section {
+  text-align: center;
+  padding: 80px 20px;
+  background: white;
+  margin: 40px auto;
+  max-width: 600px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
 
-        .page-heading h1 {
-            font-size: 4rem;
-            font-weight: normal;
-            margin-bottom: 15px;
-            color: white;
-        }
+.login-section p {
+  font-size: 1.2rem;
+  color: #666;
+  margin-bottom: 25px;
+}
 
-        .subheading {
-            font-size: 1.2rem;
-            font-weight: normal;
-            color: white;
-        }
+.login-section a {
+  background: #007bff;
+  color: white;
+  padding: 12px 30px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: background 0.3s ease;
+}
 
-        /* Main content styling to match reference page */
-        main {
-            background-color: white;
-            padding: 60px 0;
-        }
+.login-section a:hover {
+  background: #0056b3;
+}
 
-        .mb-4 {
-            margin-bottom: 1.5rem;
-        }
+/* Responsive design */
+@media (max-width: 768px) {
+  .page-heading h1 {
+    font-size: 2.5rem;
+  }
 
-        /* Wine tips section styling */
-        .tips-section {
-            margin-top: 2rem;
-        }
+  .masthead {
+    height: 300px;
+  }
 
-        .tips-section h3 {
-            font-size: 1.8rem;
-            color: #333;
-            margin-bottom: 2rem;
-            font-weight: normal;
-        }
+  .tip-content {
+    flex-direction: column;
+    align-items: center;
+  }
 
-        .tip-item {
-            margin-bottom: 2rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid #eee;
-        }
+  .tip-image {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+  }
+}
 
-        .tip-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
 
-        .tip-content {
-            display: flex;
-            align-items: flex-start;
-            gap: 2rem;
-        }
-
-        .tip-image {
-            flex-shrink: 0;
-            width: 200px;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .tip-text {
-            flex: 1;
-            font-size: 1rem;
-            line-height: 1.6;
-            color: #333;
-        }
-        .tip-number {
-            font-weight: bold;
-            color: #007bff;
-            margin-bottom: 0.5rem;
-            display: block;
-        }
-        /* Login prompt styling */
-        .login-section {
-            text-align: center;
-            padding: 80px 20px;
-            background: white;
-            margin: 40px auto;
-            max-width: 600px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        .login-section p {
-            font-size: 1.2rem;
-            color: #666;
-            margin-bottom: 25px;
-        }
-        .login-section a {
-            display: inline-block;
-            background-color: #007bff;
-            color: white;
-            padding: 12px 30px;
-            text-decoration: none;
-            border-radius: 4px;
-            font-size: 1rem;
-            transition: background-color 0.3s ease;
-        }
-
-        .login-section a:hover {
-            background-color: #0056b3;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .page-heading h1 {
-                font-size: 2.5rem;
-            }
-
-            .masthead {
-                height: 300px;
-            }
-
-            .col-md-10,
-            .col-lg-8,
-            .col-xl-7,
-            .col-md-6 {
-                flex: 0 0 100%;
-                max-width: 100%;
-            }
-
-            main {
-                padding: 40px 0;
-            }
-
-            .tip-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .tip-image {
-                width: 100%;
-                max-width: 300px;
-                margin: 0 auto;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 15px;
-            }
-
-            .px-4,
-            .px-lg-5 {
-                padding-left: 1rem;
-                padding-right: 1rem;
-            }
-
-            .tip-image {
-                height: 200px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -266,7 +165,6 @@
       <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
           <div class="col-md-10 col-lg-8 col-xl-7">
-
             <p>Proper wine storage is essential for maintaining the quality and flavor of your wine collection. These expert tips will help you preserve your wines at their best.</p>
 
             <section class="tips-section">
@@ -278,7 +176,8 @@
                     <img src="{{ tip.image }}" class="tip-image" alt="{{ tip.number }}">
                     <div class="tip-text">
                       <span class="tip-number">Tip {{ loop.index }}</span>
-                      <p>{{ tip.tip }}</p>
+                      <h5>{{ tip.tip }}</h5>
+                        <p> {{tip.text}}</p>
                     </div>
                   </div>
                 </div>
