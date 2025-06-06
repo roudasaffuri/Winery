@@ -16,6 +16,7 @@ def complete_order():
     6. Update wine stock
     7. Clear the cart
     8. Send confirmation email
+    9. Update the globle object g.cart_count to 0
     Returns the total amount, or a redirect Response if stock is insufficient.
     """
 
@@ -95,7 +96,7 @@ def complete_order():
     }
     if session.get('useremail'):
         send_order_confirmation_email(session['useremail'], summary, purchase_id)
-    flash('Purchase successfully!', 'success')
+    flash('Purchase successfully!. Email sent.', 'success')
 
     g.cart_count = 0
-    return render_template("home.html",total=total)
+    return render_template("cart.html")
