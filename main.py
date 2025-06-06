@@ -18,9 +18,10 @@ from getWineById import getWineById
 from managerManageAdmins import manageAdmins
 from paypalPayment import paypalPayment
 from test import seasonalSt
+from userItemsInCart import get_cart_count
 from userPaymentByCard import PaymentByCard
 from userPurchseHistory import getPurchaseHistory
-from userSentMessage import sentMessage
+from userSentMessage import contactUs
 from registration import registration
 from login import log
 from userStore import getStorePage
@@ -28,9 +29,9 @@ from dotenv import load_dotenv
 import os
 from userSendUserPassword import sendPass
 from clearSessionAndLogout import exitAndClearSession
-from ageVerified import ageVerified
+from userAgeVerified import  userAgeVerified
 from userAddToCart import handle_add_to_cart
-from userCart import getCart, get_cart_count
+from userCart import getCart
 from userRemoveProduct import removeProductFromCart
 from userUpdateQuantity import handle_quantity_update
 
@@ -48,9 +49,7 @@ app.context_processor(inject_current_year)
 # - - - - - - - - - - - - - - Index / Login / Signup / Reset - - - - - - - - - - - - - - #
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    if request.method == 'POST':
-        return ageVerified()
-    return render_template("index.html")
+    return userAgeVerified()
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -98,11 +97,7 @@ def tips():
 
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
-    if request.method == "POST":
-        data = request.form
-        sentMessage(data)
-        return render_template("contact.html", msg_sent=True) # Redirect to avoid form resubmission
-    return render_template("contact.html", msg_sent=False)
+    return contactUs()
 
 
 @app.route("/tipsPage")
@@ -191,17 +186,7 @@ def creditCardCheckout():
 
 @app.route('/process_payment_credit_card', methods=['POST'])
 def process_payment_credit_card():
-    user_id = session.get('id')
-    complete_order(user_id)
-    return render_template("cart.html")
-
-
-    result = complete_order(user_id)
-    #hasattr built-in function that checks whether the object result has an attribute with the given name(status_code).
-    if hasattr(result, 'status_code'):
-        return result
-    flash(f"Payment successful! Your order for ${result:.2f} is complete. Email sent.")
-    return render_template("cart.html")
+    return complete_order()
 
 
 # - - - - - - - - - - - - - - Admin  - - - - - - - - - - - - - - #

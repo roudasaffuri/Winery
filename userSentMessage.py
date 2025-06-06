@@ -1,10 +1,21 @@
 from dotenv import load_dotenv
 import os
 import smtplib
+
+from flask import request, render_template
+
 load_dotenv()
 
 OWN_EMAIL = os.getenv("OWN_EMAIL")
 OWN_PASSWORD = os.getenv("OWN_PASSWORD_EMAIL")
+
+def contactUs():
+    if request.method == "POST":
+        data = request.form
+        #ImmutableMultiDict([('name', 'rouda saffuri'), ('email', 'R.saffuri@hotmail.com'), ('phone', '0525676783'), ('message', 'ewersf')])
+        sentMessage(data)
+        return render_template("contact.html", msg_sent=True) # Redirect to avoid form resubmission
+    return render_template("contact.html", msg_sent=False)
 
 
 

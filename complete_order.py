@@ -1,19 +1,26 @@
 from decimal import Decimal
 from db_connection import create_connection
 from sendOrderConfirmationEmail import send_order_confirmation_email
-from flask import session, flash, redirect, url_for
+from flask import session, flash, redirect, url_for, render_template , g
 
-def complete_order(user_id):
+from userItemsInCart import get_cart_count
+
+
+def complete_order():
     """
-    1. Fetch cart items for this user
-    2. **Check availability**: if any qty > stock, flash + redirect
-    3. Calculate subtotal, shipping, tax, total
-    4. Insert into purchases & purchase_items
-    5. Update wine stock
-    6. Clear the cart
-    7. Send confirmation email
+    1. Get user id  using session
+    2. Fetch cart items for this user
+    3. **Check availability**: if any qty > stock, flash + redirect
+    4. Calculate subtotal, shipping, tax, total
+    5. Insert into purchases & purchase_items
+    6. Update wine stock
+    7. Clear the cart
+    8. Send confirmation email
     Returns the total amount, or a redirect Response if stock is insufficient.
     """
+
+    user_id = session.get('id')
+
     conn    = create_connection()
     cursor  = conn.cursor()
 
@@ -90,4 +97,5 @@ def complete_order(user_id):
         send_order_confirmation_email(session['useremail'], summary, purchase_id)
     flash('Purchase successfully!', 'success')
 
-    return total
+    g.cart_count = 0
+    return render_template("home.html",total=total)
