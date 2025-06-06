@@ -35,7 +35,9 @@ def complete_order():
          WHERE c.user_id = %s
     """, (user_id,))
     cart_items = cursor.fetchall()
-
+    if not cart_items:
+        g.cart_count = 0
+        return render_template("cart.html")
     # — 2) Availability check —
     for _, _, qty, _, wine_name, stock in cart_items:
         if stock < qty:

@@ -16,3 +16,21 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+
+
+function applyAllWineFilters() {
+const checkedTypes = Array.from(document.querySelectorAll('#wine-type-filter-all input[name="wine_type_all"]:checked'))
+  .map(checkbox => checkbox.value);
+const allWineItems = document.querySelectorAll('#all-wines-collection .wine-item.all-wine');
+
+allWineItems.forEach(item => {
+  const wineType = item.dataset.wineType;
+  if (checkedTypes.length === 0 || checkedTypes.includes(wineType)) {
+    item.style.display = 'block';
+  } else {
+    item.style.display = 'none';
+  }
+});
+}
+

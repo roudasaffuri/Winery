@@ -17,7 +17,7 @@ from adminDeleteWine import deleteWineFromDB
 from getWineById import getWineById
 from managerManageAdmins import manageAdmins
 from paypalPayment import paypalPayment
-from test import seasonalSt
+# from test import seasonalSt
 from userItemsInCart import get_cart_count
 from userPaymentByCard import PaymentByCard
 from userPurchseHistory import getPurchaseHistory
@@ -180,7 +180,6 @@ def process_payment_credit_card():
     return complete_order()
 
 
-
 # - - - - - - - - - - - - - - Admin  - - - - - - - - - - - - - - #
 @app.route('/adminHomePage')
 def adminHomePage():
@@ -245,10 +244,10 @@ def adminStatistics():
     return render_template("adminStatistics.html", male=male, female=female , all_wines=getAllWines())
 
 
-@app.route("/seasonalStatistics")
-def seasonalStatistics():
-    seasonal_data = seasonalSt()
-    return render_template("seasonalStatistics.html", **seasonal_data)
+# @app.route("/seasonalStatistics")
+# def seasonalStatistics():
+#     seasonal_data = seasonalSt()
+#     return render_template("seasonalStatistics.html", **seasonal_data)
 
 
 # - - - - - - - - - - - - - - Manager  - - - - - - - - - - - - - - #

@@ -1,4 +1,4 @@
-from flask import session, render_template
+from flask import session, render_template, g
 from _pydecimal import Decimal
 from db_connection import create_connection, disconnection
 
@@ -15,7 +15,10 @@ def PaymentByCard():
         cur = conn.cursor()
         cur.execute("SELECT cart_id FROM carts WHERE user_id = %s", (user_id,))
         cart_row = cur.fetchone()
-        if cart_row:
+        if not cart_row:
+            g.cart_count = 0
+            return render_template("cart.html")
+        elif cart_row:
             cart_id = cart_row[0]
             query = """
                 SELECT ci.cart_item_id,
