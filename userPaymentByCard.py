@@ -23,7 +23,7 @@ def PaymentByCard():
             query = """
                 SELECT ci.cart_item_id,
                        ci.quantity,
-                       ci.price_at_addition,
+                       w.final_price,
                        w.id,
                        w.wine_name
                 FROM cart_items ci
@@ -31,11 +31,11 @@ def PaymentByCard():
                 WHERE ci.cart_id = %s
             """
             cur.execute(query, (cart_id,))
-            for cart_item_id, quantity, price_at_addition, wine_id, wine_name in cur.fetchall():
-                item_total = Decimal(str(price_at_addition)) * Decimal(quantity)
+            for cart_item_id, quantity, final_price, wine_id, wine_name in cur.fetchall():
+                item_total = Decimal(str(final_price)) * Decimal(quantity)
                 cart_items.append({
                     "quantity": quantity,
-                    "price": price_at_addition,
+                    "price": final_price,
                     "name": wine_name,
                     "total": item_total
                 })

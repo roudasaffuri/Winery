@@ -27,7 +27,7 @@ def complete_order():
 
     # — 1) Fetch cart items (including current stock) —
     cursor.execute("""
-        SELECT ci.cart_item_id, ci.wine_id, ci.quantity, ci.price_at_addition,
+        SELECT ci.cart_item_id, ci.wine_id, ci.quantity, w.final_price,
                w.wine_name, w.stock
           FROM cart_items ci
           JOIN carts c ON ci.cart_id = c.cart_id

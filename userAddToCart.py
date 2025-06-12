@@ -37,13 +37,13 @@ def handle_add_to_cart(product_id):
             cart_item_id, existing_qty = item
             new_qty = existing_qty + quantity
             cur.execute(
-                "UPDATE cart_items SET quantity = %s, price_at_addition = %s, added_at = NOW() WHERE cart_item_id = %s",
-                (new_qty, wine.price, cart_item_id)
+                "UPDATE cart_items SET quantity = %s,  added_at = NOW() WHERE cart_item_id = %s",
+                (new_qty, cart_item_id)
             )
         else:
             cur.execute(
-                "INSERT INTO cart_items (cart_id, wine_id, quantity, price_at_addition, added_at) VALUES (%s, %s, %s, %s, NOW())",
-                (cart_id, wine.id, quantity, wine.price)
+                "INSERT INTO cart_items (cart_id, wine_id, quantity, added_at) VALUES (%s, %s, %s, NOW())",
+                (cart_id, wine.id, quantity)
             )
         conn.commit()
         flash(f"{wine.wine_name} added to cart!")

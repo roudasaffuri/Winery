@@ -106,7 +106,8 @@ def wines():
                 description=row[6],
                 best_before=row[7],
                 product_registration_date=row[8],
-                discount=row[9]
+                discount=row[9],
+                final_price = row[10]
             )
             wines.append(wine)
 

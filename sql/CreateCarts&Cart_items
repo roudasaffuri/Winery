@@ -19,7 +19,6 @@ CREATE TABLE cart_items (
     cart_id INTEGER NOT NULL,
     wine_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL CHECK (quantity > 0),
-    price_at_addition DECIMAL(10,2),
     added_at TIMESTAMP WITHOUT TIME ZONE DEFAULT NOW(),
     CONSTRAINT fk_cart
         FOREIGN KEY(cart_id)

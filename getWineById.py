@@ -33,7 +33,8 @@ def getWineById(id):
             description=result[6],
             best_before=result[7],
             product_registration_date=result[8],
-            discount=result[9]
+            discount=result[9],
+            final_price=result[10]
         )
 
         return wine
