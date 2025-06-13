@@ -1,44 +1,6 @@
 {% if session.admin or session.manager %}
-
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <title>Admin Panel</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
-    <style>
-        .table img {
-            border-radius: 5px; /* Rounded corners for images */
-        }
-        .table th {
-            background-color: #f8f9fa; /* Light background for headers */
-        }
-        .table th, .table td {
-            vertical-align: middle; /* Center-align content */
-        }
-        .btn-sm {
-            margin-right: 5px; /* Spacing between buttons */
-        }
-        .table td, .table th {
-    vertical-align: middle; /* already in your CSS */
-    text-align: center;     /* add this if not using Bootstrap classes */
-}
-    </style>
-</head>
-<body>
     {% include "adminHeader.html" %}
-      {% with messages = get_flashed_messages(with_categories=True) %}
-        {% if messages %}
-            <div class="container">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
+
 
     <main class="mb-4">
         <div class="container my-5">
@@ -61,56 +23,49 @@
                         </tr>
                     </thead>
                    <tbody>
-    {% if all_wines %}
-        {% for wine in all_wines %}
-        <tr>
-            <td>{{ wine.id }}</td>
-            <td>{{ wine.wine_name }}</td>
-            <td>{{ wine.wine_type }}</td>
-            <td>${{ '%.2f' | format(wine.price) }}</td>
-            <td>{{ wine.stock }}</td>
-            <td>{{ wine.product_registration_date.strftime('%Y-%m-%d') }}</td>
-            <td><img src="{{ wine.image_url }}" alt="{{ wine.wine_name }}" style="width: 50px; height: auto;"></td>
-            <td>
-                {% if wine.stock < 5 %}
-                    <span class="text-danger font-weight-bold">Only {{ wine.stock }} left!</span>
-                {% else %}
-                    <span class="text-success">In stock</span>
-                {% endif %}
-            </td>
-            <td>
-                <!-- Edit Wine Form -->
-                <form method="post" action="{{ url_for('edit_product') }}" style="display:inline;">
-                        <input type="hidden" name="id" value="{{ wine.id }}">
-                        <button type="submit" class="btn btn-warning btn-sm">Edit</button>
-                </form>
+        {% if all_wines %}
+            {% for wine in all_wines %}
+            <tr>
+                <td>{{ wine.id }}</td>
+                <td>{{ wine.wine_name }}</td>
+                <td>{{ wine.wine_type }}</td>
+                <td>${{ '%.2f' | format(wine.price) }}</td>
+                <td>{{ wine.stock }}</td>
+                <td>{{ wine.product_registration_date.strftime('%Y-%m-%d') }}</td>
+                <td><img src="{{ wine.image_url }}" alt="{{ wine.wine_name }}" style="width: 50px; height: auto;"></td>
+                <td>
+                    {% if wine.stock < 5 %}
+                        <span class="text-danger font-weight-bold">Only {{ wine.stock }} left!</span>
+                    {% else %}
+                        <span class="text-success">In stock</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <!-- Edit Wine Form -->
+                    <form method="post" action="{{ url_for('edit_product') }}" style="display:inline;">
+                            <input type="hidden" name="id" value="{{ wine.id }}">
+                            <button type="submit" class="btn btn-warning btn-sm">Edit</button>
+                    </form>
 
-                <!-- Delete Wine Form -->
-                <form method="post" action="/delete-wine" style="display:inline;">
-                    <input type="hidden" name="wineId" value="{{ wine.id }}">
-                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                </form>
-            </td>
-        </tr>
-        {% endfor %}
-    {% else %}
-        <tr>
-            <td colspan="6" class="text-center">No wines available.</td>
-        </tr>
-    {% endif %}
+                    <!-- Delete Wine Form -->
+                    <form method="post" action="/delete-wine" style="display:inline;">
+                        <input type="hidden" name="wineId" value="{{ wine.id }}">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="6" class="text-center">No wines available.</td>
+            </tr>
+        {% endif %}
 </tbody>
 
                 </table>
             </div>
         </div>
     </main>
-    <!-- Optional JavaScript -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
-</body>
-</html>
-
 
 {% else %}
     <p>Please go to the <a href="/">index page</a>.</p>

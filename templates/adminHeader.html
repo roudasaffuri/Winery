@@ -7,17 +7,8 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/favicon.ico') }}" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-    <style>
-        .custom-navbar {
-            background-color: #dc3545; /* Red background color */
-        }
-        .nav-link {
-            color: #ffffff; /* White text for links */
-        }
-        .nav-link:hover {
-            color: #ffcc00; /* Yellow text on hover */
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesAdmin.css') }}">
+
 </head>
 <body>
     <!-- Navigation -->
@@ -45,10 +36,6 @@
             </div>
         </div>
     </nav>
+    <!-- Flash Messages -->
+{% include "flash.html" %}
 
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" crossorigin="anonymous"></script>
-</body>
-</html>

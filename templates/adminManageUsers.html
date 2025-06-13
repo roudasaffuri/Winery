@@ -1,51 +1,6 @@
 {% if session.admin or session.manager %}
 {% include "adminHeader.html" %}
 
-
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin - Manage Users</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-
-        h2 {
-            color: #333;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-
-        th {
-            background-color: #ffc107;
-            color: black;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        input[type="checkbox"] {
-            transform: scale(1.2);
-        }
-    </style>
-</head>
-<body>
-
 <h2>Admin - Manage Users</h2>
 
 <form method="GET" action="/adminManageUsers">
@@ -97,8 +52,6 @@
     </tbody>
 </table>
 
-</body>
-</html>
 
 {% else %}
 <p>Please go to the <a href="/">index page</a>.</p>
