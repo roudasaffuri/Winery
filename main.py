@@ -24,7 +24,6 @@ from registration import registration
 from login import log
 from userStore import getStorePage
 from dotenv import load_dotenv
-import os
 from userSendUserPassword import sendPass
 from clearSessionAndLogout import exitAndClearSession
 from userAgeVerified import  userAgeVerified
@@ -32,6 +31,7 @@ from userAddToCart import handle_add_to_cart
 from userCart import getCart
 from userRemoveProduct import removeProductFromCart
 from userUpdateQuantity import handle_quantity_update
+import os
 
 load_dotenv()
 
@@ -80,11 +80,6 @@ def sendPasswordToEmail():
 @app.route('/home')
 def home():
     return render_template("home.html")
-
-
-@app.route("/about")
-def about():
-    return render_template("about.html")
 
 
 @app.route("/contact", methods=["GET", "POST"])
