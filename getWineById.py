@@ -1,6 +1,5 @@
 from ClassWine import Wine
 from db_connection import create_connection, disconnection
-from decimal import Decimal  # לדיוק בחישוב
 
 def getWineById(id):
     conn = create_connection()

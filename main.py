@@ -97,9 +97,12 @@ def store():
     return getStorePage()
 
 
+
 @app.route('/singlePage/<int:id>')
 def singlePage(id):
-    return render_template("singlePage.html", wine=getWineById(id))
+    best_seller = request.args.get('best_seller', default=0, type=int)
+    wine = getWineById(id)
+    return render_template("singlePage.html", wine=wine, best_seller=best_seller)
 
 
 @app.route('/history')

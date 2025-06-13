@@ -56,6 +56,11 @@
         </div>
         <div class="col-md-6">
           <h1 class="display-5 fw-bold mb-3">{{ wine.wine_name }}</h1>
+{% if best_seller == 1 %}
+    <span class="badge bg-success">Best Seller</span>
+            {%elif best_seller == 2 %}
+            <span class="badge bg-success">Recommended</span>
+{% endif %}
 
           <div class="mb-4">
             {# Check for a discount by comparing the original and final prices #}
@@ -74,6 +79,7 @@
             {% endif %}
           </div>
           <div class="mb-4">
+
             <p class="lead">In Stock: {{ wine.stock }}</p>
           </div>
           <div class="mb-4">

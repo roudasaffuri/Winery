@@ -63,7 +63,7 @@
                     {% endif %}
                   </div>
                   <div class="mt-auto">
-                    <a href="{{ url_for('singlePage', id=wine.id) }}"
+                    <a href="{{ url_for('singlePage', id=wine.id, best_seller=1) }}"
                        class="btn btn-sm px-3"
                        style="background-color: #722f37; border-color: #722f37; color: white;">
                       View Details
@@ -129,7 +129,7 @@
                       {% endif %}
                     </div>
                     <div class="mt-auto">
-                      <a href="{{ url_for('singlePage', id=wine.id) }}"
+                      <a href="{{ url_for('singlePage', id=wine.id, best_seller=2) }}"
                          class="btn btn-sm px-3"
                          style="background-color: #722f37; border-color: #722f37; color: white;">
                         View Details
