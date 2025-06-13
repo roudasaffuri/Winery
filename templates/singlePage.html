@@ -24,35 +24,60 @@
       flex-shrink: 0;
       background: white;
     }
+    .original-price {
+      text-decoration: line-through;
+      color: #6c757d;
+      font-size: 1.2rem;
+    }
+    .discounted-price {
+      color: #dc3545;
+      font-weight: bold;
+    }
+    .discount-badge {
+      background-color: #dc3545;
+      color: white;
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.375rem;
+      font-size: 0.875rem;
+      margin-left: 0.5rem;
+    }
   </style>
 </head>
 <body class="py-5">
   {% include "header.html" %}
 
-
   <div class="content">
     <div class="container bg-white rounded shadow mx-auto my-4 p-4" style="max-width: 1200px;">
       <div class="row g-4">
-        <!-- Product Image Column -->
         <div class="col-md-6">
           <div class="d-flex align-items-center justify-content-center bg-light rounded" style="min-height: 400px;">
             <img src="{{ wine.image_url }}" alt="{{ wine.wine_name }}" class="img-fluid" style="max-height: 400px; object-fit: cover;">
           </div>
         </div>
-        <!-- Product Details Column -->
         <div class="col-md-6">
           <h1 class="display-5 fw-bold mb-3">{{ wine.wine_name }}</h1>
+
           <div class="mb-4">
-            <span class="fs-3 fw-bold">${{ '%.2f'|format(wine.price) }}</span>
+            {# Check for a discount by comparing the original and final prices #}
+            {% if wine.price != wine.final_price %}
+              <div class="d-flex align-items-center flex-wrap">
+                <span class="original-price me-2">${{ '%.2f'|format(wine.price) }}</span>
+                <span class="fs-3 fw-bold discounted-price">${{ '%.2f'|format(wine.final_price) }}</span>
+                {# You can still show the discount percentage if it exists #}
+                {% if wine.discount and wine.discount > 0 %}
+                  <span class="discount-badge">{{ wine.discount }}% OFF</span>
+                {% endif %}
+              </div>
+            {% else %}
+              {# If no discount, just show the normal price #}
+              <span class="fs-3 fw-bold">${{ '%.2f'|format(wine.final_price) }}</span>
+            {% endif %}
           </div>
           <div class="mb-4">
-            <p class="lead">Quantity: {{ wine.stock }}</p>
-          </div>
-            <div class="mb-4">
-            <p class="lead">Discount: {{ wine.discount }}</p>
+            <p class="lead">In Stock: {{ wine.stock }}</p>
           </div>
           <div class="mb-4">
-            <p class="lead">{{ wine.description or "Product description goes here." }}</p>
+            <p class="lead">{{ wine.description or "No description available." }}</p>
           </div>
           <div class="d-flex align-items-center mb-4">
             {% if wine.stock > 0 %}

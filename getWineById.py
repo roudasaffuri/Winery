@@ -15,20 +15,13 @@ def getWineById(id):
         if result is None:
             return "Product not found", 404
 
-        # חשב את המחיר לאחר ההנחה
-        price = Decimal(result[4])
-        discount = Decimal(result[9])
-        if discount == 0:
-            calculated_price = price
-        else:
-            calculated_price = (Decimal('100') - discount) / Decimal('100') * price
 
         wine = Wine(
             id=result[0],
             wine_name=result[1],
             wine_type=result[2],
             image_url=result[3],
-            price=calculated_price,
+            price=result[4],
             stock=result[5],
             description=result[6],
             best_before=result[7],

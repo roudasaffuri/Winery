@@ -86,22 +86,13 @@ def wines():
         rows = cursor.fetchall()
 
         # Map each row to a Wine object and append to the wines list
-        # Map each row to a Wine object and append to the wines list
         for row in rows:
-            discount = Decimal(row[9])
-            price = row[4]  # בהנחה שזה כבר Decimal, אם לא - להמיר אותו ל-Decimal
-
-            if discount == 0:
-                calculated_price = price
-            else:
-                calculated_price = (Decimal('100') - discount) / Decimal('100') * price
-
             wine = Wine(
                 id=row[0],
                 wine_name=row[1],
                 wine_type=row[2],
                 image_url=row[3],
-                price=calculated_price,
+                price=row[4],
                 stock=row[5],
                 description=row[6],
                 best_before=row[7],
@@ -134,15 +125,21 @@ def get_top5_wines_last_week():
     conn = create_connection()
     cur  = conn.cursor()
     cur.execute(
-        """
-        SELECT w.id,w.wine_name,w.image_url,w.price,
-          SUM(pi.quantity) AS total_qty FROM purchases p
+         """
+        SELECT 
+          w.id,
+          w.wine_name,
+          w.image_url,
+          w.price,
+          w.final_price,
+          SUM(pi.quantity) AS total_qty 
+        FROM purchases p
         JOIN purchase_items pi
           ON p.purchase_id = pi.purchase_id
         JOIN wines w
           ON w.id = pi.wine_id
         WHERE p.purchased_at BETWEEN %s AND %s
-        GROUP BY w.id, w.wine_name, w.image_url, w.price
+        GROUP BY w.id, w.wine_name, w.image_url, w.price, w.final_price
         ORDER BY total_qty DESC
         LIMIT 5
         """,
@@ -158,6 +155,7 @@ def get_top5_wines_last_week():
             'wine_name': r[1],
             'image_url': r[2],
             'price':     float(r[3]),
+            'final_price':float(r[4])
         }
         for r in rows
     ]

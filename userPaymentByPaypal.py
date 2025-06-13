@@ -1,8 +1,6 @@
 import paypalrestsdk
 from flask import request, app, flash, redirect, url_for
 from complete_order import complete_order
-
-
 def paymentByPaypal():
     # 1. Grab the PayPal IDs from the query string
     payment_id = request.args.get('paymentId')
