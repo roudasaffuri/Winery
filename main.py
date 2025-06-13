@@ -1,11 +1,9 @@
-import paypalrestsdk as paypalrestsdk
-from flask import Flask, render_template, request, redirect, url_for, flash,  g
+from flask import Flask, render_template, request, redirect, url_for, g
 from Tips import get_wine_tips
 from adminAddWine import addWine
 from managerChangeRole import changeRole
 from adminDiscountWineById import discountWine
 from adminEditProduct import  adminEditProduct
-from adminGenderDistribution import genderDistribution
 from adminGetAllWines import getAllWines
 from adminManageUsers import manageUsers
 from adminStatisticWine import  viewStatisticByIdWine
@@ -17,9 +15,9 @@ from adminDeleteWine import deleteWineFromDB
 from getWineById import getWineById
 from managerManageAdmins import manageAdmins
 from paypalPayment import paypalPayment
-# from test import seasonalSt
 from userItemsInCart import get_cart_count
 from userPaymentByCard import PaymentByCard
+from userPaymentByPaypal import paymentByPaypal
 from userPurchseHistory import getPurchaseHistory
 from userSentMessage import contactUs
 from registration import registration
@@ -79,7 +77,6 @@ def sendPasswordToEmail():
 
 
 # - - - - - - - - - - - - - - USER - - - - - - - - - - - - - - #
-
 @app.route('/home')
 def home():
     return render_template("home.html")
@@ -150,25 +147,14 @@ def paypal_payment(total):
 
 @app.route('/paypal_execute')
 def paypal_execute():
-    # 1. Grab the PayPal IDs from the query string
-    payment_id = request.args.get('paymentId')
-    payer_id   = request.args.get('PayerID')
-    # 2. Look up that payment in the PayPal SDK
-    payment = paypalrestsdk.Payment.find(payment_id)
-    # 3. Execute it
-    if not payment.execute({"payer_id": payer_id}):
-        # If execution failed, show an error and send them back
-        app.logger.error("PayPal execute failed: %s", payment.error)
-        flash("Payment execution failed. Please try again.")
-        return redirect(url_for('cart'))
-    # 4. On success, run DB+email logic
-    return complete_order()
+    return paymentByPaypal()
 
 
 # Credit Card
 @app.route('/creditCardCheckout')
 def creditCardCheckout():
     return PaymentByCard()
+
 
 @app.route('/process_payment_credit_card', methods=['POST'])
 def process_payment_credit_card():
@@ -233,20 +219,10 @@ def adminViewStatistic():
 
 @app.route("/adminStatistics")
 def adminStatistics():
-    gender = genderDistribution()
-    male=gender[0]
-    female = gender[1]
-    return render_template("adminStatistics.html", male=male, female=female , all_wines=getAllWines())
-
-
-# @app.route("/seasonalStatistics")
-# def seasonalStatistics():
-#     seasonal_data = seasonalSt()
-#     return render_template("seasonalStatistics.html", **seasonal_data)
+    return render_template("adminStatistics.html", all_wines=getAllWines())
 
 
 # - - - - - - - - - - - - - - Manager  - - - - - - - - - - - - - - #
-
 @app.route('/managerManageAdmins')
 def managerManageAdmins():
     return manageAdmins()
