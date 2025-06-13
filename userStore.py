@@ -1,4 +1,4 @@
-from flask import session, render_template
+from flask import session, render_template, flash
 from ClassWine import Wine
 from collections import Counter
 from datetime import datetime,timedelta
@@ -112,7 +112,7 @@ def wines():
 
 
     except Exception as e:
-        print(f"An error occurred: {e}")
+        flash(f"Update error: {e}", 'error ')
     finally:
         # Close the cursor and database connection
         disconnection(conn, cursor)

@@ -20,7 +20,7 @@ def deleteWineFromDB():
         flash('Wine deleted successfully!', 'success')  # Flash success message
     except Exception as e:
         print(f"An error occurred: {e}")
-        flash('An error occurred while deleting the wine.', 'danger')  # Flash error message
+        flash('An error occurred while deleting the wine.', 'error')  # Flash error message
     finally:
         disconnection(conn,cur)
 

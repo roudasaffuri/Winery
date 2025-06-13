@@ -1,5 +1,5 @@
 from decimal import Decimal
-from flask import session, flash, render_template, redirect, url_for
+from flask import session, flash, render_template
 from db_connection import create_connection, disconnection
 
 
@@ -32,12 +32,12 @@ def getCart():
             cur.execute(query, (cart_id,))
             for cart_item_id, quantity, wine_id, wine_name, image_url, stock, final_price in cur.fetchall():
                 if stock == 0:
-                    flash("Your cart was updated regarding to products stock.")
+                    flash("Your cart was updated regarding to products stock.",'success')
                     cur.execute("DELETE FROM cart_items WHERE wine_id = %s", (wine_id,))
                     conn.commit()
                     continue
                 elif quantity > stock:
-                    flash(f"Your cart was updated, only {stock} left in stock for {wine_name}. Requested {quantity}")
+                    flash(f"Your cart was updated, only {stock} left in stock for {wine_name}. Requested {quantity}",'warning')
                     quantity = stock
                     cur.execute("UPDATE cart_items SET quantity = %s WHERE cart_item_id = %s", (stock, cart_item_id))
                     conn.commit()

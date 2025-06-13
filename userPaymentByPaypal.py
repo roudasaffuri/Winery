@@ -11,7 +11,7 @@ def paymentByPaypal():
     if not payment.execute({"payer_id": payer_id}):
         # If execution failed, show an error and send them back
         app.logger.error("PayPal execute failed: %s", payment.error)
-        flash("Payment execution failed. Please try again.")
+        flash("Payment execution failed. Please try again.","error")
         return redirect(url_for('cart'))
     # 4. On success, run DB+email logic
     return complete_order()

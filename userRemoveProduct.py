@@ -20,11 +20,11 @@ def removeProductFromCart(product_id):
             (cart_id, product_id)
         )
         conn.commit()
-        flash("Item removed from cart.")
+        flash("Item removed from cart.",'success')
         return redirect(url_for('cart'))
 
     except Exception as e:
-        flash("Error removing item from cart.")
+        flash("Error removing item from cart.",'error')
     finally:
         disconnection(conn, cur)
 

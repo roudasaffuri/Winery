@@ -46,9 +46,9 @@ def handle_add_to_cart(product_id):
                 (cart_id, wine.id, quantity)
             )
         conn.commit()
-        flash(f"{wine.wine_name} added to cart!")
+        flash(f"{wine.wine_name} added to cart!" , 'success')
     except Exception as e:
-        flash("Error adding product to cart.")
+        flash("Error adding product to cart.", 'error')
 
     finally:
         cur.close()

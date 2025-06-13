@@ -1,4 +1,4 @@
-from flask import request, redirect, url_for
+from flask import request, redirect, url_for, flash
 from db_connection import disconnection, create_connection
 
 def handle_quantity_update():
@@ -27,8 +27,10 @@ def handle_quantity_update():
             elif action == 'decrease' and quantity > 1:
                 cur.execute("UPDATE cart_items SET quantity = quantity - 1 WHERE cart_item_id = %s", (cart_item_id,))
                 conn.commit()
+            flash("Your cart was updated!" , 'success ')
             return redirect(url_for('cart'))
     except Exception as e:
-        print(f"Update error: {e}")
+        flash(f"Update error: {e}", 'error ')
+
     finally:
         disconnection(conn, cur)
