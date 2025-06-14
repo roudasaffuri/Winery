@@ -1,4 +1,4 @@
-from flask import  flash, render_template, request
+from flask import flash, render_template, request
 
 from adminGetAllWines import getAllWines
 from db_connection import create_connection ,disconnection

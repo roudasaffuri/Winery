@@ -1,4 +1,4 @@
-from flask import render_template, session
+from flask import session, render_template
 from db_connection import create_connection, disconnection
 
 
@@ -6,7 +6,6 @@ def getPurchaseHistory():
     conn = create_connection()
     cursor = conn.cursor()
 
-    # שלוף את כל הרכישות של המשתמש
     cursor.execute("SELECT * FROM purchases WHERE user_id = %s", (session['id'],))
     purchases = cursor.fetchall()
 
@@ -15,12 +14,11 @@ def getPurchaseHistory():
     for purchase in purchases:
         purchase_id = purchase[0]
 
-        # שלוף פריטים עבור כל רכישה
         cursor.execute("""
-                SELECT wine_name, quantity, price_at_purchase, subtotal
-                FROM purchase_items
-                WHERE purchase_id = %s
-            """, (purchase_id,))
+            SELECT wine_name, quantity, price_at_purchase, subtotal
+            FROM purchase_items
+            WHERE purchase_id = %s
+        """, (purchase_id,))
         items = cursor.fetchall()
 
         item_list = []
@@ -47,4 +45,5 @@ def getPurchaseHistory():
 
     disconnection(conn, cursor)
 
-    return render_template('history.html', purchases=history_data)
+    # שימוש ב-render_template
+    return render_template("userPurchaseHistory.html", purchases=history_data)

@@ -77,41 +77,41 @@ def sendPasswordToEmail():
 
 
 # - - - - - - - - - - - - - - USER - - - - - - - - - - - - - - #
-@app.route('/home')
-def home():
-    return render_template("home.html")
+@app.route('/userHomePage')
+def userHomePage():
+    return render_template("userHomePage.html")
 
 
-@app.route("/contact", methods=["GET", "POST"])
-def contact():
+@app.route("/userContact", methods=["GET", "POST"])
+def userContact():
     return contactUs()
 
 
-@app.route("/tipsPage")
-def tipsPage():
-    return render_template("tipsPage.html",tips=get_wine_tips())
+@app.route("/userTips")
+def userTips():
+    return render_template("userTips.html",tips=get_wine_tips())
 
 
-@app.route('/store')
-def store():
+@app.route('/userStore')
+def userStore():
     return getStorePage()
 
 
 
-@app.route('/singlePage/<int:id>')
-def singlePage(id):
+@app.route('/userSinglePage/<int:id>')
+def userSinglePage(id):
     best_seller = request.args.get('best_seller', default=0, type=int)
     wine = getWineById(id)
-    return render_template("singlePage.html", wine=wine, best_seller=best_seller)
+    return render_template("userSinglePage.html", wine=wine, best_seller=best_seller)
 
 
-@app.route('/history')
-def history():
+@app.route('/userPurchaseHistory')
+def userPurchaseHistory():
     return getPurchaseHistory()
 
 #-------------------------------- ADD TO CART  ---------------------------------#
-@app.route('/cart')
-def cart():
+@app.route('/userCart')
+def userCart():
     return getCart()
 
 
@@ -149,8 +149,8 @@ def paypal_execute():
 
 
 # Credit Card
-@app.route('/creditCardCheckout')
-def creditCardCheckout():
+@app.route('/userCreditCardCheckout')
+def userCreditCardCheckout():
     return PaymentByCard()
 
 

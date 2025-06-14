@@ -12,7 +12,7 @@ def paypalPayment(total):
         "payer": {"payment_method": "paypal"},
         "redirect_urls": {
             "return_url": url_for('paypal_execute', _external=True),
-            "cancel_url": url_for('cart', _external=True)
+            "cancel_url": url_for('userCart', _external=True)
         },
         "transactions": [{
             "amount": {

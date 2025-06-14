@@ -23,7 +23,7 @@ def log():
                 id, stored_password_base64, role_id, firstname, lastname, is_blocked = result
 
                 if is_blocked :
-                    flash("email blocked by admin ")
+                    flash("email blocked by admin ",'error')
                     return render_template('login.html')
 
                 # Decode the stored password from base64
@@ -46,7 +46,7 @@ def log():
                         session['manager'] = useremail
                         return redirect(url_for('adminHomePage'))
                     else:
-                        return redirect(url_for('home'))  # Regular user
+                        return redirect(url_for('userHomePage'))  # Regular user
 
                 else:
                     flash("Invalid email or password.", "danger")

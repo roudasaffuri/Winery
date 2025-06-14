@@ -14,8 +14,8 @@ def contactUs():
         data = request.form
         #ImmutableMultiDict([('name', 'rouda saffuri'), ('email', 'R.saffuri@hotmail.com'), ('phone', '0525676783'), ('message', 'ewersf')])
         sentMessage(data)
-        return render_template("contact.html", msg_sent=True) # Redirect to avoid form resubmission
-    return render_template("contact.html", msg_sent=False)
+        return render_template("userContact.html", msg_sent=True) # Redirect to avoid form resubmission
+    return render_template("userContact.html", msg_sent=False)
 
 
 

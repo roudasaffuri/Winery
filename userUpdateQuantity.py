@@ -28,7 +28,7 @@ def handle_quantity_update():
                 cur.execute("UPDATE cart_items SET quantity = quantity - 1 WHERE cart_item_id = %s", (cart_item_id,))
                 conn.commit()
             flash("Your cart was updated!" , 'success ')
-            return redirect(url_for('cart'))
+            return redirect(url_for('userCart'))
     except Exception as e:
         flash(f"Update error: {e}", 'error ')
 

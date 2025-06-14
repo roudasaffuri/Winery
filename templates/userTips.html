@@ -144,7 +144,7 @@ main {
 </head>
 <body>
     {% if session.username %}
-    {% include "header.html" %}
+    {% include "userHeader.html" %}
 
     <!-- Page Header -->
     <header class="masthead" style="background-image: url('../static/assets/img/tips-bg.jpg')">
@@ -190,7 +190,7 @@ main {
       </div>
     </main>
 
-     {% include "footer.html" %}
+     {% include "userFooter.html" %}
     {% else %}
         <div class="login-section">
             <p>Please go to the <a href="/">index page</a>.</p>

@@ -37,7 +37,7 @@ def complete_order():
     cart_items = cursor.fetchall()
     if not cart_items:
         g.cart_count = 0
-        return render_template("cart.html")
+        return render_template("userCart.html")
     # — 2) Availability check —
     for _, _, qty, _, wine_name, stock in cart_items:
         if stock < qty:
@@ -101,4 +101,4 @@ def complete_order():
     flash('Purchase successfully!. Email sent.', 'success')
 
     g.cart_count = 0
-    return render_template("cart.html")
+    return render_template("userCart.html")

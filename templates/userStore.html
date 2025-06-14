@@ -1,5 +1,5 @@
 {% if session.username %}
-  {% include "header.html" %}
+  {% include "userHeader.html" %}
   <header class="masthead" style="background-image: url('../static/assets/img/store-bg.jpg')">
     <div class="container position-relative px-4 px-lg-5">
       <div class="row gx-4 gx-lg-5 justify-content-center">
@@ -63,7 +63,7 @@
                     {% endif %}
                   </div>
                   <div class="mt-auto">
-                    <a href="{{ url_for('singlePage', id=wine.id, best_seller=1) }}"
+                    <a href="{{ url_for('userSinglePage', id=wine.id, best_seller=1) }}"
                        class="btn btn-sm px-3"
                        style="background-color: #722f37; border-color: #722f37; color: white;">
                       View Details
@@ -129,7 +129,7 @@
                       {% endif %}
                     </div>
                     <div class="mt-auto">
-                      <a href="{{ url_for('singlePage', id=wine.id, best_seller=2) }}"
+                      <a href="{{ url_for('userSinglePage', id=wine.id, best_seller=2) }}"
                          class="btn btn-sm px-3"
                          style="background-color: #722f37; border-color: #722f37; color: white;">
                         View Details
@@ -216,7 +216,7 @@
                       ${{ '%.2f' | format(wine.price) }}
                     {% endif %}
                   </div>
-                  <a href="{{ url_for('singlePage', id=wine.id) }}"
+                  <a href="{{ url_for('userSinglePage', id=wine.id) }}"
                      class="btn px-4 py-2"
                      style="background-color: #722f37; border-color: #722f37; color: white; font-weight: 500;">
                     View Details
@@ -230,7 +230,7 @@
     </div>
   </main>
 
-  {% include "footer.html" %}
+  {% include "userFooter.html" %}
   <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 {% else %}
   <p>Please go to the <a href="/">index page</a>.</p>

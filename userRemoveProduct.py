@@ -21,7 +21,7 @@ def removeProductFromCart(product_id):
         )
         conn.commit()
         flash("Item removed from cart.",'success')
-        return redirect(url_for('cart'))
+        return redirect(url_for('userCart'))
 
     except Exception as e:
         flash("Error removing item from cart.",'error')

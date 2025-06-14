@@ -16,7 +16,7 @@ def create_paypal_payment(user_id, total_amount):
         "payer": {"payment_method": "paypal"},
         "redirect_urls": {
             "return_url": url_for('paypal_execute', _external=True),
-            "cancel_url": url_for('creditCardCheckout', _external=True)
+            "cancel_url": url_for('userCreditCardCheckout', _external=True)
         },
         "transactions": [{
             "amount": {"total": f"{total_amount:.2f}", "currency": "USD"},

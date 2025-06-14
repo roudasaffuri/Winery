@@ -9,7 +9,7 @@ from decimal import Decimal
 def getStorePage():
     catalog = wines()
     recommended_wines = get_top5_wines_last_week()
-    return render_template('store.html', all_wines=catalog, recommended_wines=recommended_wines)
+    return render_template('userStore.html', all_wines=catalog, recommended_wines=recommended_wines)
 
 
 # Define a Wine class to structure the data

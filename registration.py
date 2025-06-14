@@ -1,4 +1,4 @@
-from flask import redirect, url_for ,request
+from flask import redirect, url_for, request, flash
 from db_connection import create_connection,disconnection
 from psycopg2 import sql
 from fernet_encryption import encode_string
@@ -26,11 +26,12 @@ def registration():
         )
         cur.execute(insert_query, (firstname, lastname, email, password_encrypt_base64, birth_year, gender))
         conn.commit()
-
+        flash('Your registration has been successfully', 'success')
         return redirect(url_for('login'))  # Redirect to the home page after successful signup
 
     except Exception as e:
         print(f"Error: {e}")
-        cur.close()
-        conn.close()
-        return "There was an error during signup", 500
+        disconnection(conn,cur)
+        flash('An unexpected error occurred during signup. Please try again.', 'danger')
+        flash('If you\'ve already signed up, please try logging in.', 'info')  # Suggestive, less accusatory
+        return redirect(url_for('login'))

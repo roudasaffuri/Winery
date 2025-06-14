@@ -44,7 +44,7 @@
   </style>
 </head>
 <body class="py-5">
-  {% include "header.html" %}
+  {% include "userHeader.html" %}
 
   <div class="content">
     <div class="container bg-white rounded shadow mx-auto my-4 p-4" style="max-width: 1200px;">
@@ -100,7 +100,7 @@
             {% endif %}
           </div>
           <div>
-            <a href="{{ url_for('store') }}" class="btn btn-link"><i class="fas fa-arrow-left me-1"></i>Back to Store</a>
+            <a href="{{ url_for('userStore') }}" class="btn btn-link"><i class="fas fa-arrow-left me-1"></i>Back to Store</a>
           </div>
         </div>
       </div>

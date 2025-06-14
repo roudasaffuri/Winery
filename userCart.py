@@ -70,7 +70,7 @@ def getCart():
 
     total = subtotal + tax + shipping
 
-    return render_template("cart.html",
+    return render_template("userCart.html",
                            cart_items=cart_items,
                            subtotal=subtotal,
                            tax=tax,

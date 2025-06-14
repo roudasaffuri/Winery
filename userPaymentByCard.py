@@ -17,7 +17,7 @@ def PaymentByCard():
         cart_row = cur.fetchone()
         if not cart_row:
             g.cart_count = 0
-            return render_template("cart.html")
+            return render_template("userCart.html")
         elif cart_row:
             cart_id = cart_row[0]
             query = """
@@ -46,7 +46,7 @@ def PaymentByCard():
         shipping_cost = Decimal('20.00') if subtotal < Decimal('50') else Decimal('0.00')
         total = subtotal + tax + shipping_cost
 
-    return render_template("creditCardCheckout.html",
+    return render_template("userCreditCardCheckout.html",
                            cart_items=cart_items,
                            subtotal=subtotal,
                            shipping_cost=shipping_cost,
