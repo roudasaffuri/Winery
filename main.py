@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, g
-from Tips import get_wine_tips
+from ClassTips import get_wine_tips
 from adminAddWine import addWine
 from managerChangeRole import changeRole
 from adminDiscountWineById import discountWine
@@ -12,7 +12,7 @@ from adminblockUser import blockUser
 from complete_order import complete_order
 from context_processors import inject_current_year
 from adminDeleteWine import deleteWineFromDB
-from getWineById import getWineById
+from userGetWineById import getWineById
 from managerManageAdmins import manageAdmins
 from paypalPayment import paypalPayment
 from userItemsInCart import get_cart_count

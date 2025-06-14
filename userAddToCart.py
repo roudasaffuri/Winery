@@ -1,6 +1,6 @@
 from flask import session, flash, redirect, url_for, request
 from db_connection import create_connection
-from getWineById import getWineById
+from userGetWineById import getWineById
 
 
 def handle_add_to_cart(product_id):
