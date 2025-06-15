@@ -97,7 +97,6 @@ def userStore():
     return getStorePage()
 
 
-
 @app.route('/userSinglePage/<int:id>')
 def userSinglePage(id):
     best_seller = request.args.get('best_seller', default=0, type=int)

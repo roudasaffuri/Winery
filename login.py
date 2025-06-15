@@ -1,4 +1,3 @@
-
 from db_connection import create_connection, disconnection
 from flask import redirect, url_for, flash, session, request, render_template
 from fernet_encryption import decode_string

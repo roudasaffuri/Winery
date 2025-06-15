@@ -1,41 +1,63 @@
-        <!-- Footer-->
-        <footer class="border-top">
-             <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8351.595959665312!2d35.27482673957666!3d32.91602889832137!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151c33e41201da93%3A0xee7b4a64461d4ece!2z15TXnteb15zXnNeUINeU15jXm9eg15XXnNeV15LXmdeqINec15TXoNeT16HXkNeZ150g15DXldeo15gg15HXqNeQ15XXk9eUINeb16jXnteZ15DXnA!5e0!3m2!1sen!2sil!4v1749466944450!5m2!1sen!2sil" width="300" height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-            <div class="container px-4 px-lg-5">
-                <div class="row gx-4 gx-lg-5 justify-content-center">
-                    <div class="col-md-10 col-lg-8 col-xl-7">
-                        <ul class="list-inline text-center">
-                            <li class="list-inline-item">
-                                <a href="#!">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fas fa-circle fa-stack-2x"></i>
-                                        <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="#!">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fas fa-circle fa-stack-2x"></i>
-                                        <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="https://github.com/roudasaffuri/Winery">
-                                    <span class="fa-stack fa-lg">
-                                        <i class="fas fa-circle fa-stack-2x"></i>
-                                        <i class="fab fa-github fa-stack-1x fa-inverse"></i>
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="small text-center text-muted fst-italic">Rouda Saffuri & Elie Sbeat &copy; {{ current_year }}</div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <!-- Bootstrap core JS-->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
-        </body>
-</html>
+<!-- Footer -->
+<footer class="border-top bg-light py-5">
+  <div class="container">
+    <div class="row align-items-center justify-content-center">
+      <!-- Map -->
+      <div class="col-12 col-md-4 text-center mb-4 mb-md-0">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d8351.595959665312!2d35.27482673957666!3d32.91602889832137!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151c33e41201da93%3A0xee7b4a64461d4ece!2z15TXnteb15zXnNeUINeU15jXm9eg15XXnNeV15LXmdeqINec15TXoNeT16HXkNeZ150g15DXldeo15gg15HXqNeQ15XXk9eUINeb16jXnteZ15DXnA!5e0!3m2!1sen!2sil!4v1749466944450!5m2!1sen!2sil"
+          width="100%" height="300" style="border:0; max-width: 300px;" allowfullscreen="" loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+         <!-- Contact -->
+          <div>
+          <ul class="list-inline text-center">
+            <li class="nav-item list-inline-item">
+              <a class="text-muted fst-italic mt-3 fs-3" href="{{ url_for('userContact') }}">
+                Contact
+              </a>
+            </li>
+          </ul>
+        </div>
+
+
+      <!-- Social Icons -->
+      <div class="col-12 col-md-8 text-center">
+        <ul class="list-inline mb-3">
+          <li class="list-inline-item">
+            <a href="#!">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a href="#!">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+          <li class="list-inline-item">
+            <a href="https://github.com/roudasaffuri/Winery">
+              <span class="fa-stack fa-lg">
+                <i class="fas fa-circle fa-stack-2x"></i>
+                <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+              </span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="text-muted fst-italic fs-7">
+          Rouda Saffuri & Elie Sbeat &copy; {{ current_year }}
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap core JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+

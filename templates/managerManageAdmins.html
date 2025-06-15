@@ -2,97 +2,49 @@
 {% include "adminHeader.html" %}
 
 
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Admin - Manage Users</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/managerManageAdmins.css') }}">
 
-        h2 {
-            color: #333;
-        }
+    <h2>Manager - Manage Admins</h2>
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
+    <form method="GET" action="/managerManageAdmins">
+        <input type="text" name="search" placeholder="Search by ID or name" value="{{ request.args.get('search', '') }}">
+        <button type="submit">Search</button>
+    </form>
+    <br>
 
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user[0] }}</td>
+                    <td>{{ user[1] }}</td>
+                    <td>{{ user[2] }}</td>
+                    <td>{{ user[3] }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('change_role') }}">
+                            <input type="hidden" name="user_id" value="{{ user[0] }}">
+                            <select name="role_id" onchange="this.form.submit()">
+                                <option value="1" {% if user[4] == 1 %}selected{% endif %}>User</option>
+                                <option value="2" {% if user[4] == 2 %}selected{% endif %}>Admin</option>
+                                <option value="3" {% if user[4] == 3 %}selected{% endif %}>Manager</option>
+                            </select>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
-        th {
-            background-color: #ffc107;
-            color: black;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
-        input[type="checkbox"] {
-            transform: scale(1.2);
-        }
-    </style>
-</head>
-<body>
-<h2>Manager - Manage Admins</h2>
-
-<form method="GET" action="/managerManageAdmins">
-    <input type="text" name="search" placeholder="Search by ID or name" value="{{ request.args.get('search', '') }}">
-    <button type="submit">Search</button>
-</form>
-<br>
-
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Status</th>
-
-        </tr>
-    </thead>
-    <tbody>
-        {% for user in users %}
-        <tr>
-            <td>{{ user[0] }}</td>
-            <td>{{ user[1] }}</td>
-            <td>{{ user[2] }}</td>
-            <td>{{ user[3] }}</td>
-
-<td>
-<form method="POST" action="{{ url_for('change_role') }}">
-    <input type="hidden" name="user_id" value="{{ user[0] }}">
-    <select name="role_id" onchange="this.form.submit()">
-      <option value="1" {% if user[4] == 1 %}selected{% endif %}>User</option>
-<option value="2" {% if user[4] == 2 %}selected{% endif %}>Admin</option>
-<option value="3" {% if user[4] == 3 %}selected{% endif %}>Manager</option>
-
-    </select>
-  </form>
-</td>
-
-
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-</body>
-</html>
 
 {% else %}
-<p>Please go to the <a href="/">index page</a>.</p>
+    <p>Please go to the <a href="/">index page</a>.</p>
 {% endif %}
