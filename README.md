@@ -22,31 +22,26 @@ python-dotenv>=0.19.0
 os
 smtplib
 
-##  Login , Signup , ForgetPassword 
-![Screenshot 2024-10-02 182829](https://github.com/user-attachments/assets/a5fb4444-6b44-49ad-9d2d-7184cb817770)
-![Screenshot 2024-10-02 183455](https://github.com/user-attachments/assets/c444922b-e7c5-448e-8cc7-d46fe5e0b483)
-![Screenshot 2024-10-09 151118](https://github.com/user-attachments/assets/71afe7dd-f1e7-4664-a4ec-dcab3883a97a)
-
-## User : 
-
-![Screenshot 2024-10-05 094847](https://github.com/user-attachments/assets/4b7cf637-b1a1-4add-9385-589c68e11001)
-
-![Screenshot 2024-10-05 094918](https://github.com/user-attachments/assets/4366b304-7e6a-442b-b0f1-5f333a77b58c)
-
-![Screenshot 2024-10-05 094939](https://github.com/user-attachments/assets/ab805bbc-1fd9-4f6f-a346-163a0ae965bd)
-
-
-
-## Admin : 
-
-
-
-![Screenshot 2024-10-09 145709](https://github.com/user-attachments/assets/0bcad928-9e21-4fbc-b2c0-83396d78a581)
-
-![Screenshot 2024-10-09 145720](https://github.com/user-attachments/assets/18500edb-ad1c-4ccd-91b9-013d3bedba80)
-
-![Screenshot 2024-10-09 145732](https://github.com/user-attachments/assets/37be85ab-f7a4-4438-9da0-252bfeb620e1)
-
-## DATABASE :
+##  Login , Signup , ForgetPassword , User , Admin , DataBase 
 ![image](https://github.com/user-attachments/assets/7551ec52-5857-4628-9315-2b674034a084)
-
+![Image](https://github.com/user-attachments/assets/933f9c5e-76ce-41af-8e90-4f3d132b8025)
+![Image](https://github.com/user-attachments/assets/670ebe8c-7521-45b1-ac03-a4cd3d935afa)
+![Image](https://github.com/user-attachments/assets/79c1d3e8-5046-42d3-985f-846e02901e04)
+![Image](https://github.com/user-attachments/assets/631b45be-aab6-4bc3-a060-82f44443a50b)
+![Image](https://github.com/user-attachments/assets/d00ff4d9-0237-4f77-9d0f-e2b7976c78f3)
+![Image](https://github.com/user-attachments/assets/cdb36b55-e8f4-4cfe-ab82-789c1f72ecea)
+![Image](https://github.com/user-attachments/assets/36b551dc-ed58-4fa1-a787-df3744ceb233)
+![Image](https://github.com/user-attachments/assets/7e7c1037-0884-4d86-ad16-0aa5589832d2)
+![Image](https://github.com/user-attachments/assets/dbf7b8ac-6ce7-4f92-b120-9c0b152114bd)
+![Image](https://github.com/user-attachments/assets/76c1fbfb-8c8b-4a61-bb01-a405833f3c48)
+![Image](https://github.com/user-attachments/assets/91d297fa-8a6b-4240-8f7f-2adf46b9a0f9)
+![Image](https://github.com/user-attachments/assets/b0b3a740-daef-4385-8cb8-77a731bbffc9)
+![Image](https://github.com/user-attachments/assets/6317cd5f-6274-4471-9cde-e6704f5a2f94)
+![Image](https://github.com/user-attachments/assets/37afe3ab-b385-4d87-a900-a5dd97744087)
+![Image](https://github.com/user-attachments/assets/42372661-8762-4132-8e49-9bfa8fde90d5)
+![Image](https://github.com/user-attachments/assets/e68fa28f-6a1a-4743-b186-58a2ecfd7e77)
+![Image](https://github.com/user-attachments/assets/a442f9b2-cf5e-4a9b-8b2a-af3440dc9f27)
+![Image](https://github.com/user-attachments/assets/53eeab70-82ae-4ab2-b196-f69caa1c406a)
+![Image](https://github.com/user-attachments/assets/b52af4c0-04ba-43c9-b20d-b8b3b0083e69)
+![Image](https://github.com/user-attachments/assets/babd01c0-0ec5-45fa-851c-7de6f8cbf23f)
+![Image](https://github.com/user-attachments/assets/f5fd73a6-fdc0-4aaa-acba-9d278bfe6dbf)
