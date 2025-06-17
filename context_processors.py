@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import session
 
-def inject_current_year():
+def inject_context():
     """Inject the current year, username and user-email into templates."""
     return {
         'current_year': datetime.now().year,

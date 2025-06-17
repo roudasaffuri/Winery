@@ -10,7 +10,7 @@ from adminStatisticWine import  viewStatisticByIdWine
 from adminUpdateWine import updateWine
 from adminblockUser import blockUser
 from complete_order import complete_order
-from context_processors import inject_current_year
+from context_processors import inject_context
 from adminDeleteWine import deleteWineFromDB
 from userGetWineById import getWineById
 from managerManageAdmins import manageAdmins
@@ -21,7 +21,7 @@ from userPaymentByPaypal import paymentByPaypal
 from userPurchseHistory import getPurchaseHistory
 from userSentMessage import contactUs
 from registration import registration
-from login import log
+from login import log_in
 from userStore import getStorePage
 from dotenv import load_dotenv
 from userSendUserPassword import sendPass
@@ -41,7 +41,7 @@ app = Flask(__name__)
 app.secret_key = KEY  # Replace with a strong secret key for production
 
 # Register the context processor
-app.context_processor(inject_current_year)
+app.context_processor(inject_context)
 
 
 # - - - - - - - - - - - - - - Index / Login / Signup / Reset - - - - - - - - - - - - - - #
@@ -53,7 +53,7 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        return log()
+        return log_in()
     return render_template("login.html")
 
 
@@ -121,7 +121,6 @@ def load_cart_count():
 
 @app.route('/remove_from_cart/<int:product_id>')
 def remove_from_cart(product_id):
-    """Remove a product from the user's cart."""
     return removeProductFromCart(product_id)
 
 

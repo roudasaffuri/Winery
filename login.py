@@ -3,7 +3,7 @@ from flask import redirect, url_for, flash, session, request, render_template
 from fernet_encryption import decode_string
 import  base64
 
-def log():
+def log_in():
 
     useremail = request.form['email']
     password = request.form['password']

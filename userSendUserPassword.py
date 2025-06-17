@@ -37,7 +37,7 @@ def sendPass(email):
                 flash('A password reset link has been sent to your email.', 'success')
                 return True
         else:
-            flash("Email does not exist. Please try a different email.", "error")
+            flash("Email does not exist. Please try a different email.", 'danger')
             return False
 
     finally:
