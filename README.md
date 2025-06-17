@@ -23,7 +23,6 @@ os
 smtplib
 
 ##  Login , Signup , ForgetPassword , User , Admin , DataBase 
-![image](https://github.com/user-attachments/assets/7551ec52-5857-4628-9315-2b674034a084)
 ![Image](https://github.com/user-attachments/assets/933f9c5e-76ce-41af-8e90-4f3d132b8025)
 ![Image](https://github.com/user-attachments/assets/670ebe8c-7521-45b1-ac03-a4cd3d935afa)
 ![Image](https://github.com/user-attachments/assets/79c1d3e8-5046-42d3-985f-846e02901e04)
