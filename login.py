@@ -45,7 +45,7 @@ def log_in():
                         session['manager'] = useremail
                         return redirect(url_for('adminManageProducts'))
                     else:
-                        return redirect(url_for('adminManageProducts'))  # Regular user
+                        return redirect(url_for('userHomePage'))  # Regular user
 
                 else:
                     flash("Invalid email or password.", "danger")

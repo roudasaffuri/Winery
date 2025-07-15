@@ -21,7 +21,7 @@
     {% if purchases %}
       {% for purchase in purchases %}
         <div class="card mb-4">
-          <div class="card-header bg-primary text-white">
+          <div class="card-header text-white" style="background-color: #722F37;">
             <strong>Purchase ID:</strong> {{ purchase['purchase_id'] }} |
             <strong>Date:</strong> {{ purchase['purchased_at'].strftime('%Y-%m-%d %H:%M:%S') }}
           </div>
