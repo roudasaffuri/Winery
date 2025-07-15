@@ -158,11 +158,6 @@ def process_payment_credit_card():
 
 
 # - - - - - - - - - - - - - - Admin  - - - - - - - - - - - - - - #
-@app.route('/adminHomePage')
-def adminHomePage():
-    return render_template('adminHomePage.html')
-
-
 @app.route('/adminManageProducts')
 def adminManageProducts():
     return render_template('adminManageProducts.html', all_wines=getAllWines())

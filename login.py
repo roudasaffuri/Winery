@@ -39,13 +39,13 @@ def log_in():
                     # Set session and redirect based on role
                     if role_id == 2:  # Admin
                         session['admin'] = useremail
-                        return redirect(url_for('adminHomePage'))
+                        return redirect(url_for('adminManageProducts'))
                     elif role_id == 3:  # Manager
                         session['admin'] = useremail
                         session['manager'] = useremail
-                        return redirect(url_for('adminHomePage'))
+                        return redirect(url_for('adminManageProducts'))
                     else:
-                        return redirect(url_for('userHomePage'))  # Regular user
+                        return redirect(url_for('adminManageProducts'))  # Regular user
 
                 else:
                     flash("Invalid email or password.", "danger")

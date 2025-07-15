@@ -55,4 +55,4 @@ def handle_add_to_cart(product_id):
         conn.close()
 
     # Redirect back to the product detail page
-    return redirect(url_for('store'))
+    return redirect(url_for('userStore'))

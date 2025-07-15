@@ -10,6 +10,7 @@ def calculate_discounted_price(wine):
     new_price = ((hundred - discount_dec) / hundred) * price_dec
     return new_price.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
 
+
 def getAllWines():
     search = request.args.get('search', '').strip()
     sort_by_stock = request.args.get('sort_by_stock')  # will be "1" if checkbox is checked
