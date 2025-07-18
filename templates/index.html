@@ -1,12 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Age Verification</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-     <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
-
-
-
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
 <body>
     <div class="verification-box">
         <i class="fas fa-exclamation-triangle icon"></i>
-        <h1>Welcome to Online Wine World</h1>
+        <h1>Welcome to Our Website</h1>
         <h2>⚠️ Warning: This website contains alcohol-related content. You must be at least 18 years old to enter. By continuing, you confirm that you are of legal drinking age. Drink responsibly.</h2>
         <form method="POST">
             <button class="btn btn-success" name="age_verified" value="yes">
@@ -17,5 +21,8 @@
             </button>
         </form>
     </div>
-</body>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+</body>
+</html>

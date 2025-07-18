@@ -6,13 +6,14 @@
 <div class="container my-5">
   <h1 class="mb-4 text-white">Shopping Cart</h1>
 
-{% include 'flash.html' %}
+  {% include 'flash.html' %}
 
   <div class="card mb-4 shadow-sm">
     <div class="card-body">
       {% if cart_items %}
         <div class="row cart-header pb-3 d-none d-md-flex">
-          <div class="col-md-6 text-dark">Product</div>
+          <div class="col-md-1 text-dark">#</div>
+          <div class="col-md-5 text-dark">Product</div>
           <div class="col-md-2 text-center text-dark">Price</div>
           <div class="col-md-2 text-center text-dark">Quantity</div>
           <div class="col-md-2 text-end text-dark">Total</div>
@@ -20,8 +21,13 @@
 
         {% for item in cart_items %}
         <div class="row align-items-center py-3 cart-item {% if not loop.last %}border-bottom{% endif %}">
+          <!-- Row Number -->
+          <div class="col-md-1 text-dark fw-bold">
+            {{ loop.index }}
+          </div>
+
           <!-- Product Image and Name -->
-          <div class="col-md-6 d-flex align-items-center mb-3 mb-md-0">
+          <div class="col-md-5 d-flex align-items-center mb-3 mb-md-0">
             <img src="{{ item.image }}" alt="{{ item.name }}" class="cart-item-img rounded me-3" style="max-height: 80px; max-width: 80px;">
             <h5 class="mb-1 text-dark">{{ item.name }}</h5>
           </div>
@@ -48,7 +54,7 @@
             </form>
           </div>
 
-          <!-- Product Total -->
+          <!-- Product Total and Delete -->
           <div class="col-md-2 text-md-end mt-3 mt-md-0 d-flex justify-content-between align-items-center text-dark">
             <span>${{ "%.2f"|format(item.total) }}</span>
             <a href="{{ url_for('remove_from_cart', product_id=item.id) }}" class="btn btn-sm text-danger ms-2">
@@ -83,9 +89,10 @@
             <span>
               {% if shipping == 0 %}
                   Free Shipping
-               {% else %}
-                   ${{ "%.2f"|format(shipping) }}
-               {% endif %}</span>
+              {% else %}
+                  ${{ "%.2f"|format(shipping) }}
+              {% endif %}
+            </span>
           </div>
           <div class="d-flex justify-content-between mb-2 text-dark">
             <span>Tax</span>
@@ -96,18 +103,20 @@
             <strong>Total</strong>
             <strong>${{ "%.2f"|format(total) }}</strong>
           </div>
-            <a href="{{ url_for('userCreditCardCheckout') }}" class="btn w-100 mb-3" style="background-color: #722F37; border-color: #722F37; color: white;">
-            <i class="fas fa-lock me-2"></i>Credit card Checkout</a>
 
-            <a href="{{ url_for('paypal_payment', total=total) }}" class="btn w-100" style="background-color: #722F37; border-color: #722F37; color: white;">
-              <i class="fas fa-lock me-2"></i>PayPal Checkout</a>
+          <a href="{{ url_for('userCreditCardCheckout') }}" class="btn w-100 mb-3" style="background-color: #722F37; border-color: #722F37; color: white;">
+            <i class="fas fa-lock me-2"></i>Credit card Checkout
+          </a>
+
+          <a href="{{ url_for('paypal_payment', total=total) }}" class="btn w-100" style="background-color: #722F37; border-color: #722F37; color: white;">
+            <i class="fas fa-lock me-2"></i>PayPal Checkout
+          </a>
 
         </div>
       </div>
     </div>
   </div>
   {% endif %}
-
 </div>
 
 {% else %}

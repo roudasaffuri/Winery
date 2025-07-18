@@ -5,7 +5,12 @@
 
 <body class="py-5">
   <div class="content">
+
     <div class="container bg-white rounded shadow mx-auto p-4" style="max-width: 1200px; margin-top: 80px; margin-bottom: 80px;">      <div class="row g-4">
+
+    <div class="container bg-white rounded shadow mx-auto p-4" style="max-width: 1200px; margin-top: 80px; margin-bottom: 80px;">
+      <div class="row g-4">
+
         <div class="col-md-5">
           <div class="d-flex align-items-center justify-content-center bg-light rounded">
             <img src="{{ wine.image_url }}" alt="{{ wine.wine_name }}" class="img-fluid" style="max-height: 400px; object-fit: cover;">
@@ -15,7 +20,11 @@
           <h1 class="display-5 fw-bold mb-3">{{ wine.wine_name }}</h1>
 {% if best_seller == 1 %}
     <span class="badge" style="background-color: #d4af37; color: white;">Best Seller 🔥</span>
+
 {%elif best_seller == 2 %}
+
+            {%elif best_seller == 2 %}
+
             <span class="badge" style="background-color: #d4af37; color: white;">☆ Recommended</span>
 {% endif %}
 
@@ -64,6 +73,10 @@
     </div>
   </div>
 
+
+
+
+{% include "userFooter.html" %}
 
 {% else %}
 <p>Please go to the <a href="/">index page</a>.</p>
