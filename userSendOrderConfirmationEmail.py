@@ -71,7 +71,7 @@ def send_order_confirmation_email(user_email, order_summary, purchase_id):
 
         <div style="font-size: 14px; color: #888; margin-top: 40px; text-align: center; border-top: 1px solid #D4AF37; padding-top: 10px;">
             <p>For any questions about your order, please contact our Sommelier Service at wineryproject3@gmail.com</p>
-            <p>© Online Wine World 2025 | <a href="#" style="color: #722F37;">Unsubscribe</a> | <a href="#" style="color: #722F37;">View in Browser</a></p>
+            <p>© Online Wine World 2025</p>
         </div>
     </body>
     </html>
@@ -101,7 +101,7 @@ With appreciation for your distinguished palate,
 The Online Wine World Team
 
 For any questions about your order, please contact our Sommelier Service at wineryproject3@gmail.com
-© Online Wine World 2024
+© Online Wine World 2025
 """
 
     # Set up the email message

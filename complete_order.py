@@ -98,7 +98,7 @@ def complete_order():
     }
     if session.get('useremail'):
         send_order_confirmation_email(session['useremail'], summary, purchase_id)
-    flash('Purchase successfully!. Email sent.', 'success')
+    flash('Purchase successfully! Email sent.', 'success')
 
     g.cart_count = 0
     return render_template("userCart.html")

@@ -20,17 +20,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 function applyAllWineFilters() {
-const checkedTypes = Array.from(document.querySelectorAll('#wine-type-filter-all input[name="wine_type_all"]:checked'))
-  .map(checkbox => checkbox.value);
-const allWineItems = document.querySelectorAll('#all-wines-collection .wine-item.all-wine');
+  // Step 1: Get all the checkboxes that are checked under the wine type filter
+  const checkboxes = document.querySelectorAll('#wine-type-filter-all input[name="wine_type_all"]:checked');
 
-allWineItems.forEach(item => {
-  const wineType = item.dataset.wineType;
-  if (checkedTypes.length === 0 || checkedTypes.includes(wineType)) {
-    item.style.display = 'block';
-  } else {
-    item.style.display = 'none';
-  }
-});
+  // Step 2: Get the values (types) of the checked checkboxes
+    const selectedTypes = checkboxes.map(checkbox => checkbox.value);
+
+  // Step 3: Get all wine items from the collection
+  const wineItems = document.querySelectorAll('#all-wines-collection .wine-item.all-wine');
+
+  // Step 4: Show or hide each wine item based on the selected filters
+  wineItems.forEach(function(item) {
+    const wineType = item.dataset.wineType; // Get wine type from data attribute
+
+    // If no checkbox is selected OR the wine type is selected → show it
+    if (selectedTypes.length === 0 || selectedTypes.includes(wineType)) {
+      item.style.display = 'block'; // Show the item
+    } else {
+      item.style.display = 'none'; // Hide the item
+    }
+  });
 }
-
