@@ -1,7 +1,7 @@
 {% if (session.username) %}
 {% include 'userHeader.html' %}
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/userCreditCardCheckout.css') }}">
 
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/userCreditCardCheckout.css') }}">
   <div class="container py-5 checkout-container">
     <h4 class="mb-4 checkout-title wine-text">Checkout</h4>
     <div class="row">
@@ -149,7 +149,7 @@
               </div>
             </div>
           </div>
-          <button class="w-100 btn btn-lg wine-primary" type="submit">Complete Purchase</button>
+          <button class="w-100 btn btn-lg wine-primary" type="submit" style="color:white;">Complete Purchase</button>
         </form>
       </div>
     </div>

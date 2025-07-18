@@ -155,7 +155,7 @@ def get_top5_wines_last_week():
             'wine_name': r[1],
             'image_url': r[2],
             'price':     float(r[3]),
-            'final_price':float(r[4])
+            'final_price':float(r[4]),
         }
         for r in rows
     ]

@@ -186,42 +186,44 @@
       <div class="row" id="all-wines-collection">
         {% if all_wines %}
           {% for wine in all_wines %}
-            <div class="col-lg-4 col-md-6 mb-4 wine-item all-wine" data-wine-type="{{ wine.wine_type|lower }}">
+            <div class="col-lg-2 col-md-3 col-sm-6 mb-4 wine-item all-wine" data-wine-type="{{ wine.wine_type|lower }}">
               <div class="card h-100 shadow-sm border-0" style="transition: transform 0.3s;">
                 <div class="position-relative">
                   <img src="{{ wine.image_url }}"
                        class="card-img-top"
                        alt="{{ wine.wine_name }}"
-                       style="height: 300px; object-fit: cover;">
+                       style="height: 220px; object-fit: cover;">
                   {% if wine.final_price != wine.price %}
-                    <div class="position-absolute top-0 start-0 m-3">
-                      <span class="badge bg-danger fs-6 px-3 py-2">
+                    <div class="position-absolute top-0 start-0 m-2">
+                      <span class="badge bg-danger">
                         SALE
                       </span>
                     </div>
                   {% endif %}
                 </div>
-                <div class="card-body text-center p-4">
-                  <h5 class="card-title mb-3" style="color: #722f37; font-weight: 600;">
+                <div class="card-body d-flex flex-column text-center p-3">
+                  <h6 class="card-title mb-2" style="color: #722f37; font-weight: 500; min-height: 40px; display: flex; align-items: center; justify-content: center;">
                     {{ wine.wine_name }}
-                  </h5>
-                  <div class="card-text mb-4" style="color: #722f37; font-weight: 600; font-size: 1.2rem;">
+                  </h6>
+                  <div class="card-text mb-3" style="color: #722f37; font-weight: 600; font-size: 1.1rem;">
                     {% if wine.final_price != wine.price %}
-                      <div style="text-decoration: line-through; color: #999; font-size: 1rem; margin-bottom: 5px;">
+                      <div style="text-decoration: line-through; color: #999; font-size: 0.9rem; margin-bottom: 2px;">
                         ${{ '%.2f' | format(wine.price) }}
                       </div>
-                      <div style="color: #dc3545; font-weight: 700; font-size: 1.3rem;">
+                      <div style="color: #dc3545; font-weight: 700;">
                         ${{ '%.2f' | format(wine.final_price) }}
                       </div>
                     {% else %}
                       ${{ '%.2f' | format(wine.price) }}
                     {% endif %}
                   </div>
-                  <a href="{{ url_for('userSinglePage', id=wine.id) }}"
-                     class="btn px-4 py-2"
-                     style="background-color: #722f37; border-color: #722f37; color: white; font-weight: 500;">
-                    View Details
-                  </a>
+                  <div class="mt-auto">
+                    <a href="{{ url_for('userSinglePage', id=wine.id) }}"
+                       class="btn btn-sm px-3"
+                       style="background-color: #722f37; border-color: #722f37; color: white;">
+                      View Details
+                    </a>
+                  </div>
                 </div>
               </div>
             </div>
