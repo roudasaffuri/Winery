@@ -18,13 +18,13 @@ def addWine():
 
     # SQL insert query
     sql = """
-            INSERT INTO wines (wine_name, wine_type,image_url, price,  stock ,description,best_before,final_price)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s);
+            INSERT INTO wines (wine_name, wine_type,image_url, price,  stock ,description,best_before,final_price,discount)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s);
             """
 
     try:
         # Execute the insert query
-        cur.execute(sql, (wine_name, wine_type,wine_image, wine_price,  wine_quantity,wine_description, wine_best_before ,wine_price))
+        cur.execute(sql, (wine_name, wine_type,wine_image, wine_price,  wine_quantity,wine_description, wine_best_before ,wine_price, 0 ))
         conn.commit()
         flash('Wine added successfully!', 'success')  # Flash success message
     except Exception as e:
