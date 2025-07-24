@@ -1,29 +1,95 @@
 {% if session.admin or session.manager %}
 {% include "adminHeader.html" %}
 
-<main class="mb-4">
-    <div class="container my-5">
-        <h1 class="text-center mb-4">Manage Wines</h1>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/adminManageProd.css') }}">
 
-        <!-- Search + Sort Form -->
-<form method="GET" action="/adminManageProducts" class="mb-4" style="max-width: 300px;">
-    <input type="text" name="search" class="form-control form-control-sm mb-2"
-           placeholder="Search by ID, name or type"
-           value="{{ request.args.get('search', '') }}">
+<main class="mb-4 wine-management-main">
+    <div class="container wine-py-5">
+        <!-- Header Section -->
+        <div class="row wine-mb-5">
+            <div class="col-12 text-center">
+                <div class="d-inline-flex align-items-center mb-3">
+                    <i class="fas fa-wine-bottle text-danger me-3 wine-header-icon"></i>
+                    <h1 class="display-4 text-dark mb-0 wine-header-title">
+                        Wine Inventory Management
+                    </h1>
+                </div>
+                <p class="lead text-muted">Manage your wine collection with ease and precision</p>
+                <div class="border-bottom border-danger mx-auto wine-header-divider"></div>
+            </div>
+        </div>
 
-    <div class="form-check mb-2">
-        <input type="checkbox" class="form-check-input" id="sortByStock" name="sort_by_stock" value="1"
-               onchange="this.form.submit()"
-               {% if request.args.get('sort_by_stock') %}checked{% endif %}>
-        <label class="form-check-label" for="sortByStock">Sort by Stock (ascending)</label>
-    </div>
+        <!-- Search and Controls Section -->
+        <div class="row wine-mb-4">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <div class="card shadow-sm border-0 search-card">
+                    <div class="card-body wine-p-4">
+                        <h5 class="card-title text-center mb-4">
+                            <i class="fas fa-search text-primary me-2"></i>
+                            Search & Filter
+                        </h5>
 
-    <button type="submit" class="btn btn-primary btn-sm">Search</button>
-</form>
+                        <form method="GET" action="/adminManageProducts">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="fas fa-wine-glass text-muted"></i>
+                                </span>
+                                <input type="text" name="search" class="form-control border-start-0 search-input"
+                                       placeholder="Search by ID, wine name, or type..."
+                                       value="{{ request.args.get('search', '') }}">
+                            </div>
 
+                            <div class="form-check mb-3">
+                                <input type="checkbox" class="form-check-input" id="sortByStock" name="sort_by_stock" value="1"
+                                       onchange="this.form.submit()"
+                                       {% if request.args.get('sort_by_stock') %}checked{% endif %}>
+                                <label class="form-check-label text-muted" for="sortByStock">
+                                    <i class="fas fa-sort-amount-up me-1"></i>
+                                    Sort by Stock Level (Low to High)
+                                </label>
+                            </div>
 
-        <h3 class="text-success">Current Wines</h3>
-        <div class="table-responsive">
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search me-2"></i>Search Wines
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if all_wines %}
+        <div class="card-footer bg-light border-0 wine-py-3">
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <div class="text-muted stats-label">Total Wines</div>
+                    <div class="stats-value-primary">{{ all_wines|length }}</div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-muted stats-label">In Stock</div>
+                    <div class="stats-value-success">
+                        {{ all_wines|selectattr('stock', 'gt', 0)|list|length }}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-muted stats-label">Low Stock</div>
+                    <div class="stats-value-warning">
+                        {{ all_wines|selectattr('stock', 'lt', 5)|selectattr('stock', 'gt', 0)|list|length }}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="text-muted stats-label">Sold Out</div>
+                    <div class="stats-value-danger">
+                        {{ all_wines|selectattr('stock', 'eq', 0)|list|length }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="wine-table-wrapper">
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
@@ -49,27 +115,26 @@
                         <td>{{ wine.stock }}</td>
                         <td>{{ wine.product_registration_date.strftime('%Y-%m-%d') }}</td>
                         <td>
-                            <img src="{{ wine.image_url }}" alt="{{ wine.wine_name }}"
-                                 style="width: 50px; height: auto;">
+                            <img src="{{ wine.image_url }}" alt="{{ wine.wine_name }}" class="wine-thumbnail">
                         </td>
                         <td>
                             {% if wine.stock == 0 %}
-                                <span class="text-danger font-weight-bold">SOLD OUT!</span>
+                                <span class="status-sold-out">SOLD OUT!</span>
                             {% elif wine.stock < 5 %}
-                                <span class="text-danger font-weight-bold">Only {{ wine.stock }} left!</span>
+                                <span class="status-low-stock">Only {{ wine.stock }} left!</span>
                             {% else %}
-                                <span class="text-success">In stock</span>
+                                <span class="status-in-stock">In stock</span>
                             {% endif %}
                         </td>
                         <td>
                             <!-- Edit Form -->
-                            <form method="post" action="{{ url_for('edit_product') }}" style="display:inline;">
+                            <form method="post" action="{{ url_for('edit_product') }}" class="inline-form">
                                 <input type="hidden" name="id" value="{{ wine.id }}">
                                 <button type="submit" class="btn btn-warning btn-sm">Edit</button>
                             </form>
 
                             <!-- Delete Form -->
-                            <form method="post" action="/delete-wine" style="display:inline;">
+                            <form method="post" action="/delete-wine" class="inline-form">
                                 <input type="hidden" name="wineId" value="{{ wine.id }}">
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>

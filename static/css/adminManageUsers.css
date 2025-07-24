@@ -1,0 +1,339 @@
+/* Wine Admin Theme CSS */
+
+/* Main Background - Textured Wine Theme */
+.wine-admin-main {
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(160, 82, 45, 0.05) 100%), #f5f5f0;
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000' fill-opacity='0.02'%3E%3Cpath d='m0 40 40-40V0L0 40z'/%3E%3C/g%3E%3C/svg%3E");
+    min-height: 100vh;
+}
+
+/* Card Styles */
+.wine-admin-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: none;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+}
+
+.wine-admin-card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.3s ease;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* Header Styles */
+.wine-admin-header {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: #2c3e50;
+}
+
+.wine-admin-subtitle {
+    color: #6c757d;
+    font-weight: 300;
+}
+
+.wine-admin-divider {
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, #dc3545, #c82333);
+    border: none;
+    border-radius: 2px;
+}
+
+/* Search Section Styles */
+.wine-search-card {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(15px);
+    border: none;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    border-radius: 15px;
+}
+
+.wine-search-input {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: none;
+}
+
+.wine-search-input:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    outline: none;
+}
+
+/* Primary Button Styles */
+.btn-primary {
+background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        border: none;
+}
+
+.btn-primary:hover {
+        background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
+
+/* Statistics Card Styles */
+.wine-stats-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.wine-stats-footer {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border: none;
+    padding: 20px;
+    border-radius: 0 0 10px 10px;
+}
+
+.wine-stat-item {
+    text-align: center;
+    padding: 10px;
+}
+
+.wine-stat-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.wine-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.wine-stat-value.text-primary {
+    color: #0d6efd !important;
+}
+
+.wine-stat-value.text-success {
+    color: #198754 !important;
+}
+
+.wine-stat-value.text-danger {
+    color: #dc3545 !important;
+}
+
+.wine-stat-value.text-warning {
+    color: #fd7e14 !important;
+}
+
+/* Table Styles with Borders and Grids */
+.wine-admin-table {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    border: 1px solid #dee2e6;
+}
+
+.wine-admin-table thead {
+    background-color: #343a40;
+    color: white;
+}
+
+.wine-admin-table thead th {
+    border: 1px solid #dee2e6;
+    padding: 15px 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.875rem;
+}
+
+.wine-admin-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.wine-admin-table tbody tr:nth-child(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.wine-admin-table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.wine-admin-table tbody td {
+    padding: 12px;
+    vertical-align: middle;
+    border: 1px solid #dee2e6;
+}
+
+/* Status Badge Styles */
+.wine-status-active {
+    color: #198754;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.wine-status-blocked {
+    color: #dc3545;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+}
+
+.wine-status-sold-out {
+    color: #dc3545;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+}
+
+.wine-status-low-stock {
+    color: #fd7e14;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+.wine-status-in-stock {
+    color: #198754;
+    font-weight: 600;
+    font-size: 0.875rem;
+}
+
+/* Button Styles */
+.wine-btn-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.wine-btn-primary:hover {
+    background: linear-gradient(135deg, #0056b3, #004085);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+}
+
+.wine-btn-success {
+    background: linear-gradient(135deg, #28a745, #1e7e34);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.wine-btn-success:hover {
+    background: linear-gradient(135deg, #1e7e34, #155724);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+    color: white;
+}
+
+.wine-btn-danger {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.wine-btn-danger:hover {
+    background: linear-gradient(135deg, #c82333, #bd2130);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+    color: white;
+}
+
+.wine-btn-warning {
+    background: linear-gradient(135deg, #ffc107, #e0a800);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    color: #212529;
+    transition: all 0.3s ease;
+}
+
+.wine-btn-warning:hover {
+    background: linear-gradient(135deg, #e0a800, #d39e00);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 193, 7, 0.3);
+    color: #212529;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .wine-admin-header {
+        font-size: 2rem;
+    }
+
+    .wine-stat-item {
+        margin-bottom: 15px;
+    }
+
+    .wine-admin-table {
+        font-size: 0.875rem;
+    }
+
+    .wine-admin-table thead th,
+    .wine-admin-table tbody td {
+        padding: 8px;
+    }
+}
+
+/* Input Group Styles */
+.wine-input-group .input-group-text {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px solid #e9ecef;
+    border-right: none;
+}
+
+.wine-input-group .form-control {
+    border: 2px solid #e9ecef;
+    border-left: none;
+}
+
+.wine-input-group .form-control:focus {
+    border-color: #dc3545;
+    box-shadow: none;
+}
+
+.wine-input-group .form-control:focus + .input-group-text,
+.wine-input-group .input-group-text:has(+ .form-control:focus) {
+    border-color: #dc3545;
+}
+
+/* Wine Theme Icons */
+.wine-icon-primary {
+    color: #dc3545;
+}
+
+.wine-icon-secondary {
+    color: #6c757d;
+}
+
+/* Animation Classes */
+.wine-fade-in {
+    animation: wineFadeIn 0.5s ease-in;
+}
+
+@keyframes wineFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

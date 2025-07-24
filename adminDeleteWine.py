@@ -6,7 +6,6 @@ from db_connection import create_connection ,disconnection
 def deleteWineFromDB():
 
     item_id = request.form['wineId']
-
     conn = create_connection()
     cur = conn.cursor()
 

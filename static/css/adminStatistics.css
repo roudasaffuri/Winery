@@ -1,0 +1,221 @@
+/* Wine Statistics Page Styles */
+.btn-primary {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+    }
+/* Main container background - matching the wine management page */
+.wine-statistics-main {
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(160, 82, 45, 0.05) 100%), #f5f5f0;
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000' fill-opacity='0.02'%3E%3Cpath d='m0 40 40-40V0L0 40z'/%3E%3C/g%3E%3C/svg%3E");
+    min-height: 100vh;
+}
+
+/* Header section styles */
+.statistics-header-icon {
+    font-size: 2.5rem;
+}
+
+.statistics-header-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+
+.statistics-header-divider {
+    width: 100px;
+    height: 3px;
+}
+
+/* Wine section title */
+.wine-section-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    color: #198754;
+    position: relative;
+    padding-left: 2rem;
+}
+
+.wine-section-title::before {
+    content: "🍷";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+}
+
+/* Table container with card styling */
+.statistics-table-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 1px solid rgba(139, 69, 19, 0.1);
+}
+
+/* Table styling - matching adminManageProd colors */
+.statistics-table {
+    margin-bottom: 0;
+}
+
+.statistics-table thead th {
+    background-color: #343a40;
+    color: white;
+    border: 1px solid #dee2e6;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+    padding: 1rem 0.75rem;
+}
+
+.statistics-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.statistics-table tbody tr:nth-child(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.statistics-table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.statistics-table tbody td {
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+    border: 1px solid #dee2e6;
+}
+
+/* Status styling */
+.status-low-stock {
+    color: #dc3545;
+    font-weight: bold;
+    background: rgba(220, 53, 69, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+}
+
+.status-in-stock {
+    color: #198754;
+    font-weight: bold;
+    background: rgba(25, 135, 84, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+}
+
+/* Button styling */
+.btn-view {
+    background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
+    border: none;
+    color: #212529;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(255, 193, 7, 0.3);
+}
+
+.btn-view:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.4);
+    color: #212529;
+}
+
+/* Discount dropdown styling */
+.discount-select {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.5rem;
+    background: white;
+    color: #495057;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.discount-select:hover {
+    border-color: #8b4513;
+    box-shadow: 0 2px 4px rgba(139, 69, 19, 0.2);
+}
+
+.discount-select:focus {
+    outline: none;
+    border-color: #8b4513;
+    box-shadow: 0 0 0 0.2rem rgba(139, 69, 19, 0.25);
+}
+
+/* Price styling */
+.price-text {
+    font-weight: 600;
+    color: #8b4513;
+    font-size: 1.1rem;
+}
+
+/* Stock quantity styling */
+.stock-quantity {
+    font-weight: 600;
+    color: #495057;
+    background: rgba(108, 117, 125, 0.1);
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    display: inline-block;
+    min-width: 3rem;
+    text-align: center;
+}
+
+/* Wine name styling */
+.wine-name {
+    font-weight: 600;
+    color: #212529;
+}
+
+/* ID styling */
+.wine-id {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+/* Container spacing */
+.statistics-container {
+    padding: 3rem 0;
+}
+
+.statistics-mb-5 {
+    margin-bottom: 3rem;
+}
+
+.statistics-mb-4 {
+    margin-bottom: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .statistics-header-title {
+        font-size: 1.8rem;
+    }
+
+    .statistics-header-icon {
+        font-size: 2rem;
+    }
+
+    .statistics-table {
+        font-size: 0.9rem;
+    }
+
+    .statistics-table thead th,
+    .statistics-table tbody td {
+        padding: 0.75rem 0.5rem;
+    }
+}

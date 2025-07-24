@@ -1,58 +1,136 @@
 {% if session.admin or session.manager %}
 {% include "adminHeader.html" %}
 
-<h2>Admin - Manage Users</h2>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/adminManageUsers.css') }}">
+<main class="mb-4 wine-admin-main">
+    <div class="container py-5">
+        <!-- Header Section -->
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <div class="d-inline-flex align-items-center mb-3">
+                    <i class="fas fa-users wine-icon-primary me-3" style="font-size: 2.5rem;"></i>
+                    <h1 class="display-4 wine-admin-header mb-0">
+                        User Management
+                    </h1>
+                </div>
+                <p class="lead wine-admin-subtitle">Manage customer accounts and access controls</p>
+                <div class="wine-admin-divider mx-auto"></div>
+            </div>
+        </div>
 
-<form method="GET" action="/adminManageUsers">
-    <input type="text" name="search" placeholder="Search by ID or name" value="{{ request.args.get('search', '') }}">
-    <button type="submit">Search</button>
-</form>
-<br>
+        <!-- Search and Controls Section -->
+        <div class="row mb-4">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <div class="card wine-search-card">
+                    <div class="card-body p-4">
+                        <h5 class="card-title text-center mb-4">
+                            <i class="fas fa-search text-primary me-2"></i>
+                            Search & Filter
+                        </h5>
 
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Email</th>
-            <th>Birth Year</th>
-            <th>Gender</th>
-            <th>Created At</th>
-            <th>Is Blocked</th>
+                        <form method="GET" action="/adminManageUsers">
+                            <div class="input-group wine-input-group mb-3">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="fas fa-user-circle wine-icon-secondary"></i>
+                                </span>
+                                <input type="text" name="search" class="form-control wine-search-input border-start-0"
+                                       placeholder="Search by user ID or name..."
+                                       value="{{ request.args.get('search', '') }}">
+                            </div>
 
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search me-2"></i>Search Users
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        </tr>
-    </thead>
-    <tbody>
-        {% for user in users %}
-        <tr>
-            <td>{{ user[0] }}</td>
-            <td>{{ user[1] }}</td>
-            <td>{{ user[2] }}</td>
-            <td>{{ user[3] }}</td>
-            <td>{{ user[4] }}</td>
-            <td>{{ user[5] }}</td>
-            <td>{{ user[7] }}</td>
-            <td>
-    <form method="POST" action="{{ url_for('block_user') }}">
-      <input type="hidden" name="user_id" value="{{ user[0] }}">
-      <input type="hidden" name="is_blocked" value="{{ 'false' if user[8] else 'true' }}">
-      <input type="checkbox" name="block_user" onChange="this.form.submit()" {% if user[8] %}checked{% endif %}>
-    {% if user[8] %}
-      <span style="color: red;">Blocked</span>
-    {% else %}
-      <span style="color: green;">Active</span>
-    {% endif %}
-    </form>
+        {% if users %}
+        <div class="card wine-stats-card">
+            <div class="wine-stats-footer">
+                <div class="row text-center">
+                    <div class="col-md-4 wine-stat-item">
+                        <div class="wine-stat-label">Total Users</div>
+                        <div class="wine-stat-value text-primary">{{ users|length }}</div>
+                    </div>
+                    <div class="col-md-4 wine-stat-item">
+                        <div class="wine-stat-label">Active Users</div>
+                        <div class="wine-stat-value text-success">
+                            {{ users|selectattr('8', 'equalto', false)|list|length }}
+                        </div>
+                    </div>
+                    <div class="col-md-4 wine-stat-item">
+                        <div class="wine-stat-label">Blocked Users</div>
+                        <div class="wine-stat-value text-danger">
+                            {{ users|selectattr('8', 'equalto', true)|list|length }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
 
-  </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
+        <div class="table-responsive">
+            <table class="table wine-admin-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Birth Year</th>
+                        <th>Gender</th>
+                        <th>Created At</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% if users %}
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user[0] }}</td>
+                        <td>{{ user[1] }}</td>
+                        <td>{{ user[2] }}</td>
+                        <td>{{ user[3] }}</td>
+                        <td>{{ user[4] }}</td>
+                        <td>{{ user[5] }}</td>
+                        <td>{{ user[7] }}</td>
+                        <td>
+                            {% if user[8] %}
+                                <span class="wine-status-blocked">BLOCKED</span>
+                            {% else %}
+                                <span class="wine-status-active">Active</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <form method="POST" action="{{ url_for('block_user') }}" style="display:inline;">
+                                <input type="hidden" name="user_id" value="{{ user[0] }}">
+                                <input type="hidden" name="is_blocked" value="{{ 'false' if user[8] else 'true' }}">
+                                {% if user[8] %}
+                                    <button type="submit" class="btn btn-sm wine-btn-success">Unblock</button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-sm wine-btn-danger">Block</button>
+                                {% endif %}
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="9" class="text-center">No users found.</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
 
 {% else %}
-<p>Please go to the <a href="/">index page</a>.</p>
+    <p>Please go to the <a href="/">index page</a>.</p>
 {% endif %}
