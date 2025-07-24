@@ -53,7 +53,7 @@ def getAllWines():
 
             # row[9] = discount
             if int(row[9]) != 0:
-                wine.price = calculate_discounted_price(wine)
+                wine.final_price = calculate_discounted_price(wine)
 
             wines.append(wine)
 

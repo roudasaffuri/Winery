@@ -1,14 +1,5 @@
 /* Wine Statistics Page Styles */
-.btn-primary {
-        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
-        border: none;
-    }
 
-    .btn-primary:hover {
-        background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
-    }
 /* Main container background - matching the wine management page */
 .wine-statistics-main {
     background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(160, 82, 45, 0.05) 100%), #f5f5f0;
@@ -58,20 +49,60 @@
     border: 1px solid rgba(139, 69, 19, 0.1);
 }
 
-/* Table styling - matching adminManageProd colors */
+/* Table styling with borders and grids */
 .statistics-table {
     margin-bottom: 0;
+    border: 2px solid #dee2e6;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    width: 100%;
 }
 
 .statistics-table thead th {
     background-color: #343a40;
     color: white;
-    border: 1px solid #dee2e6;
+    border: 1px solid #adb5bd;
+    border-bottom: 2px solid #adb5bd;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.5px;
     font-size: 0.9rem;
     padding: 1rem 0.75rem;
+}
+
+.statistics-table thead th:first-child {
+    border-left: 2px solid #adb5bd;
+    width: 8%;
+}
+
+.statistics-table thead th:nth-child(2) {
+    width: 15%;
+}
+
+.statistics-table thead th:nth-child(3) {
+    width: 10%;
+}
+
+.statistics-table thead th:nth-child(4) {
+    width: 10%;
+}
+
+.statistics-table thead th:nth-child(5) {
+    width: 15%;
+}
+
+.statistics-table thead th:nth-child(6) {
+    width: 12%;
+}
+
+.statistics-table thead th:nth-child(7) {
+    width: 15%;
+}
+
+.statistics-table thead th:last-child {
+    border-right: 2px solid #adb5bd;
+    width: 15%;
 }
 
 .statistics-table tbody tr {
@@ -92,6 +123,25 @@
     padding: 1rem 0.75rem;
     vertical-align: middle;
     border: 1px solid #dee2e6;
+    border-top: none;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+.statistics-table tbody tr:first-child td {
+    border-top: 1px solid #dee2e6;
+}
+
+.statistics-table tbody td:first-child {
+    border-left: 2px solid #dee2e6;
+}
+
+.statistics-table tbody td:last-child {
+    border-right: 2px solid #dee2e6;
+}
+
+.statistics-table tbody tr:last-child td {
+    border-bottom: 2px solid #dee2e6;
 }
 
 /* Status styling */
@@ -101,7 +151,10 @@
     background: rgba(220, 53, 69, 0.1);
     padding: 0.25rem 0.5rem;
     border-radius: 15px;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    display: inline-block;
+    min-width: fit-content;
 }
 
 .status-in-stock {
@@ -110,10 +163,23 @@
     background: rgba(25, 135, 84, 0.1);
     padding: 0.25rem 0.5rem;
     border-radius: 15px;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    display: inline-block;
+    min-width: fit-content;
 }
 
 /* Button styling */
+.btn-primary {
+        background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+        border: none;
+    }
+
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+    }
 .btn-view {
     background: linear-gradient(135deg, #ffc107 0%, #ffb300 100%);
     border: none;

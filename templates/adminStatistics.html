@@ -76,6 +76,7 @@
                                     <th>Status</th>
                                     <th>View Details</th>
                                     <th>Discount</th>
+                                    <th>Discounted Price</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -122,12 +123,21 @@
                                                 <select name="discount" class="discount-select" onchange="this.form.submit()">
                                                     {% for i in range(0, 55, 5) %}
                                                         <option value="{{ i }}" {% if wine.discount == i %}selected{% endif %}>
-                                                            {{ i }}% {% if i == 0 %}(No Discount){% endif %}
+                                                            {{ i }}%
                                                         </option>
                                                     {% endfor %}
                                                 </select>
                                             </form>
                                         </td>
+                                        {% if wine.discount != 0%}
+                                        <td>
+                                            <span class="price-text">${{ '%.2f' | format(wine.final_price) }}</span>
+                                        </td>
+                                        {% else %}
+                                        <td>
+                                            <span class="price-text">No Discount</span>
+                                        </td>
+                                        {% endif %}
                                     </tr>
                                     {% endfor %}
                                 {% else %}
