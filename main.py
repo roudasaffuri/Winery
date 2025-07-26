@@ -1,18 +1,18 @@
-from flask import Flask, render_template, request, redirect, url_for, g
+from flask import Flask, render_template, g
 from ClassTips import get_wine_tips
 from adminAddWine import addWine
 from managerChangeRole import changeRole
 from adminDiscountWineById import discountWine
-from adminEditProduct import  adminEditProduct
+from adminEditProduct import adminEditProduct
 from adminGetAllWines import getAllWines
 from adminManageUsers import manageUsers
-from adminStatisticWine import  viewStatisticByIdWine
+from adminStatisticWine import viewStatisticByIdWine
 from adminUpdateWine import updateWine
 from adminblockUser import blockUser
 from complete_order import complete_order
 from context_processors import inject_context
 from adminDeleteWine import deleteWineFromDB
-from userGetWineById import getWineById
+from userGetSinglePage import userGetSinglePage
 from managerManageAdmins import manageAdmins
 from paypalPayment import paypalPayment
 from userItemsInCart import get_cart_count
@@ -26,7 +26,7 @@ from userStore import getStorePage
 from dotenv import load_dotenv
 from userSendUserPassword import sendPass
 from clearSessionAndLogout import exitAndClearSession
-from userAgeVerified import  userAgeVerified
+from userAgeVerified import userAgeVerified
 from userAddToCart import handle_add_to_cart
 from userCart import getCart
 from userRemoveProduct import removeProductFromCart
@@ -52,16 +52,13 @@ def index():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    if request.method == 'POST':
-        return log_in()
-    return render_template("login.html")
+    return log_in()
 
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
-    if request.method == 'POST':
-        return registration()
-    return render_template('signup.html')  # Render the signup form
+    return registration()
+
 
 @app.route('/privacy_policy')
 def privacy_policy():
@@ -70,11 +67,7 @@ def privacy_policy():
 
 @app.route('/sendPasswordToEmail', methods=['GET', 'POST'])
 def sendPasswordToEmail():
-    if request.method == 'POST':
-        userEmail = request.form['email']
-        sendPass(userEmail)
-    return redirect(url_for('login'))
-
+    return sendPass()
 
 # - - - - - - - - - - - - - - USER - - - - - - - - - - - - - - #
 @app.route('/userHomePage')
@@ -99,9 +92,7 @@ def userStore():
 
 @app.route('/userSinglePage/<int:id>')
 def userSinglePage(id):
-    best_seller = request.args.get('best_seller', default=0, type=int)
-    wine = getWineById(id)
-    return render_template("userSinglePage.html", wine=wine, best_seller=best_seller)
+    return userGetSinglePage(id)
 
 
 @app.route('/userPurchaseHistory')
