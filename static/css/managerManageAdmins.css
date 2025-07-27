@@ -1,36 +1,321 @@
+/* Manager - Manage Admins Page Styles */
 
-    body {
-        font-family: Arial, sans-serif;
-        padding: 20px;
-        background-color: #f5f5f5;
-    }
+.btn-primary {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    border: none;
+}
 
-    h2 {
-        color: #333;
-    }
+.btn-primary:hover {
+    background: linear-gradient(135deg, #c82333 0%, #a71e2a 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+}
 
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        background-color: white;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
+/* Main container background - matching wine theme */
+.manager-admin-main {
+    background: linear-gradient(135deg, rgba(139, 69, 19, 0.1) 0%, rgba(160, 82, 45, 0.05) 100%), #f5f5f0;
+    background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000' fill-opacity='0.02'%3E%3Cpath d='m0 40 40-40V0L0 40z'/%3E%3C/g%3E%3C/svg%3E");
+    min-height: 100vh;
+}
 
-    th, td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
+/* Header section styles */
+.manager-header-icon {
+    font-size: 2.5rem;
+}
 
-    th {
-        background-color: #ffc107;
-        color: black;
-    }
+.manager-header-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
 
-    tr:hover {
-        background-color: #f1f1f1;
-    }
+.manager-header-divider {
+    width: 100px;
+    height: 3px;
+}
 
-    input[type="checkbox"] {
-        transform: scale(1.2);
+/* Search card styles */
+.manager-search-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(139, 69, 19, 0.1);
+}
+
+.manager-search-input {
+    box-shadow: none;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.manager-search-input:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+    outline: none;
+}
+
+/* Table container with card styling */
+.manager-table-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border: 1px solid rgba(139, 69, 19, 0.1);
+}
+
+/* Table styling with borders and grids */
+.manager-table {
+    margin-bottom: 0;
+    border: 2px solid #dee2e6;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    width: 100%;
+}
+
+.manager-table thead th {
+    background-color: #343a40;
+    color: white;
+    border: 1px solid #adb5bd;
+    border-bottom: 2px solid #adb5bd;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.9rem;
+    padding: 1rem 0.75rem;
+}
+
+.manager-table thead th:first-child {
+    border-left: 2px solid #adb5bd;
+    width: 10%;
+}
+
+.manager-table thead th:nth-child(2) {
+    width: 20%;
+}
+
+.manager-table thead th:nth-child(3) {
+    width: 20%;
+}
+
+.manager-table thead th:nth-child(4) {
+    width: 30%;
+}
+
+.manager-table thead th:last-child {
+    border-right: 2px solid #adb5bd;
+    width: 20%;
+}
+
+.manager-table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.manager-table tbody tr:nth-child(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.manager-table tbody tr:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.manager-table tbody td {
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+    border: 1px solid #dee2e6;
+    border-top: none;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+.manager-table tbody tr:first-child td {
+    border-top: 1px solid #dee2e6;
+}
+
+.manager-table tbody td:first-child {
+    border-left: 2px solid #dee2e6;
+}
+
+.manager-table tbody td:last-child {
+    border-right: 2px solid #dee2e6;
+}
+
+.manager-table tbody tr:last-child td {
+    border-bottom: 2px solid #dee2e6;
+}
+
+/* Role selector styling */
+.role-select {
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    padding: 0.5rem;
+    background: white;
+    color: #495057;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: 100%;
+    max-width: 120px;
+}
+
+.role-select:hover {
+    border-color: #8b4513;
+    box-shadow: 0 2px 4px rgba(139, 69, 19, 0.2);
+}
+
+.role-select:focus {
+    outline: none;
+    border-color: #8b4513;
+    box-shadow: 0 0 0 0.2rem rgba(139, 69, 19, 0.25);
+}
+
+/* Role badges */
+.role-user {
+    background: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+    padding: 0.25rem 0.5rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.role-admin {
+    background: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.role-manager {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    padding: 0.25rem 0.5rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+/* User ID styling */
+.user-id {
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+/* User name styling */
+.user-name {
+    font-weight: 600;
+    color: #212529;
+}
+
+/* Email styling */
+.user-email {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+/* Container spacing */
+.manager-container {
+    padding: 3rem 0;
+}
+
+.manager-mb-5 {
+    margin-bottom: 3rem;
+}
+
+.manager-mb-4 {
+    margin-bottom: 2rem;
+}
+
+.manager-p-4 {
+    padding: 1.5rem;
+}
+
+/* Statistics section */
+.manager-stats-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    border-radius: 10px;
+    margin-bottom: 2rem;
+}
+
+.manager-stats-footer {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border: none;
+    padding: 20px;
+    border-radius: 0 0 10px 10px;
+}
+
+.manager-stat-item {
+    text-align: center;
+    padding: 10px;
+}
+
+.manager-stat-label {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+.manager-stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.manager-stat-value.text-primary {
+    color: #0d6efd !important;
+}
+
+.manager-stat-value.text-success {
+    color: #198754 !important;
+}
+
+.manager-stat-value.text-danger {
+    color: #dc3545 !important;
+}
+
+/* Access denied styling */
+.access-denied-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .manager-header-title {
+        font-size: 1.8rem;
     }
+    
+    .manager-header-icon {
+        font-size: 2rem;
+    }
+    
+    .manager-table {
+        font-size: 0.9rem;
+    }
+    
+    .manager-table thead th,
+    .manager-table tbody td {
+        padding: 0.75rem 0.5rem;
+    }
+    
+    .role-select {
+        max-width: 100px;
+        font-size: 0.8rem;
+    }
+}

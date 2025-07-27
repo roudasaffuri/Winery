@@ -1,49 +1,149 @@
 {% if session.admin or session.manager %}
 {% include "adminHeader.html" %}
 
+<link rel="stylesheet" href="{{ url_for('static', filename='css/managerManageAdmins.css') }}">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/managerManageAdmins.css') }}">
+<main class="mb-4 manager-admin-main">
+    <div class="container manager-container">
+        <!-- Header Section -->
+        <div class="row manager-mb-5">
+            <div class="col-12 text-center">
+                <div class="d-inline-flex align-items-center mb-3">
+                    <i class="fas fa-user-shield text-danger me-3 manager-header-icon"></i>
+                    <h1 class="display-4 text-dark mb-0 manager-header-title">
+                        Admin Management
+                    </h1>
+                </div>
+                <p class="lead text-muted">Manage administrator roles and permissions</p>
+                <div class="border-bottom border-danger mx-auto manager-header-divider"></div>
+            </div>
+        </div>
 
-    <h2>Manager - Manage Admins</h2>
+        <!-- Search Section -->
+        <div class="row manager-mb-4">
+            <div class="col-lg-6 col-md-8 mx-auto">
+                <div class="card manager-search-card">
+                    <div class="card-body manager-p-4">
+                        <h5 class="card-title text-center mb-4">
+                            <i class="fas fa-search text-primary me-2"></i>
+                            Search Administrators
+                        </h5>
 
-    <form method="GET" action="/managerManageAdmins">
-        <input type="text" name="search" placeholder="Search by ID or name" value="{{ request.args.get('search', '') }}">
-        <button type="submit">Search</button>
-    </form>
-    <br>
+                        <form method="GET" action="/managerManageAdmins">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="fas fa-user-cog text-muted"></i>
+                                </span>
+                                <input type="text" name="search" class="form-control border-start-0 manager-search-input"
+                                       placeholder="Search by ID or name..."
+                                       value="{{ request.args.get('search', '') }}">
+                            </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Email</th>
-                <th>Status</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for user in users %}
-                <tr>
-                    <td>{{ user[0] }}</td>
-                    <td>{{ user[1] }}</td>
-                    <td>{{ user[2] }}</td>
-                    <td>{{ user[3] }}</td>
-                    <td>
-                        <form method="POST" action="{{ url_for('change_role') }}">
-                            <input type="hidden" name="user_id" value="{{ user[0] }}">
-                            <select name="role_id" onchange="this.form.submit()">
-                                <option value="1" {% if user[4] == 1 %}selected{% endif %}>User</option>
-                                <option value="2" {% if user[4] == 2 %}selected{% endif %}>Admin</option>
-                                <option value="3" {% if user[4] == 3 %}selected{% endif %}>Manager</option>
-                            </select>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search me-2"></i>Search Admins
+                                </button>
+                            </div>
                         </form>
-                    </td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <!-- Statistics Section -->
+        {% if users %}
+        <div class="card manager-stats-card">
+            <div class="manager-stats-footer">
+                <div class="row text-center">
+                    <div class="col-md-4 manager-stat-item">
+                        <div class="manager-stat-label">Total Users</div>
+                        <div class="manager-stat-value text-primary">{{ users|length }}</div>
+                    </div>
+                    <div class="col-md-4 manager-stat-item">
+                        <div class="manager-stat-label">Administrators</div>
+                        <div class="manager-stat-value text-success">
+                            {{ users|selectattr('4', 'equalto', 2)|list|length }}
+                        </div>
+                    </div>
+                    <div class="col-md-4 manager-stat-item">
+                        <div class="manager-stat-label">Managers</div>
+                        <div class="manager-stat-value text-danger">
+                            {{ users|selectattr('4', 'equalto', 3)|list|length }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Users Table -->
+        <div class="row manager-mb-4">
+            <div class="col-12">
+                <div class="manager-table-card">
+                    <div class="table-responsive">
+                        <table class="table table-striped manager-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>Role Management</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if users %}
+                                    {% for user in users %}
+                                    <tr>
+                                        <td>
+                                            <span class="user-id">#{{ user[0] }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="user-name">{{ user[1] }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="user-name">{{ user[2] }}</span>
+                                        </td>
+                                        <td>
+                                            <span class="user-email">{{ user[3] }}</span>
+                                        </td>
+                                        <td>
+                                            <form method="POST" action="{{ url_for('change_role') }}">
+                                                <input type="hidden" name="user_id" value="{{ user[0] }}">
+                                                <select name="role_id" class="role-select" onchange="this.form.submit()">
+                                                    <option value="1" {% if user[4] == 1 %}selected{% endif %}>
+                                                        👤 User
+                                                    </option>
+                                                    <option value="2" {% if user[4] == 2 %}selected{% endif %}>
+                                                        🛡️ Admin
+                                                    </option>
+                                                    <option value="3" {% if user[4] == 3 %}selected{% endif %}>
+                                                        👑 Manager
+                                                    </option>
+                                                </select>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="5" class="text-center py-5">
+                                            <i class="fas fa-users text-muted mb-3" style="font-size: 3rem;"></i>
+                                            <div class="text-muted">
+                                                <h5>No users found</h5>
+                                                <p class="mb-0">Try adjusting your search criteria.</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 
 {% else %}
     <p>Please go to the <a href="/">index page</a>.</p>
