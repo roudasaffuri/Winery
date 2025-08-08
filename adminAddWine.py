@@ -24,7 +24,7 @@ def addWine():
 
     try:
         # Execute the insert query
-        cur.execute(sql, (wine_name, wine_type,wine_image, wine_price,  wine_quantity,wine_description, wine_best_before ,wine_price, 0 ))
+        cur.execute(sql, (wine_name, wine_type.title(),wine_image, wine_price,  wine_quantity,wine_description, wine_best_before ,wine_price, 0 ))
         conn.commit()
         flash('Wine added successfully!', 'success')  # Flash success message
     except Exception as e:

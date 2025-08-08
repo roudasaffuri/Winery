@@ -3,17 +3,17 @@ from ClassWine import Wine
 from collections import Counter
 from datetime import datetime,timedelta
 from db_connection import create_connection, disconnection
-from decimal import Decimal
 
 
 def getStorePage():
-    catalog = wines()
-    recommended_wines = get_top5_wines_last_week()
-    return render_template('userStore.html', all_wines=catalog, recommended_wines=recommended_wines)
+    recommendedForYou = first10wines()
+    top5_wines = get_top5_wines_last_week()
+    allwines = getAllwines()
+    return render_template('userStore.html', recommendedForYou=recommendedForYou, top5_wines=top5_wines,all_wines=allwines)
 
 
 # Define a Wine class to structure the data
-def wines():
+def first10wines():
     # Create database connection
     conn = create_connection()
     cursor = conn.cursor()
@@ -34,11 +34,8 @@ def wines():
         user_age = current_year - birth_year
         # Select users of similar age and same gender
         if user_age < 25:
-            sql = "SELECT id FROM users WHERE birth_year BETWEEN %s AND %s AND gender = %s;"
-            cursor.execute(sql, (current_year - 25, current_year - 18, user_gender))
-        elif user_age > 65:
-            sql = "SELECT id FROM users WHERE birth_year BETWEEN %s AND %s AND gender = %s;"
-            cursor.execute(sql, (current_year - 80, current_year - 60, user_gender))
+            sql = "SELECT id FROM users WHERE birth_year > %s AND gender = %s;"
+            cursor.execute(sql, (current_year - 25, user_gender))
         else:
             age_min = user_age - 5
             age_max = user_age + 5
@@ -71,22 +68,18 @@ def wines():
 
         # Get list of (wine_id, frequency), sorted from most to the least frequent
         sorted_items = counter.most_common()
-        # Example: [(14, 9), (49, 8), (51, 8), (57, 8), (60, 8), (12, 7), (17, 7), ...]
-
+        # print(sorted_items)
+        # Example: [(38, 9), (22, 8), (24, 8), (7, 7), (8, 7), (12, 7), (5, 7), (20, 6), (29, 5), ...]
+        # slice first 10 items
+        sorted_items = sorted_items[:10]
         # Extract only the unique wine IDs, sorted by popularity
         sorted_unique_wine_ids = [item[0] for item in sorted_items]
-        # Add missing wine IDs (1 to 60) that were not in the list
-        for i in range(1, 41):
-            if i not in sorted_unique_wine_ids:
-                sorted_unique_wine_ids.append(i)
-        wines = []  # Array to store wine objects
-        # Execute the SQL query to select all records from wines
-        cursor.execute("SELECT * FROM wines")
-        # Fetch all results
-        rows = cursor.fetchall()
 
-        # Map each row to a Wine object and append to the wines list
-        for row in rows:
+        first10Wines = []
+        for i in range(0, 10):
+            sql = "SELECT * FROM wines WHERE id = %s;"
+            cursor.execute(sql, (int(sorted_unique_wine_ids[i]),))
+            row = cursor.fetchone()
             wine = Wine(
                 id=row[0],
                 wine_name=row[1],
@@ -98,17 +91,10 @@ def wines():
                 best_before=row[7],
                 product_registration_date=row[8],
                 discount=row[9],
-                final_price = row[10]
+                final_price=row[10]
             )
-            wines.append(wine)
-
-        final_sorted_wine = []
-        for id in sorted_unique_wine_ids:
-            for wine in wines:
-                if wine.id == id:
-                    final_sorted_wine.append(wine)
-
-        return final_sorted_wine
+            first10Wines.append(wine)
+        return first10Wines
 
 
     except Exception as e:
@@ -119,7 +105,9 @@ def wines():
 
 def get_top5_wines_last_week():
     # now = datetime(2025, 4, 20, 0, 0, 0) #for custom date replace with line 135
-    now      = datetime.now()
+    now = datetime.now()
+    # timedelta(days=7) — creates a time interval of 7 days.
+    # now - timedelta(days=7) — subtracts that time interval from now, giving you the date/time one week earlier.
     week_ago = now - timedelta(days=7)
 
     conn = create_connection()
@@ -159,3 +147,28 @@ def get_top5_wines_last_week():
         }
         for r in rows
     ]
+
+def getAllwines():
+    conn = create_connection()
+    cursor = conn.cursor()
+    getAllWines_sql = "SELECT * FROM wines"
+    cursor.execute(getAllWines_sql)
+    result = cursor.fetchall()
+
+    allWines = []
+    for row in result:
+        wine = Wine(
+            id=row[0],
+            wine_name=row[1],
+            wine_type=row[2],
+            image_url=row[3],
+            price=row[4],
+            stock=row[5],
+            description=row[6],
+            best_before=row[7],
+            product_registration_date=row[8],
+            discount=row[9],
+            final_price=row[10]
+        )
+        allWines.append(wine)
+    return allWines
