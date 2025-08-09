@@ -24,7 +24,7 @@ def log_in():
                     id, stored_password_base64, role_id, firstname, lastname, is_blocked = result
 
                     if is_blocked :
-                        flash("email blocked by admin ",'error')
+                        flash("email blocked by admin ",'danger')
                         return render_template('login.html')
 
                     # Decode the stored password from base64
