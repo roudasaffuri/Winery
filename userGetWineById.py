@@ -9,7 +9,7 @@ def getWineById(id):
         sql = "SELECT * FROM wines WHERE id = %s;"
         cursor.execute(sql, (id,))
         result = cursor.fetchone()
-        print(result)
+
 
         if result is None:
             return "Product not found", 404

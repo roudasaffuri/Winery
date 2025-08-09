@@ -104,77 +104,66 @@ def first10wines():
         # Close the cursor and database connection
         disconnection(conn, cursor)
 
+
 def get_top5_wines_last_week():
     """  מחזיר את 5 היינות הנמכרים ביותר בשבוע האחרון.    """
 
-    try:
-        now = datetime.now()
-        week_ago = now - timedelta(days=7)
+    now = datetime.now()
+    week_ago = now - timedelta(days=7)
 
-        conn = create_connection()
-        cur = conn.cursor()
+    conn = create_connection()
+    cur = conn.cursor()
 
-        # שלב 1 – שליפת כל רכישות השבוע האחרון
-        cur.execute("""
-            SELECT purchase_id
-            FROM purchases
-            WHERE purchased_at BETWEEN %s AND %s
-        """, (week_ago, now))
-        result = cur.fetchall()
-        purchase_ids = [row[0] for row in result]
+    # שלב 1 – שליפת כל רכישות השבוע האחרון
+    cur.execute("""
+        SELECT purchase_id
+        FROM purchases
+        WHERE purchased_at BETWEEN %s AND %s
+    """, (week_ago, now))
+    result = cur.fetchall()
+    purchase_ids = [row[0] for row in result]
 
-        if not purchase_ids:
-            disconnection(conn, cur)
-            return []  # אין רכישות בשבוע האחרון
+    if not purchase_ids:
+        disconnection(conn, cur)
+        return []  # אין רכישות בשבוע האחרון
 
-        # שלב 2 – חישוב הכמויות של היינות מתוך הרכישות האלו
-        # מחפש בטבלת הpurchase_items
-        # purchase_id את כל ה
-        cur.execute("""
-            SELECT 
-                pi.wine_id,
-                SUM(pi.quantity) AS total_qty
-            FROM purchase_items pi
-            WHERE pi.purchase_id = ANY(%s)
-            GROUP BY pi.wine_id
-            ORDER BY total_qty DESC
-            LIMIT 5
-        """, (purchase_ids,))
-        top_wines_qty = cur.fetchall()
-        print(top_wines_qty)
-        top5 = []
-        for top in top_wines_qty:
-            sql = "SELECT * FROM wines WHERE id = %s"
-            cur.execute(sql, (top[0],))
-            result = cur.fetchone()
+    # שלב 2 – חישוב הכמויות של היינות מתוך הרכישות האלו
+    # מחפש בטבלת הpurchase_items
+    # purchase_id את כל ה
+    cur.execute("""
+        SELECT 
+            pi.wine_id,
+            SUM(pi.quantity) AS total_qty
+        FROM purchase_items pi
+        WHERE pi.purchase_id = ANY(%s)
+        GROUP BY pi.wine_id
+        ORDER BY total_qty DESC
+        LIMIT 5
+    """, (purchase_ids,))
+    top_wines_qty = cur.fetchall()
 
-            wine = Wine(
-                id=result[0],
-                wine_name=result[1],
-                wine_type=result[2],
-                image_url=result[3],
-                price=result[4],
-                stock=result[5],
-                description=result[6],
-                best_before=result[7],
-                product_registration_date=result[8],
-                discount=result[9],
-                final_price=result[10]
-            )
-            top5.append(wine)
+    top5 = []
+    for top in top_wines_qty:
+        sql = "SELECT * FROM wines WHERE id = %s"
+        cur.execute(sql, (top[0],))
+        result = cur.fetchone()
 
-        return top5
+        wine = Wine(
+            id=result[0],
+            wine_name=result[1],
+            wine_type=result[2],
+            image_url=result[3],
+            price=result[4],
+            stock=result[5],
+            description=result[6],
+            best_before=result[7],
+            product_registration_date=result[8],
+            discount=result[9],
+            final_price=result[10]
+        )
+        top5.append(wine)
 
-    except Exception as e:
-        print(f"Error in get_top5_wines_last_week: {e}")
-        return []
-
-    finally:
-        try:
-            disconnection(conn, cur)
-        except:
-            pass
-
+    return top5
 
 def getAllwines():
     conn = create_connection()
