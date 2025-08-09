@@ -14,10 +14,9 @@ from context_processors import inject_context
 from adminDeleteWine import deleteWineFromDB
 from userGetSinglePage import userGetSinglePage
 from managerManageAdmins import manageAdmins
-from paypalPayment import paypalPayment
+from paypal_integration import start_paypal_payment, finalize_paypal_payment
 from userItemsInCart import get_cart_count
 from userPaymentByCard import PaymentByCard
-from userPaymentByPaypal import paymentByPaypal
 from userPurchseHistory import getPurchaseHistory
 from userSentMessage import contactUs
 from registration import registration
@@ -130,12 +129,11 @@ def add_to_cart(product_id):
 # Paypal
 @app.route('/paypal_payment/<float:total>')
 def paypal_payment(total):
-    return paypalPayment(total)
+    return start_paypal_payment(total)
 
 @app.route('/paypal_execute')
 def paypal_execute():
-    return paymentByPaypal()
-
+    return finalize_paypal_payment()
 
 # Credit Card
 @app.route('/userCreditCardCheckout')
