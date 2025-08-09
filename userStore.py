@@ -6,6 +6,7 @@ from db_connection import create_connection, disconnection
 
 
 def getStorePage():
+    # first10wines() ,get_top5_wines_last_week() and getAllwines() ->Returns a list of objects Wine
     recommendedForYou = first10wines()
     top5_wines = get_top5_wines_last_week()
     allwines = getAllwines()
@@ -104,49 +105,76 @@ def first10wines():
         disconnection(conn, cursor)
 
 def get_top5_wines_last_week():
-    # now = datetime(2025, 4, 20, 0, 0, 0) #for custom date replace with line 135
-    now = datetime.now()
-    # timedelta(days=7) — creates a time interval of 7 days.
-    # now - timedelta(days=7) — subtracts that time interval from now, giving you the date/time one week earlier.
-    week_ago = now - timedelta(days=7)
+    """  מחזיר את 5 היינות הנמכרים ביותר בשבוע האחרון.    """
 
-    conn = create_connection()
-    cur  = conn.cursor()
-    cur.execute(
-         """
-        SELECT 
-          w.id,
-          w.wine_name,
-          w.image_url,
-          w.price,
-          w.final_price,
-          SUM(pi.quantity) AS total_qty 
-        FROM purchases p
-        JOIN purchase_items pi
-          ON p.purchase_id = pi.purchase_id
-        JOIN wines w
-          ON w.id = pi.wine_id
-        WHERE p.purchased_at BETWEEN %s AND %s
-        GROUP BY w.id, w.wine_name, w.image_url, w.price, w.final_price
-        ORDER BY total_qty DESC
-        LIMIT 5
-        """,
-        (week_ago, now)
-    )
-    rows = cur.fetchall()
-    cur.close()
-    conn.close()
-    # Map to dicts so Jinja can do wine.id, wine.wine_name, etc.
-    return [
-        {
-            'id':        r[0],
-            'wine_name': r[1],
-            'image_url': r[2],
-            'price':     float(r[3]),
-            'final_price':float(r[4]),
-        }
-        for r in rows
-    ]
+    try:
+        now = datetime.now()
+        week_ago = now - timedelta(days=7)
+
+        conn = create_connection()
+        cur = conn.cursor()
+
+        # שלב 1 – שליפת כל רכישות השבוע האחרון
+        cur.execute("""
+            SELECT purchase_id
+            FROM purchases
+            WHERE purchased_at BETWEEN %s AND %s
+        """, (week_ago, now))
+        result = cur.fetchall()
+        purchase_ids = [row[0] for row in result]
+
+        if not purchase_ids:
+            disconnection(conn, cur)
+            return []  # אין רכישות בשבוע האחרון
+
+        # שלב 2 – חישוב הכמויות של היינות מתוך הרכישות האלו
+        # מחפש בטבלת הpurchase_items
+        # purchase_id את כל ה
+        cur.execute("""
+            SELECT 
+                pi.wine_id,
+                SUM(pi.quantity) AS total_qty
+            FROM purchase_items pi
+            WHERE pi.purchase_id = ANY(%s)
+            GROUP BY pi.wine_id
+            ORDER BY total_qty DESC
+            LIMIT 5
+        """, (purchase_ids,))
+        top_wines_qty = cur.fetchall()
+        print(top_wines_qty)
+        top5 = []
+        for top in top_wines_qty:
+            sql = "SELECT * FROM wines WHERE id = %s"
+            cur.execute(sql, (top[0],))
+            result = cur.fetchone()
+
+            wine = Wine(
+                id=result[0],
+                wine_name=result[1],
+                wine_type=result[2],
+                image_url=result[3],
+                price=result[4],
+                stock=result[5],
+                description=result[6],
+                best_before=result[7],
+                product_registration_date=result[8],
+                discount=result[9],
+                final_price=result[10]
+            )
+            top5.append(wine)
+
+        return top5
+
+    except Exception as e:
+        print(f"Error in get_top5_wines_last_week: {e}")
+        return []
+
+    finally:
+        try:
+            disconnection(conn, cur)
+        except:
+            pass
+
 
 def getAllwines():
     conn = create_connection()

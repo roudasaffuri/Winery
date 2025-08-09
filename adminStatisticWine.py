@@ -17,15 +17,10 @@ def viewStatisticByIdWine():
     conn = create_connection()
     cursor = conn.cursor()
 
-    sql = "SELECT * FROM wines WHERE id = %s;"
-    cursor.execute(sql, (wine_id,))
-    result = cursor.fetchone()
-
 
     sql = "SELECT * FROM purchase_items WHERE wine_id = %s;"
     cursor.execute(sql, (wine_id,))
     result = cursor.fetchall()
-    discount = result[9]
 
 
     for row in result :
@@ -42,21 +37,21 @@ def viewStatisticByIdWine():
         elif yearOfPurchase == lastYear:
             monthsOfLastYear[monthOfPurchase-1] += int(row[4])
 
-
-
-
-    n = len(monthsOfLastYear)
+    # Standard Deviation
     sum_x = sum(monthsOfLastYear)
-    sum_x_squared = sum(x ** 2 for x in monthsOfLastYear)
-
-    variance = (sum_x_squared - (sum_x ** 2) / n) / (n - 1)
+    mean = sum_x/12
+    variance = sum((x - mean) ** 2 for x in monthsOfLastYear) / (12 - 1)
     std_dev = variance ** 0.5
+
+    # Average Sales
     media = (sum_x/12)
+    # Recommended Monthly Stock
     recommended = round(media + std_dev)
+
     disconnection(conn,cursor)
 
 
     return render_template("adminViewStatistic.html", labels=labels, last_year=monthsOfLastYear, this_year=monthsOfThisYear,
-                           std_dev=round(std_dev), media=round(media), recommended=recommended, discount=discount)
+                           std_dev=round(std_dev), media=round(media), recommended=recommended)
 
 
