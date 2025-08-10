@@ -10,12 +10,12 @@ def getStorePage():
     recommendedForYou = first10wines()
     top5_wines = get_top5_wines_last_week()
     allwines = getAllwines()
-    top6WinesByUser = getTop6WinesByUser()
+    top6WinesByUser = getUserFavoriteWines()
     return render_template('userStore.html',
                            recommendedForYou=recommendedForYou,
                            top5_wines=top5_wines,
                            all_wines=allwines,
-                           pastPurchaseWines= top6WinesByUser
+                           favoriteWines= top6WinesByUser
                            )
 
 
@@ -200,9 +200,9 @@ def getAllwines():
     return allWines
 
 
-def getTop6WinesByUser():
+def getUserFavoriteWines():
     """
-    מחזירה את 5 היינות שנקנו הכי הרבה על ידי המשתמש לפי כמות,
+    מחזירה את 6 היינות שנקנו הכי הרבה על ידי המשתמש לפי כמות,
     לפי כל ההיסטוריה (לא מוגבל לשבוע האחרון).
     """
     conn = create_connection()

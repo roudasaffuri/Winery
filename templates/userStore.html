@@ -157,12 +157,12 @@
 
 <div class="container my-5">
   <div class="text-center mb-4">
-    <h2 style="color: #722f37; font-weight: 600;">Wines You Bought in the Past</h2>
-    <p class="text-muted">Wines you bought in the past</p>
+    <h2 style="color: #722f37; font-weight: 600;">Your Favorite Taste Choice</h2>
+    <p class="text-muted">Depending on Your Previous Purchases</p>
   </div>
   <div class="row justify-content-center">
-    {% if pastPurchaseWines %}
-      {% for wine in pastPurchaseWines %}
+    {% if favoriteWines %}
+      {% for wine in favoriteWines %}
         <div class="col-lg-2 col-md-3 col-sm-6 mb-4 wine-item featured-wine" data-wine-type="{{ wine.wine_type|lower }}">
           <div class="card h-100 shadow-sm border-0" style="transition: transform 0.3s;">
             <div class="position-relative">
@@ -171,6 +171,9 @@
                    alt="{{ wine.wine_name }}"
                    style="height: 220px; object-fit: cover;">
               <div class="position-absolute top-0 start-0 m-2">
+                <span class="badge bg-danger">
+                        <i class="fas fa-heart"></i> Favorite
+                      </span>
                 {% if wine.final_price != wine.price %}
                   <div class="mt-1">
                     <span class="badge bg-danger">
