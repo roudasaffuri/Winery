@@ -10,7 +10,13 @@ def getStorePage():
     recommendedForYou = first10wines()
     top5_wines = get_top5_wines_last_week()
     allwines = getAllwines()
-    return render_template('userStore.html', recommendedForYou=recommendedForYou, top5_wines=top5_wines,all_wines=allwines)
+    top6WinesByUser = getTop6WinesByUser()
+    return render_template('userStore.html',
+                           recommendedForYou=recommendedForYou,
+                           top5_wines=top5_wines,
+                           all_wines=allwines,
+                           pastPurchaseWines= top6WinesByUser
+                           )
 
 
 # Define a Wine class to structure the data
@@ -76,6 +82,9 @@ def first10wines():
         # Extract only the unique wine IDs, sorted by popularity
         sorted_unique_wine_ids = [item[0] for item in sorted_items]
 
+        if not sorted_unique_wine_ids:
+            # אין יינות להמליץ
+            return []
         first10Wines = []
         for i in range(0, 10):
             sql = "SELECT * FROM wines WHERE id = %s;"
@@ -189,3 +198,61 @@ def getAllwines():
         )
         allWines.append(wine)
     return allWines
+
+
+def getTop6WinesByUser():
+    """
+    מחזירה את 5 היינות שנקנו הכי הרבה על ידי המשתמש לפי כמות,
+    לפי כל ההיסטוריה (לא מוגבל לשבוע האחרון).
+    """
+    conn = create_connection()
+    cur = conn.cursor()
+    user_id = session.get('id')
+    # שלב 1 - שליפת כל מזהי הרכישות של המשתמש
+    cur.execute("""
+        SELECT purchase_id
+        FROM purchases
+        WHERE user_id = %s
+    """, (user_id,))
+    purchase_ids = [row[0] for row in cur.fetchall()]
+
+    if not purchase_ids:
+        disconnection(conn, cur)
+        return []  # אין רכישות כלל למשתמש
+
+    # שלב 2 - חישוב כמויות לפי יין מכל הרכישות של המשתמש
+    cur.execute("""
+        SELECT 
+            pi.wine_id,
+            SUM(pi.quantity) AS total_qty
+        FROM purchase_items pi
+        WHERE pi.purchase_id = ANY(%s)
+        GROUP BY pi.wine_id
+        ORDER BY total_qty DESC
+        LIMIT 6
+    """, (purchase_ids,))
+
+    top_wines_qty = cur.fetchall()
+
+    top6 = []
+    for wine_id, total_qty in top_wines_qty:
+        cur.execute("SELECT * FROM wines WHERE id = %s", (wine_id,))
+        row = cur.fetchone()
+        if row:
+            wine = Wine(
+                id=row[0],
+                wine_name=row[1],
+                wine_type=row[2],
+                image_url=row[3],
+                price=row[4],
+                stock=row[5],
+                description=row[6],
+                best_before=row[7],
+                product_registration_date=row[8],
+                discount=row[9],
+                final_price=row[10]
+            )
+            top6.append(wine)
+
+    disconnection(conn, cur)
+    return top6
