@@ -1,7 +1,7 @@
 from flask import request, render_template
 from db_connection import create_connection ,disconnection
 
-def manageAdmins():
+def getAllUsers():
 
     search = request.args.get('search', '').strip()
 

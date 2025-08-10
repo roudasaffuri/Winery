@@ -3,7 +3,7 @@ from flask import request, render_template
 from db_connection import create_connection ,disconnection
 
 
-def manageUsers():
+def getRegularUsers():
 
     search = request.args.get('search', '').strip()
 

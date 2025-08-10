@@ -43,7 +43,7 @@ def start_paypal_payment(total):
         flash("Error creating PayPal payment.", "error")
 
     conn.close()
-    return redirect(url_for('home'))
+    return redirect(url_for('userHomePage'))
 
 
 def finalize_paypal_payment():

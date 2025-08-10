@@ -3,9 +3,6 @@ from db_connection import create_connection
 from userSendOrderConfirmationEmail import send_order_confirmation_email
 from flask import session, flash, redirect, url_for, render_template , g
 
-from userItemsInCart import get_cart_count
-
-
 def complete_order():
     """
     1. Get user id  using session

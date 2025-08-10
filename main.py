@@ -5,7 +5,7 @@ from managerChangeRole import changeRole
 from adminDiscountWineById import discountWine
 from adminEditProduct import adminEditProduct
 from adminGetAllWines import getAllWines
-from adminManageUsers import manageUsers
+from adminManageUsers import getRegularUsers
 from adminStatisticWine import viewStatisticByIdWine
 from adminUpdateWine import updateWine
 from adminblockUser import blockUser
@@ -13,7 +13,7 @@ from complete_order import complete_order
 from context_processors import inject_context
 from adminDeleteWine import deleteWineFromDB
 from userGetSinglePage import userGetSinglePage
-from managerManageAdmins import manageAdmins
+from managerManageAdmins import getAllUsers
 from paypal_integration import start_paypal_payment, finalize_paypal_payment
 from userItemsInCart import get_cart_count
 from userPaymentByCard import PaymentByCard
@@ -179,7 +179,7 @@ def update_wine():
 
 @app.route('/adminManageUsers')
 def adminManageUsers():
-    return manageUsers()
+    return getRegularUsers()
 
 
 @app.route('/block_user', methods=['POST'])
@@ -205,7 +205,7 @@ def adminStatistics():
 # - - - - - - - - - - - - - - Manager  - - - - - - - - - - - - - - #
 @app.route('/managerManageAdmins')
 def managerManageAdmins():
-    return manageAdmins()
+    return getAllUsers()
 
 
 @app.route('/changeRole', methods=['POST'])
