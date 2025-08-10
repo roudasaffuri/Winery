@@ -25,4 +25,4 @@ def discountWine() :
     else:
         flash("No wine found with that ID", "warning")
     disconnection(conn,cursor)
-    return redirect(url_for('adminStatistics'))
+    return redirect(url_for('adminManageProducts'))

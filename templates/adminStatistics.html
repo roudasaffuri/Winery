@@ -75,8 +75,6 @@
                                     <th>Quantity Available</th>
                                     <th>Status</th>
                                     <th>View Statics</th>
-                                    <th>Discount</th>
-                                    <th>Discounted Price</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -90,7 +88,7 @@
                                             <span class="wine-name">{{ wine.wine_name }}</span>
                                         </td>
                                         <td>
-                                            <span class="price-text">${{ '%.2f' | format(wine.price) }}</span>
+                                            <span class="price-text">${{ '%.2f' | format(wine.final_price) }}</span>
                                         </td>
                                         <td>
                                             <span class="stock-quantity">{{ wine.stock }}</span>
@@ -117,27 +115,6 @@
                                                 </button>
                                             </form>
                                         </td>
-                                        <td>
-                                            <form method="POST" action="{{ url_for('discountWineById') }}">
-                                                <input type="hidden" name="wine_id" value="{{ wine.id }}">
-                                                <select name="discount" class="discount-select" onchange="this.form.submit()">
-                                                    {% for i in range(0, 55, 5) %}
-                                                        <option value="{{ i }}" {% if wine.discount == i %}selected{% endif %}>
-                                                            {{ i }}%
-                                                        </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </form>
-                                        </td>
-                                        {% if wine.discount != 0%}
-                                        <td>
-                                            <span class="price-text">${{ '%.2f' | format(wine.final_price) }}</span>
-                                        </td>
-                                        {% else %}
-                                        <td>
-                                            <span class="price-text">No Discount</span>
-                                        </td>
-                                        {% endif %}
                                     </tr>
                                     {% endfor %}
                                 {% else %}
