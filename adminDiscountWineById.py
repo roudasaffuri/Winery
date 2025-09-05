@@ -2,7 +2,7 @@ from flask import flash, redirect, url_for, request
 from db_connection import create_connection ,disconnection
 
 
-def discountWine() :
+def discountWine():
     wine_id = request.form.get('wine_id')
     discount = request.form.get('discount')
     discount = int(discount)
