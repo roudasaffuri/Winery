@@ -6,7 +6,9 @@ def getPurchaseHistory():
     conn = create_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT * FROM purchases WHERE user_id = %s", (session['id'],))
+    user_id = session.get('id')
+
+    cursor.execute("SELECT * FROM purchases WHERE user_id = %s", (user_id,))
     purchases = cursor.fetchall()
 
     history_data = []

@@ -56,7 +56,7 @@
             {% if wine.stock > 0 %}
             <form action="{{ url_for('add_to_cart', product_id=wine.id) }}" method="post" class="d-flex align-items-center">
               <div class="input-group me-3" style="width: 100px;">
-                <input type="number" name="quantity" class="form-control text-center" value="1" min="1" max="{{ wine.stock }}" id="quantity">
+                <input type="number" name="quantity" class="form-control text-center" value="1" min="1" max="{{ wine.stock }}" id="quantity" required >
               </div>
               <button type="submit" class="btn" style="background-color: #722f37; color: white; border-color: #722f37;">
                 <i class="fas fa-shopping-cart me-2"></i>Add to cart
