@@ -1,5 +1,6 @@
 from decimal import Decimal
 from db_connection import create_connection
+from userClearTheCart import clearTheCart
 from userSendOrderConfirmationEmail import send_order_confirmation_email
 from flask import session, flash, redirect, url_for, render_template , g
 
@@ -76,15 +77,7 @@ def complete_order():
         )
 
     # — 6) Clear the cart —
-    cursor.execute("""
-        DELETE FROM cart_items
-        USING carts
-        WHERE cart_items.cart_id = carts.cart_id
-          AND carts.user_id = %s
-    """, (user_id,))
-
-    conn.commit()
-    conn.close()
+    clearTheCart(user_id)
 
     # — 7) Send confirmation email —
     summary = {
