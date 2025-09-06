@@ -18,6 +18,7 @@
         </div>
         <div class="col-md-7">
           <h1 class="display-5 fw-bold mb-3">{{ wine.wine_name }}</h1>
+
 {% if best_seller == 1 %}
     <span class="badge" style="background-color: #d4af37; color: white;">Best Seller 🔥</span>
 
@@ -60,6 +61,7 @@
               <button type="submit" class="btn" style="background-color: #722f37; color: white; border-color: #722f37;">
                 <i class="fas fa-shopping-cart me-2"></i>Add to cart
               </button>
+                <input type="hidden" name="wine_name" value="{{ wine.wine_name }}">
             </form>
             {% else %}
             <p style="color: red;">Out of Stock</p>

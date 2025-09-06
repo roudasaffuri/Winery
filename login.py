@@ -28,7 +28,9 @@ def log_in():
                         return render_template('login.html')
 
                     # Decode the stored password from base64
+                    # Base64 ➝ bytes
                     stored_password = base64.b64decode(stored_password_base64)
+
                     decrypted_password = decode_string(stored_password)
 
                     # Verify the password

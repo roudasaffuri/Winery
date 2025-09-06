@@ -15,6 +15,8 @@ def registration():
 
         # Encrypt and encode the password
         password_encrypt = encode_string(password)
+        # base64.b64encode   bytes --> bytes64
+        # decode('utf-8')   bytes64 --> string
         password_encrypt_base64 = base64.b64encode(password_encrypt).decode('utf-8')
 
         conn = create_connection()

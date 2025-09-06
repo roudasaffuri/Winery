@@ -1,11 +1,13 @@
 from flask import session, flash, redirect, url_for, request
 from db_connection import create_connection
-from userGetWineById import getWineById
+
 
 
 def handle_add_to_cart(product_id):
+
     quantity = int(request.form.get('quantity', 1))
-    wine = getWineById(product_id)
+
+    wine_name = request.form.get('wine_name')
 
     conn = create_connection()
     cur = conn.cursor()
@@ -17,6 +19,7 @@ def handle_add_to_cart(product_id):
         cur.execute("SELECT cart_id FROM carts WHERE user_id = %s", (user_id,))
         row = cur.fetchone()
         if row:
+            # row[0] -> cart_id
             cart_id = row[0]
 
         else:
@@ -27,10 +30,10 @@ def handle_add_to_cart(product_id):
             cart_id = cur.fetchone()[0]
             conn.commit()
 
-        # Add or update cart_item
+        # If exist update cart_item
         cur.execute(
             "SELECT cart_item_id, quantity FROM cart_items WHERE cart_id = %s AND wine_id = %s",
-            (cart_id, wine.id)
+            (cart_id, product_id)
         )
         item = cur.fetchone()
         if item:
@@ -40,13 +43,14 @@ def handle_add_to_cart(product_id):
                 "UPDATE cart_items SET quantity = %s,  added_at = NOW() WHERE cart_item_id = %s",
                 (new_qty, cart_item_id)
             )
+        # else Add it to cart_items
         else:
             cur.execute(
                 "INSERT INTO cart_items (cart_id, wine_id, quantity, added_at) VALUES (%s, %s, %s, NOW())",
-                (cart_id, wine.id, quantity)
+                (cart_id, product_id, quantity)
             )
         conn.commit()
-        flash(f"{wine.wine_name} added to cart!" , 'success')
+        flash(f"{wine_name} added to cart!" , 'success')
     except Exception as e:
         flash("Error adding product to cart.", 'error')
 

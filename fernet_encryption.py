@@ -16,5 +16,5 @@ def encode_string(input_string):
     return cipher_suite.encrypt(input_string.encode())
 
 def decode_string(encrypted_string):
-    """Decrypts the input string."""
+    """Decrypts the input bytes(encrypted_string)."""
     return cipher_suite.decrypt(encrypted_string).decode()

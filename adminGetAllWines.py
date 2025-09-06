@@ -38,7 +38,7 @@ def getAllWines():
         # Add WHERE clause if conditions exist
         if conditions:
             base_query += " WHERE " + " AND ".join(conditions)
-            print(base_query)
+
 
         # Add ORDER BY
         if sort_by_stock:
