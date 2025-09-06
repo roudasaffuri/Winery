@@ -6,7 +6,7 @@ from db_connection import create_connection, disconnection
 def getCart():
 
     conn = create_connection()
-    cur = None
+
     cart_items = []
     try:
         cur = conn.cursor()
@@ -30,9 +30,11 @@ def getCart():
                    WHERE ci.cart_id = %s
                """
             cur.execute(query, (cart_id,))
-            for cart_item_id, quantity, wine_id, wine_name, image_url, stock, final_price in cur.fetchall():
+            result = cur.fetchall()
+
+            for cart_item_id, quantity, wine_id, wine_name, image_url, stock, final_price in result:
                 if stock == 0:
-                    flash("Your cart was updated regarding to products stock.",'success')
+                    flash(f"Your cart was updated regarding to products stock, {wine_name} was removed",'warning')
                     cur.execute("DELETE FROM cart_items WHERE wine_id = %s", (wine_id,))
                     conn.commit()
                     continue
