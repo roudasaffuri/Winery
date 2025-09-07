@@ -4,6 +4,9 @@ from userClearTheCart import clearTheCart
 from userSendOrderConfirmationEmail import send_order_confirmation_email
 from flask import session, flash, redirect, url_for, render_template , g
 
+from userUpdateWineStock import updateWineInStock
+
+
 def complete_order():
     """
     1. Get user id  using session
@@ -17,9 +20,7 @@ def complete_order():
     9. Update the globle object g.cart_count to 0
     Returns the total amount, or a redirect Response if stock is insufficient.
     """
-
     user_id = session.get('id')
-
     conn    = create_connection()
     cursor  = conn.cursor()
 
@@ -71,14 +72,13 @@ def complete_order():
             VALUES (%s, %s, %s, %s, %s, %s)
         """, (purchase_id, wine_id, wine_name, qty, price, subtotal_item))
 
-        cursor.execute(
-            "UPDATE wines SET stock = stock - %s WHERE id = %s",
-            (qty, wine_id)
-        )
-    conn.commit()
-    # — 6) Clear the cart —
-    clearTheCart(user_id)
+        updateWineInStock(cursor,qty, wine_id)
 
+
+    # — 6) Clear the cart —
+    clearTheCart(cursor, user_id)
+
+    conn.commit()
     # — 7) Send confirmation email —
     summary = {
         "subtotal":      subtotal,
