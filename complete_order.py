@@ -75,7 +75,7 @@ def complete_order():
             "UPDATE wines SET stock = stock - %s WHERE id = %s",
             (qty, wine_id)
         )
-
+    conn.commit()
     # — 6) Clear the cart —
     clearTheCart(user_id)
 

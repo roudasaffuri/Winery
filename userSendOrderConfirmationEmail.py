@@ -18,7 +18,7 @@ def send_order_confirmation_email(user_email, order_summary, purchase_id):
     # Format the items list into a string
     formatted_items_list = "\n".join([f"• {item['quantity']}x {item['wine_name']} - ${item['price_at_purchase']:.2f}"
                                       for item in items_list])
-
+    print(formatted_items_list)
     # Format the email with HTML for styling
     html_content = f"""
     <html>
