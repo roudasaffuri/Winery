@@ -213,7 +213,7 @@ def change_role():
     return changeRole()
 
 
-# - - - - - - - - - - - - - - Logout User and Admin - - - - - - - - - - - - - - #
+# - - - - - - - - - - - - - - Logout User and Admin Manager - - - - - - - - - - - - - - #
 @app.route('/logout')
 def logout():
     return exitAndClearSession()

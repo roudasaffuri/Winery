@@ -44,7 +44,7 @@ def complete_order():
                   "Please adjust your cart and try again.", "warning")
             conn.close()
             # return a redirect Response; it has a status_code attribute (e.g. 302 for redirects, 200 for OK)
-            return redirect(url_for('cart'))
+            return redirect(url_for('userCart'))
 
     # — 3) Calculate totals —
     subtotal = Decimal('0.00')
