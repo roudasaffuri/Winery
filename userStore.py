@@ -19,7 +19,6 @@ def getStorePage():
                            )
 
 
-# Define a Wine class to structure the data
 def first10wines():
     # Create database connection
     conn = create_connection()
@@ -27,14 +26,11 @@ def first10wines():
     user_id = session.get('id')
 
     try:
-        # Retrieve the selected user from the database
-        user_get_sql = "SELECT * FROM users WHERE id = %s"
-        cursor.execute(user_get_sql, (user_id,))
-        result = cursor.fetchall()
-
-        # Extract birth year and gender
-        birth_year = result[0][5]  # Assuming birth_year is at index 5
-        user_gender = (result[0][6]).title()  # Assuming gender is at index 6 and capitalizing it
+        # Retrieve the selected user from the database Extract birth year and gender
+        cursor.execute("SELECT birth_year, gender FROM users WHERE id = %s", (user_id,))
+        row = cursor.fetchone()
+        birth_year = row[0]
+        user_gender = row[1].title()
 
         # Calculate the user's age
         current_year = datetime.now().year
@@ -51,7 +47,6 @@ def first10wines():
 
         # Fetch users within the same age range
         results = cursor.fetchall()
-        # print(results)
 
         # Extract user IDs
         list_id_users = [row[0] for row in results]
