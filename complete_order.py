@@ -1,5 +1,5 @@
 from decimal import Decimal
-from db_connection import create_connection
+from db_connection import create_connection ,disconnection
 from userClearTheCart import clearTheCart
 from userSendOrderConfirmationEmail import send_order_confirmation_email
 from flask import session, flash, redirect, url_for, render_template , g
@@ -21,8 +21,8 @@ def complete_order():
     Returns the total amount, or a redirect Response if stock is insufficient.
     """
     user_id = session.get('id')
-    conn    = create_connection()
-    cursor  = conn.cursor()
+    conn = create_connection()
+    cursor = conn.cursor()
 
     # — 1) Fetch cart items (including current stock) —
     cursor.execute("""
@@ -79,6 +79,8 @@ def complete_order():
     clearTheCart(cursor, user_id)
 
     conn.commit()
+    disconnection(conn,cursor)
+
     # — 7) Send confirmation email —
     summary = {
         "subtotal":      subtotal,

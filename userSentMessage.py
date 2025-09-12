@@ -20,6 +20,7 @@ def contactUs():
 
 
 def sentMessage(data):
+    
     name = data["name"]
     email = data["email"]
     phone = data["phone"]

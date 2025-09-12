@@ -37,7 +37,7 @@ def getAllWines():
 
         # Add WHERE clause if conditions exist
         if conditions:
-            base_query += " WHERE "+"".join(conditions)
+            base_query += " WHERE " + " AND ".join(conditions)
 
 
         # Add ORDER BY
