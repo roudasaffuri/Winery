@@ -1,6 +1,3 @@
-from db_connection import create_connection
-
-
 def clearTheCart(cursor, user_id):
     cursor.execute("""
         DELETE FROM cart_items

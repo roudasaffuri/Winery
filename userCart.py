@@ -1,8 +1,7 @@
 from decimal import Decimal
 from flask import session, flash, render_template, g
 from db_connection import create_connection, disconnection
-
-
+from userItemsInCart import get_cart_count
 def getCart():
 
     conn = create_connection()
@@ -34,7 +33,6 @@ def getCart():
 
             for cart_item_id, quantity, wine_id, wine_name, image_url, stock, final_price in result:
                 if stock == 0:
-                    g.cart_count = 0
                     flash(f"Your cart was updated regarding to products stock, {wine_name} was removed",'warning')
                     cur.execute("DELETE FROM cart_items WHERE wine_id = %s", (wine_id,))
                     conn.commit()
@@ -42,7 +40,6 @@ def getCart():
                 elif quantity > stock:
                     flash(f"Your cart was updated, only {stock} left in stock for {wine_name}. Requested {quantity}",'warning')
                     quantity = stock
-                    g.cart_count=stock
                     cur.execute("UPDATE cart_items SET quantity = %s WHERE cart_item_id = %s", (stock, cart_item_id))
                     conn.commit()
 
@@ -73,7 +70,7 @@ def getCart():
         shipping = Decimal('0.00')
 
     total = subtotal + tax + shipping
-
+    g.cart_count = get_cart_count()
     return render_template("userCart.html",
                            cart_items=cart_items,
                            subtotal=subtotal,
