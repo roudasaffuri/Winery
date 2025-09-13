@@ -18,24 +18,24 @@ def viewStatisticByIdWine():
     cursor = conn.cursor()
 
 
-    sql = "SELECT * FROM purchase_items WHERE wine_id = %s;"
+    sql = "SELECT purchase_id , quantity FROM purchase_items WHERE wine_id = %s;"
     cursor.execute(sql, (wine_id,))
     result = cursor.fetchall()
 
 
     for row in result :
-        purchase_id = row[1]
-        sql = "SELECT * FROM purchases WHERE purchase_id = %s;"
+        purchase_id = row[0]
+        sql = "SELECT purchased_at FROM purchases WHERE purchase_id = %s;"
         cursor.execute(sql, (purchase_id,))
         res = cursor.fetchone()
         # print(result[5]) # time ==>  2025-05-24 15:00:22.143595 ==> to get just the year 2025
-        yearOfPurchase = int((str(res[5]))[:4])
-        monthOfPurchase = int((str(res[5]))[5:7]) #  ==> to get just the month
+        yearOfPurchase = int((str(res[0]))[:4])
+        monthOfPurchase = int((str(res[0]))[5:7]) #  ==> to get just the month
         if yearOfPurchase == thisYear:
-            monthsOfThisYear[monthOfPurchase-1] += int(row[4])
+            monthsOfThisYear[monthOfPurchase-1] += int(row[1])
 
         elif yearOfPurchase == lastYear:
-            monthsOfLastYear[monthOfPurchase-1] += int(row[4])
+            monthsOfLastYear[monthOfPurchase-1] += int(row[1])
 
     # Standard Deviation
     sum_x = sum(monthsOfLastYear)
