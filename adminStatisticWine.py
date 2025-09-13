@@ -28,7 +28,7 @@ def viewStatisticByIdWine():
         sql = "SELECT purchased_at FROM purchases WHERE purchase_id = %s;"
         cursor.execute(sql, (purchase_id,))
         res = cursor.fetchone()
-        # print(result[5]) # time ==>  2025-05-24 15:00:22.143595 ==> to get just the year 2025
+        # print(res[0]) # time ==>  2025-05-24 15:00:22.143595 ==> to get just the year 2025
         yearOfPurchase = int((str(res[0]))[:4])
         monthOfPurchase = int((str(res[0]))[5:7]) #  ==> to get just the month
         if yearOfPurchase == thisYear:
