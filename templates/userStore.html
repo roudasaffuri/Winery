@@ -20,17 +20,14 @@
 
   <main class="mb-4">
 
-
-
-
-
+  {% if top5_wines %}
     <div class="container my-5">
       <div class="text-center mb-4">
         <h2 style="color: #722f37; font-weight: 600;">Weekly Featured Selection</h2>
-        <p class="text-muted">Our Top 5 Bestsellers This Week</p>
+        <p class="text-muted">Our Bestsellers This Week</p>
       </div>
       <div class="row justify-content-center" id="featured-wines-container">
-        {% if top5_wines %}
+
           {% for wine in top5_wines %}
             <div class="col-lg-2 col-md-3 col-sm-6 mb-4 wine-item featured-wine" data-wine-type="{{ wine.wine_type|lower }}">
               <div class="card h-100 shadow-sm border-0" style="transition: transform 0.3s;">
@@ -79,12 +76,9 @@
               </div>
             </div>
           {% endfor %}
-        {% else %}
-          <p class="text-center text-muted">No featured wines available at the moment.</p>
-        {% endif %}
       </div>
     </div>
-
+  {% endif %}
 
     <div class="container my-5">
       <div class="text-center mb-4">
