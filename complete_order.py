@@ -1,6 +1,7 @@
 from decimal import Decimal
 from db_connection import create_connection ,disconnection
 from userClearTheCart import clearTheCart
+from userItemsInCart import get_cart_count
 from userSendOrderConfirmationEmail import send_order_confirmation_email
 from flask import session, flash, redirect, url_for, render_template , g
 
@@ -35,7 +36,7 @@ def complete_order():
     """, (user_id,))
     cart_items = cursor.fetchall()
     if not cart_items:
-        g.cart_count = 0
+
         return render_template("userCart.html")
     # — 2) Availability check —
     for _, _, qty, _, wine_name, stock in cart_items:
@@ -76,9 +77,8 @@ def complete_order():
 
 
     # — 6) Clear the cart —
-    clearTheCart(cursor, user_id)
+    clearTheCart(conn, cursor, user_id)
 
-    conn.commit()
     disconnection(conn,cursor)
 
     # — 7) Send confirmation email —
@@ -92,5 +92,5 @@ def complete_order():
         send_order_confirmation_email(session['useremail'], summary, purchase_id)
     flash('Purchase successfully! Email sent.', 'success')
 
-    g.cart_count = 0
+    g.cart_count = get_cart_count()
     return render_template("userCart.html")
