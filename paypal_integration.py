@@ -2,7 +2,6 @@
 import os
 from flask import redirect, url_for, flash, session, request, current_app as app
 import paypalrestsdk
-from db_connection import create_connection
 from complete_order import complete_order
 
 # Configure PayPal SDK once
@@ -16,7 +15,6 @@ def start_paypal_payment(total):
     """
     Create a PayPal payment and redirect the user to the approval URL.
     """
-    conn = create_connection()
     username = session.get('username')
 
     payment = paypalrestsdk.Payment({
@@ -35,14 +33,11 @@ def start_paypal_payment(total):
     if payment.create():
         for link in payment.links:
             if link.rel == 'approval_url':
-                conn.close()
                 return redirect(link.href)
         flash("Approval URL not found.", "error")
     else:
         app.logger.error("Error creating PayPal payment: %s", payment.error)
         flash("Error creating PayPal payment.", "error")
-
-    conn.close()
     return redirect(url_for('userHomePage'))
 
 
