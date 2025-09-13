@@ -20,6 +20,7 @@ def send_order_confirmation_email(user_email, order_summary, purchase_id):
                                       for item in items_list])
 
     # Format the email with HTML for styling
+
     html_content = f"""
     <html>
     <body style="font-family: 'Garamond', serif; color: #722F37; max-width: 600px; margin: 0 auto; padding: 20px;">
