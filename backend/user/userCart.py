@@ -1,7 +1,7 @@
 from decimal import Decimal
 from flask import session, flash, render_template, g
-from db_connection import create_connection, disconnection
-from userItemsInCart import get_cart_count
+from backend.server.db_connection import create_connection, disconnection
+from backend.user.userItemsInCart import get_cart_count
 def getCart():
 
     conn = create_connection()

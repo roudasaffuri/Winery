@@ -1,11 +1,11 @@
-from decimal import Decimal
-from db_connection import create_connection ,disconnection
-from userClearTheCart import clearTheCart
-from userItemsInCart import get_cart_count
-from userSendOrderConfirmationEmail import send_order_confirmation_email
 from flask import session, flash, redirect, url_for, render_template , g
+from decimal import Decimal
+from backend.server.db_connection import create_connection ,disconnection
+from backend.user.userClearTheCart import clearTheCart
+from backend.user.userItemsInCart import get_cart_count
+from backend.user.userSendOrderConfirmationEmail import send_order_confirmation_email
 
-from userUpdateWineStock import updateWineInStock
+from backend.user.userUpdateWineStock import updateWineInStock
 
 
 def complete_order():

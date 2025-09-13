@@ -1,5 +1,5 @@
-from ClassWine import Wine
-from db_connection import create_connection, disconnection
+from backend.server.ClassWine import Wine
+from backend.server.db_connection import create_connection, disconnection
 
 def getWineById(id):
     conn = create_connection()

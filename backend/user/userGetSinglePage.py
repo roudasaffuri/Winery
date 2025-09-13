@@ -1,6 +1,6 @@
 from flask import request, render_template
 
-from userGetWineById import getWineById
+from backend.user.userGetWineById import getWineById
 
 
 def userGetSinglePage(id):

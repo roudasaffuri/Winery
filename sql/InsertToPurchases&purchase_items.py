@@ -1,9 +1,6 @@
-from datetime import datetime, timedelta
-
 ####"""Insert to the purchases & purchase_items table."""####
 import pandas as pd
-import random
-from db_connection import create_connection
+from backend.server.db_connection import create_connection
 
 
 from datetime import datetime, timedelta

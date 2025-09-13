@@ -1,6 +1,3 @@
-from db_connection import create_connection ,disconnection
-
-
 def updateWineInStock(cursor,quantity,wine_id):
     #  clear the cart
     cursor.execute("""

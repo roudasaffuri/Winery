@@ -2,7 +2,7 @@
 import os
 from flask import redirect, url_for, flash, session, request, current_app as app
 import paypalrestsdk
-from complete_order import complete_order
+from backend.server.complete_order import complete_order
 
 # Configure PayPal SDK once
 paypalrestsdk.configure({

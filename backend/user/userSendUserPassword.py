@@ -1,10 +1,10 @@
 import os
+from dotenv import load_dotenv
 import smtplib
 import base64
 from flask import flash, request, render_template
-from db_connection import create_connection,disconnection
-from dotenv import load_dotenv
-from fernet_encryption import decode_string
+from backend.server.db_connection import create_connection,disconnection
+from backend.server.fernet_encryption import decode_string
 
 load_dotenv()
 

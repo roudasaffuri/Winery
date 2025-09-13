@@ -1,8 +1,9 @@
 import os
 import smtplib
 from dotenv import load_dotenv
-from db_connection import create_connection,disconnection
 from email.message import EmailMessage
+from backend.server.db_connection import create_connection,disconnection
+
 
 OWN_EMAIL = os.getenv("OWN_EMAIL")
 OWN_PASSWORD = os.getenv("OWN_PASSWORD_EMAIL")

@@ -1,36 +1,36 @@
 from flask import Flask, render_template, g
-from ClassTips import get_wine_tips
-from adminAddWine import addWine
-from managerChangeRole import changeRole
-from adminDiscountWineById import discountWine
-from adminEditProduct import adminEditProduct
-from adminGetAllWines import getAllWines
-from adminManageUsers import getRegularUsers
-from adminStatisticWine import viewStatisticByIdWine
-from adminUpdateWine import updateWine
-from adminblockUser import blockUser
-from complete_order import complete_order
-from context_processors import inject_context
-from adminDeleteWine import deleteWineFromDB
-from userGetSinglePage import userGetSinglePage
-from managerManageAdmins import getAllUsers
-from paypal_integration import start_paypal_payment, finalize_paypal_payment
-from userItemsInCart import get_cart_count
-from userPaymentByCard import PaymentByCard
-from userPurchseHistory import getPurchaseHistory
-from userSentMessage import contactUs
-from registration import registration
-from login import log_in
-from userStore import getStorePage
-from dotenv import load_dotenv
-from userSendUserPassword import sendPass
-from clearSessionAndLogout import exitAndClearSession
-from userAgeVerified import userAgeVerified
-from userAddToCart import handle_add_to_cart
-from userCart import getCart
-from userRemoveProduct import removeProductFromCart
-from userUpdateQuantity import handle_quantity_update
+from backend.server.ClassTips import get_wine_tips
+from backend.adminManager.adminAddWine import addWine
+from backend.adminManager.managerChangeRole import changeRole
+from backend.adminManager.adminDiscountWineById import discountWine
+from backend.adminManager.adminEditProduct import adminEditProduct
+from backend.adminManager.adminGetAllWines import getAllWines
+from backend.adminManager.adminManageUsers import getRegularUsers
+from backend.adminManager.adminStatisticWine import viewStatisticByIdWine
+from backend.adminManager.adminUpdateWine import updateWine
+from backend.adminManager.adminblockUser import blockUser
+from backend.server.complete_order import complete_order
+from backend.server.context_processors import inject_context
+from backend.adminManager.adminDeleteWine import deleteWineFromDB
+from backend.user.userGetSinglePage import userGetSinglePage
+from backend.adminManager.managerManageAdmins import getAllUsers
+from backend.server.paypal_integration import start_paypal_payment, finalize_paypal_payment
+from backend.user.userItemsInCart import get_cart_count
+from backend.user.userPaymentByCard import PaymentByCard
+from backend.user.userPurchseHistory import getPurchaseHistory
+from backend.user.userSentMessage import contactUs
+from backend.server.registration import registration
+from backend.server.login import log_in
+from backend.user.userStore import getStorePage
+from backend.user.userSendUserPassword import sendPass
+from backend.server.clearSessionAndLogout import exitAndClearSession
+from backend.user.userAgeVerified import userAgeVerified
+from backend.user.userAddToCart import handle_add_to_cart
+from backend.user.userCart import getCart
+from backend.user.userRemoveProduct import removeProductFromCart
+from backend.user.userUpdateQuantity import handle_quantity_update
 import os
+from dotenv import load_dotenv
 
 load_dotenv()
 

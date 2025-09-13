@@ -1,5 +1,5 @@
 from flask import session, render_template
-from db_connection import create_connection, disconnection
+from backend.server.db_connection import create_connection, disconnection
 
 
 def getPurchaseHistory():

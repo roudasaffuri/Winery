@@ -1,7 +1,7 @@
 from decimal import Decimal, ROUND_HALF_UP
 from flask import request
-from ClassWine import Wine
-from db_connection import create_connection, disconnection
+from backend.server.ClassWine import Wine
+from backend.server.db_connection import create_connection, disconnection
 
 
 def calculate_discounted_price(wine):

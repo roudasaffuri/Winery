@@ -1,5 +1,5 @@
 from flask import session
-from db_connection import create_connection, disconnection
+from backend.server.db_connection import create_connection, disconnection
 
 def get_cart_count():
     """Return total quantity of all items in the current user's cart."""

@@ -1,5 +1,5 @@
 from flask import request, redirect, url_for, flash
-from db_connection import disconnection, create_connection
+from backend.server.db_connection import disconnection, create_connection
 
 def handle_quantity_update():
     cart_item_id = request.form.get('cart_item_id')

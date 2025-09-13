@@ -1,5 +1,5 @@
 
-from db_connection import create_connection
+from backend.server.db_connection import create_connection
 def get_column_field_names_with_this_query():
     conn = create_connection()
     cur = conn.cursor()

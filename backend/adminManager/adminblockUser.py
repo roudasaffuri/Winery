@@ -1,5 +1,5 @@
 from flask import redirect, url_for, request, flash
-from db_connection import create_connection,disconnection
+from backend.server.db_connection import create_connection,disconnection
 
 
 def blockUser():

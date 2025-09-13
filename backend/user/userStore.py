@@ -1,8 +1,8 @@
 from flask import session, render_template, flash
-from ClassWine import Wine
 from collections import Counter
 from datetime import datetime,timedelta
-from db_connection import create_connection, disconnection
+from backend.server.db_connection import create_connection, disconnection
+from backend.server.ClassWine import Wine
 
 
 def getStorePage():

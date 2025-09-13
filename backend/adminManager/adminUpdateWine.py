@@ -1,6 +1,6 @@
 from flask import request, flash, redirect
 
-from db_connection import create_connection
+from backend.server.db_connection import create_connection
 
 
 def updateWine():

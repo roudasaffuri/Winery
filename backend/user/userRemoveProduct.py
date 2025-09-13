@@ -1,5 +1,5 @@
 from flask import session, flash, redirect, url_for
-from db_connection import create_connection, disconnection
+from backend.server.db_connection import create_connection, disconnection
 
 
 def removeProductFromCart(product_id):

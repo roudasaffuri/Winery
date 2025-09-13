@@ -1,6 +1,6 @@
 from flask import session, render_template, g
 from _pydecimal import Decimal
-from db_connection import create_connection, disconnection
+from backend.server.db_connection import create_connection, disconnection
 
 def PaymentByCard():
     user_id = session.get('id')

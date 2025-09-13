@@ -1,7 +1,7 @@
 from flask import redirect, url_for, request, flash, render_template
-from db_connection import create_connection, disconnection
+from backend.server.db_connection import create_connection, disconnection
 from psycopg2 import sql, errors
-from fernet_encryption import encode_string
+from backend.server.fernet_encryption import encode_string
 import base64
 
 def registration():

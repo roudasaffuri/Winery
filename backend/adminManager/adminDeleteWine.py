@@ -1,7 +1,7 @@
 from flask import flash, render_template, request
 
-from adminGetAllWines import getAllWines
-from db_connection import create_connection ,disconnection
+from backend.adminManager.adminGetAllWines import getAllWines
+from backend.server.db_connection import create_connection ,disconnection
 
 def deleteWineFromDB():
 
