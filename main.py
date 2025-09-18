@@ -31,8 +31,8 @@ from backend.user.userRemoveProduct import removeProductFromCart
 from backend.user.userUpdateQuantity import handle_quantity_update
 import os
 from dotenv import load_dotenv
-
 load_dotenv()
+
 
 KEY = os.getenv("SECRET_KEY")
 

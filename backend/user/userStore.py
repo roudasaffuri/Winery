@@ -36,6 +36,7 @@ def first10wines():
         current_year = datetime.now().year
         user_age = current_year - birth_year
         # Select users of similar age and same gender
+        # between 18 - 25
         if user_age < 25:
             sql = "SELECT id FROM users WHERE birth_year > %s AND gender = %s;"
             cursor.execute(sql, (current_year - 25, user_gender))
@@ -50,6 +51,7 @@ def first10wines():
 
         # Extract user IDs
         list_id_users = [row[0] for row in results]
+
         # Get purchase IDs for each user
         list_purchase_id = []
         for id in list_id_users:
