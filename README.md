@@ -35,7 +35,6 @@ smtplib
 ![Image](https://github.com/user-attachments/assets/76c1fbfb-8c8b-4a61-bb01-a405833f3c48)
 ![Image](https://github.com/user-attachments/assets/91d297fa-8a6b-4240-8f7f-2adf46b9a0f9)
 ![Image](https://github.com/user-attachments/assets/b0b3a740-daef-4385-8cb8-77a731bbffc9)
-![Image](https://github.com/user-attachments/assets/6317cd5f-6274-4471-9cde-e6704f5a2f94)
 ![Image](https://github.com/user-attachments/assets/37afe3ab-b385-4d87-a900-a5dd97744087)
 ![Image](https://github.com/user-attachments/assets/42372661-8762-4132-8e49-9bfa8fde90d5)
 ![Image](https://github.com/user-attachments/assets/b52af4c0-04ba-43c9-b20d-b8b3b0083e69)
